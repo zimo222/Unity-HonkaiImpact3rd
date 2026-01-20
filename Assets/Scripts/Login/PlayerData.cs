@@ -1,0 +1,751 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+[System.Serializable]
+public class PlayerData
+{
+    // ================== 基础账户信息 ==================
+    public string PlayerID;                         // 唯一标识
+    public string PlayerName;
+    public DateTime CreateTime;                     // 账号创建时间
+    public DateTime LastLoginTime;                  // 上次登录时间
+
+    // ================== 游戏进度与资源 ==================
+    public int Level = 1;
+    public int Experience;
+    public int Crystals;                           // 水晶
+    public int Coins;                              // 金币
+    public int Stamina;                            // 体力
+
+    // ================== 角色与装备系统 ==================
+    [Header("角色系统")]
+    public List<CharacterData> Characters = new List<CharacterData>();          // 角色列表
+    public List<EquipmentData> EquipmentBag = new List<EquipmentData>();        // 装备背包
+
+    // ================== 设置与其他 ==================
+    public float MusicVolume = 0.8f;
+    public float SFXVolume = 0.8f;
+    public string LastLoginIP = "";
+
+    // ================== 构造函数 ==================
+    public PlayerData(string playerName)
+    {
+        PlayerID = System.Guid.NewGuid().ToString();
+        PlayerName = playerName;
+        CreateTime = DateTime.Now;
+        LastLoginTime = DateTime.Now;
+
+        // 初始化默认资源
+        Crystals = 500;
+        Coins = 3000;
+        Stamina = 120;
+
+        // 初始化默认角色和装备
+        InitializeDefaultCharacters();
+        InitializeDefaultEquipment();
+    }
+
+    // 空构造函数为JSON反序列化所需
+    public PlayerData() { }
+
+    // ================== 角色相关方法 ==================
+
+    /// <summary>
+    /// 初始化默认角色
+    /// </summary>
+    private void InitializeDefaultCharacters()
+    {
+        // 琪亚娜·薪炎之律者
+        Characters.Add(new CharacterData(
+            id: "CHAR_001",
+            name: "琪亚娜·薪炎之律者",
+            isUnlocked: true,
+            health: 1500,
+            attack: 300,
+            critRate: 0.1f,
+            critDamage: 1.5f,
+            elementBonus: 0.3f
+        ));
+
+        // 琪亚娜·白练
+        Characters.Add(new CharacterData(
+            id: "CHAR_002",
+            name: "琪亚娜·白练",
+            isUnlocked: false,
+            health: 1200,
+            attack: 250,
+            critRate: 0.08f,
+            critDamage: 1.3f,
+            elementBonus: 0f
+        ));
+
+        // 叶瞬光
+        Characters.Add(new CharacterData(
+            id: "CHAR_003",
+            name: "叶瞬光",
+            isUnlocked: false,
+            health: 1400,
+            attack: 280,
+            critRate: 0.12f,
+            critDamage: 1.6f,
+            elementBonus: 0.2f
+        ));
+
+        // 胡桃
+        Characters.Add(new CharacterData(
+            id: "CHAR_004",
+            name: "胡桃",
+            isUnlocked: false,
+            health: 1100,
+            attack: 320,
+            critRate: 0.15f,
+            critDamage: 1.8f,
+            elementBonus: 0.4f
+        ));
+
+        // 流萤
+        Characters.Add(new CharacterData(
+            id: "CHAR_005",
+            name: "流萤",
+            isUnlocked: false,
+            health: 1300,
+            attack: 270,
+            critRate: 0.09f,
+            critDamage: 1.4f,
+            elementBonus: 0.25f
+        ));
+    }
+
+    /// <summary>
+    /// 解锁角色
+    /// </summary>
+    public bool UnlockCharacter(string characterId)
+    {
+        for (int i = 0; i < Characters.Count; i++)
+        {
+            if (Characters[i].Id == characterId)
+            {
+                Characters[i].IsUnlocked = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 获取指定角色
+    /// </summary>
+    public CharacterData GetCharacter(string characterId)
+    {
+        return Characters.Find(c => c.Id == characterId);
+    }
+
+    /// <summary>
+    /// 获取已解锁的角色列表
+    /// </summary>
+    public List<CharacterData> GetUnlockedCharacters()
+    {
+        return Characters.FindAll(c => c.IsUnlocked);
+    }
+
+    // ================== 装备相关方法 ==================
+
+    /// <summary>
+    /// 初始化默认装备
+    /// </summary>
+    private void InitializeDefaultEquipment()
+    {
+        // 添加一些初始武器
+        EquipmentBag.Add(new EquipmentData(
+            id: "WEAP_001",
+            name: "薪炎双枪",
+            type: EquipmentType.Weapon,
+            weaponType: WeaponType.DualPistols,
+            health: 0,
+            attack: 150,
+            critRate: 0.05f,
+            critDamage: 0f,
+            elementBonus: 0.15f
+        ));
+
+        EquipmentBag.Add(new EquipmentData(
+            id: "WEAP_002",
+            name: "训练单手剑",
+            type: EquipmentType.Weapon,
+            weaponType: WeaponType.SingleHandedSword,
+            health: 0,
+            attack: 80,
+            critRate: 0f,
+            critDamage: 0f,
+            elementBonus: 0f
+        ));
+
+        EquipmentBag.Add(new EquipmentData(
+            id: "WEAP_003",
+            name: "新手长枪",
+            type: EquipmentType.Weapon,
+            weaponType: WeaponType.Spear,
+            health: 0,
+            attack: 90,
+            critRate: 0.02f,
+            critDamage: 0f,
+            elementBonus: 0f
+        ));
+
+        // 添加一些圣痕
+        // 上位圣痕
+        EquipmentBag.Add(new EquipmentData(
+            id: "STIG_001_TOP",
+            name: "燃烧之羽",
+            type: EquipmentType.Stigmata,
+            stigmataPosition: StigmataPosition.Top,
+            health: 200,
+            attack: 50,
+            critRate: 0.03f,
+            critDamage: 0.1f,
+            elementBonus: 0.08f
+        ));
+
+        // 中位圣痕
+        EquipmentBag.Add(new EquipmentData(
+            id: "STIG_001_MID",
+            name: "燃烧之心",
+            type: EquipmentType.Stigmata,
+            stigmataPosition: StigmataPosition.Middle,
+            health: 150,
+            attack: 60,
+            critRate: 0.02f,
+            critDamage: 0.15f,
+            elementBonus: 0.1f
+        ));
+
+        // 下位圣痕
+        EquipmentBag.Add(new EquipmentData(
+            id: "STIG_001_BOT",
+            name: "燃烧之足",
+            type: EquipmentType.Stigmata,
+            stigmataPosition: StigmataPosition.Bottom,
+            health: 180,
+            attack: 40,
+            critRate: 0.04f,
+            critDamage: 0.08f,
+            elementBonus: 0.06f
+        ));
+    }
+
+    /// <summary>
+    /// 添加新装备到背包
+    /// </summary>
+    public void AddEquipment(EquipmentData equipment)
+    {
+        EquipmentBag.Add(equipment);
+    }
+
+    /// <summary>
+    /// 移除装备
+    /// </summary>
+    public bool RemoveEquipment(int index)
+    {
+        if (index >= 0 && index < EquipmentBag.Count)
+        {
+            // 检查装备是否已被装备
+            var equipment = EquipmentBag[index];
+            if (equipment.EquippedToCharacterIndex >= 0)
+            {
+                return false; // 装备已被装备，不能直接移除
+            }
+
+            EquipmentBag.RemoveAt(index);
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 获取指定类型的装备列表
+    /// </summary>
+    public List<EquipmentData> GetEquipmentByType(EquipmentType type)
+    {
+        return EquipmentBag.FindAll(e => e.Type == type);
+    }
+
+    /// <summary>
+    /// 获取指定位置的空闲圣痕
+    /// </summary>
+    public List<EquipmentData> GetAvailableStigmata(StigmataPosition position)
+    {
+        return EquipmentBag.FindAll(e =>
+            e.Type == EquipmentType.Stigmata &&
+            e.StigmataPosition == position &&
+            e.EquippedToCharacterIndex < 0);
+    }
+
+    /// <summary>
+    /// 获取空闲的武器
+    /// </summary>
+    public List<EquipmentData> GetAvailableWeapons()
+    {
+        return EquipmentBag.FindAll(e =>
+            e.Type == EquipmentType.Weapon &&
+            e.EquippedToCharacterIndex < 0);
+    }
+
+    // ================== 装备管理方法 ==================
+
+    /// <summary>
+    /// 为角色装备武器
+    /// </summary>
+    public bool EquipWeaponToCharacter(int characterIndex, int equipmentIndex)
+    {
+        if (characterIndex < 0 || characterIndex >= Characters.Count ||
+            equipmentIndex < 0 || equipmentIndex >= EquipmentBag.Count)
+        {
+            return false;
+        }
+
+        var character = Characters[characterIndex];
+        var equipment = EquipmentBag[equipmentIndex];
+
+        // 检查装备是否是武器
+        if (equipment.Type != EquipmentType.Weapon)
+        {
+            return false;
+        }
+
+        // 检查装备是否已被其他角色装备
+        if (equipment.EquippedToCharacterIndex >= 0)
+        {
+            return false;
+        }
+
+        // 先卸下当前装备的武器
+        if (character.EquippedWeaponIndex >= 0 && character.EquippedWeaponIndex < EquipmentBag.Count)
+        {
+            var oldWeapon = EquipmentBag[character.EquippedWeaponIndex];
+            oldWeapon.EquippedToCharacterIndex = -1;
+        }
+
+        // 装备新武器
+        character.EquippedWeaponIndex = equipmentIndex;
+        equipment.EquippedToCharacterIndex = characterIndex;
+
+        return true;
+    }
+
+    /// <summary>
+    /// 为角色装备圣痕
+    /// </summary>
+    public bool EquipStigmataToCharacter(int characterIndex, int equipmentIndex, StigmataPosition position)
+    {
+        if (characterIndex < 0 || characterIndex >= Characters.Count ||
+            equipmentIndex < 0 || equipmentIndex >= EquipmentBag.Count)
+        {
+            return false;
+        }
+
+        var character = Characters[characterIndex];
+        var equipment = EquipmentBag[equipmentIndex];
+
+        // 检查装备是否是圣痕且位置正确
+        if (equipment.Type != EquipmentType.Stigmata || equipment.StigmataPosition != position)
+        {
+            return false;
+        }
+
+        // 检查装备是否已被其他角色装备
+        if (equipment.EquippedToCharacterIndex >= 0)
+        {
+            return false;
+        }
+
+        // 根据位置卸下当前装备的圣痕
+        int currentStigmataIndex = -1;
+        switch (position)
+        {
+            case StigmataPosition.Top:
+                currentStigmataIndex = character.EquippedTopStigmataIndex;
+                break;
+            case StigmataPosition.Middle:
+                currentStigmataIndex = character.EquippedMiddleStigmataIndex;
+                break;
+            case StigmataPosition.Bottom:
+                currentStigmataIndex = character.EquippedBottomStigmataIndex;
+                break;
+        }
+
+        if (currentStigmataIndex >= 0 && currentStigmataIndex < EquipmentBag.Count)
+        {
+            var oldStigmata = EquipmentBag[currentStigmataIndex];
+            oldStigmata.EquippedToCharacterIndex = -1;
+        }
+
+        // 装备新圣痕
+        switch (position)
+        {
+            case StigmataPosition.Top:
+                character.EquippedTopStigmataIndex = equipmentIndex;
+                break;
+            case StigmataPosition.Middle:
+                character.EquippedMiddleStigmataIndex = equipmentIndex;
+                break;
+            case StigmataPosition.Bottom:
+                character.EquippedBottomStigmataIndex = equipmentIndex;
+                break;
+        }
+
+        equipment.EquippedToCharacterIndex = characterIndex;
+
+        return true;
+    }
+
+    /// <summary>
+    /// 卸下角色的武器
+    /// </summary>
+    public bool UnequipWeaponFromCharacter(int characterIndex)
+    {
+        if (characterIndex < 0 || characterIndex >= Characters.Count)
+        {
+            return false;
+        }
+
+        var character = Characters[characterIndex];
+        if (character.EquippedWeaponIndex < 0)
+        {
+            return false;
+        }
+
+        var weapon = EquipmentBag[character.EquippedWeaponIndex];
+        weapon.EquippedToCharacterIndex = -1;
+        character.EquippedWeaponIndex = -1;
+
+        return true;
+    }
+
+    /// <summary>
+    /// 卸下角色的圣痕
+    /// </summary>
+    public bool UnequipStigmataFromCharacter(int characterIndex, StigmataPosition position)
+    {
+        if (characterIndex < 0 || characterIndex >= Characters.Count)
+        {
+            return false;
+        }
+
+        var character = Characters[characterIndex];
+        int stigmataIndex = -1;
+
+        switch (position)
+        {
+            case StigmataPosition.Top:
+                stigmataIndex = character.EquippedTopStigmataIndex;
+                character.EquippedTopStigmataIndex = -1;
+                break;
+            case StigmataPosition.Middle:
+                stigmataIndex = character.EquippedMiddleStigmataIndex;
+                character.EquippedMiddleStigmataIndex = -1;
+                break;
+            case StigmataPosition.Bottom:
+                stigmataIndex = character.EquippedBottomStigmataIndex;
+                character.EquippedBottomStigmataIndex = -1;
+                break;
+        }
+
+        if (stigmataIndex >= 0 && stigmataIndex < EquipmentBag.Count)
+        {
+            var stigmata = EquipmentBag[stigmataIndex];
+            stigmata.EquippedToCharacterIndex = -1;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 获取角色当前的总属性（基础属性+装备属性）
+    /// </summary>
+    public CharacterStats GetCharacterTotalStats(int characterIndex)
+    {
+        if (characterIndex < 0 || characterIndex >= Characters.Count)
+        {
+            return new CharacterStats();
+        }
+
+        var character = Characters[characterIndex];
+        var totalStats = new CharacterStats()
+        {
+            Health = character.BaseStats.Health,
+            Attack = character.BaseStats.Attack,
+            CritRate = character.BaseStats.CritRate,
+            CritDamage = character.BaseStats.CritDamage,
+            ElementBonus = character.BaseStats.ElementBonus
+        };
+
+        // 加上武器属性
+        if (character.EquippedWeaponIndex >= 0 && character.EquippedWeaponIndex < EquipmentBag.Count)
+        {
+            var weapon = EquipmentBag[character.EquippedWeaponIndex];
+            totalStats.Attack += weapon.Attack;
+            totalStats.CritRate += weapon.CritRate;
+            totalStats.CritDamage += weapon.CritDamage;
+            totalStats.ElementBonus += weapon.ElementBonus;
+        }
+
+        // 加上上位圣痕属性
+        if (character.EquippedTopStigmataIndex >= 0 && character.EquippedTopStigmataIndex < EquipmentBag.Count)
+        {
+            var stigmata = EquipmentBag[character.EquippedTopStigmataIndex];
+            totalStats.Health += stigmata.Health;
+            totalStats.Attack += stigmata.Attack;
+            totalStats.CritRate += stigmata.CritRate;
+            totalStats.CritDamage += stigmata.CritDamage;
+            totalStats.ElementBonus += stigmata.ElementBonus;
+        }
+
+        // 加上中位圣痕属性
+        if (character.EquippedMiddleStigmataIndex >= 0 && character.EquippedMiddleStigmataIndex < EquipmentBag.Count)
+        {
+            var stigmata = EquipmentBag[character.EquippedMiddleStigmataIndex];
+            totalStats.Health += stigmata.Health;
+            totalStats.Attack += stigmata.Attack;
+            totalStats.CritRate += stigmata.CritRate;
+            totalStats.CritDamage += stigmata.CritDamage;
+            totalStats.ElementBonus += stigmata.ElementBonus;
+        }
+
+        // 加上下位圣痕属性
+        if (character.EquippedBottomStigmataIndex >= 0 && character.EquippedBottomStigmataIndex < EquipmentBag.Count)
+        {
+            var stigmata = EquipmentBag[character.EquippedBottomStigmataIndex];
+            totalStats.Health += stigmata.Health;
+            totalStats.Attack += stigmata.Attack;
+            totalStats.CritRate += stigmata.CritRate;
+            totalStats.CritDamage += stigmata.CritDamage;
+            totalStats.ElementBonus += stigmata.ElementBonus;
+        }
+
+        return totalStats;
+    }
+}
+
+// ================== 角色数据类 ==================
+[System.Serializable]
+public class CharacterData
+{
+    public string Id;                                // 角色ID
+    public string Name;                              // 角色名称
+    public bool IsUnlocked;                          // 是否解锁
+    public CharacterStats BaseStats;                 // 基础属性
+
+    // 装备索引（指向EquipmentBag的下标）
+    public int EquippedWeaponIndex = -1;             // 装备的武器索引
+    public int EquippedTopStigmataIndex = -1;        // 上位圣痕索引
+    public int EquippedMiddleStigmataIndex = -1;     // 中位圣痕索引
+    public int EquippedBottomStigmataIndex = -1;     // 下位圣痕索引
+
+    public CharacterData() { }
+
+    public CharacterData(string id, string name, bool isUnlocked,
+                        int health, int attack, float critRate,
+                        float critDamage, float elementBonus)
+    {
+        Id = id;
+        Name = name;
+        IsUnlocked = isUnlocked;
+        BaseStats = new CharacterStats()
+        {
+            Health = health,
+            Attack = attack,
+            CritRate = critRate,
+            CritDamage = critDamage,
+            ElementBonus = elementBonus
+        };
+    }
+}
+
+// ================== 装备数据类 ==================
+[System.Serializable]
+public class EquipmentData
+{
+    public string Id;                                // 装备ID
+    public string Name;                              // 装备名称
+    public EquipmentType Type;                       // 装备类型
+    public WeaponType WeaponType;                    // 武器类型（如果是武器）
+    public StigmataPosition StigmataPosition;        // 圣痕位置（如果是圣痕）
+
+    public CharacterStats Stats;                     // 装备属性
+
+    // 装备状态
+    public int EquippedToCharacterIndex = -1;        // 被哪个角色装备（-1表示未装备）
+
+    public EquipmentData() { }
+
+    public EquipmentData(string id, string name, EquipmentType type,
+                        WeaponType weaponType = WeaponType.None,
+                        StigmataPosition stigmataPosition = StigmataPosition.None,
+                        int health = 0, int attack = 0,
+                        float critRate = 0f, float critDamage = 0f,
+                        float elementBonus = 0f)
+    {
+        Id = id;
+        Name = name;
+        Type = type;
+        WeaponType = weaponType;
+        StigmataPosition = stigmataPosition;
+
+        Stats = new CharacterStats()
+        {
+            Health = health,
+            Attack = attack,
+            CritRate = critRate,
+            CritDamage = critDamage,
+            ElementBonus = elementBonus
+        };
+    }
+
+    public int Health => Stats.Health;
+    public int Attack => Stats.Attack;
+    public float CritRate => Stats.CritRate;
+    public float CritDamage => Stats.CritDamage;
+    public float ElementBonus => Stats.ElementBonus;
+}
+
+// ================== 属性结构体 ==================
+[System.Serializable]
+public struct CharacterStats
+{
+    public int Health;                               // 生命值
+    public int Attack;                               // 攻击力
+    public float CritRate;                           // 暴击率（0-1）
+    public float CritDamage;                         // 暴击伤害（倍率，如1.5表示150%）
+    public float ElementBonus;                       // 元素伤害加成（百分比，如0.3表示30%）
+
+    public override string ToString()
+    {
+        return $"生命: {Health}, 攻击: {Attack}, 暴击: {CritRate:P0}, 爆伤: {CritDamage:P0}, 元素: {ElementBonus:P0}";
+    }
+}
+
+// ================== 枚举定义 ==================
+public enum EquipmentType
+{
+    Weapon,                                          // 武器
+    Stigmata                                         // 圣痕
+}
+
+public enum WeaponType
+{
+    None,                                            // 无（圣痕使用）
+    DualPistols,                                     // 双枪
+    SingleHandedSword,                               // 单手剑
+    Spear                                            // 长枪
+}
+
+public enum StigmataPosition
+{
+    None,                                            // 无（武器使用）
+    Top,                                             // 上位圣痕
+    Middle,                                          // 中位圣痕
+    Bottom                                           // 下位圣痕
+}
+
+// ================== 辅助类（用于UI显示等） ==================
+public static class EquipmentHelper
+{
+    /// <summary>
+    /// 获取装备类型的中文名称
+    /// </summary>
+    public static string GetEquipmentTypeName(EquipmentType type)
+    {
+        switch (type)
+        {
+            case EquipmentType.Weapon: return "武器";
+            case EquipmentType.Stigmata: return "圣痕";
+            default: return "未知";
+        }
+    }
+
+    /// <summary>
+    /// 获取武器类型的中文名称
+    /// </summary>
+    public static string GetWeaponTypeName(WeaponType type)
+    {
+        switch (type)
+        {
+            case WeaponType.DualPistols: return "双枪";
+            case WeaponType.SingleHandedSword: return "单手剑";
+            case WeaponType.Spear: return "长枪";
+            default: return "未知";
+        }
+    }
+
+    /// <summary>
+    /// 获取圣痕位置的中文名称
+    /// </summary>
+    public static string GetStigmataPositionName(StigmataPosition position)
+    {
+        switch (position)
+        {
+            case StigmataPosition.Top: return "上位";
+            case StigmataPosition.Middle: return "中位";
+            case StigmataPosition.Bottom: return "下位";
+            default: return "未知";
+        }
+    }
+
+    /// <summary>
+    /// 生成随机装备（用于测试）
+    /// </summary>
+    public static EquipmentData GenerateRandomEquipment()
+    {
+        System.Random rand = new System.Random();
+
+        // 随机选择装备类型
+        EquipmentType type = rand.Next(2) == 0 ? EquipmentType.Weapon : EquipmentType.Stigmata;
+
+        if (type == EquipmentType.Weapon)
+        {
+            // 随机武器类型
+            WeaponType weaponType = (WeaponType)rand.Next(1, 4);
+            string[] weaponNames =
+            {
+                "烈焰双枪", "寒冰剑", "雷霆长枪",
+                "风暴双枪", "大地剑", "流水长枪"
+            };
+
+            return new EquipmentData(
+                id: $"WEAP_RAND_{DateTime.Now.Ticks}",
+                name: weaponNames[rand.Next(weaponNames.Length)],
+                type: EquipmentType.Weapon,
+                weaponType: weaponType,
+                health: 0,
+                attack: rand.Next(50, 200),
+                critRate: (float)rand.NextDouble() * 0.1f,
+                critDamage: 0f,
+                elementBonus: (float)rand.NextDouble() * 0.2f
+            );
+        }
+        else
+        {
+            // 随机圣痕位置
+            StigmataPosition position = (StigmataPosition)rand.Next(1, 4);
+            string[] stigmataNames =
+            {
+                "勇气之证", "智慧印记", "力量纹章",
+                "守护徽记", "疾风符印", "烈焰烙印"
+            };
+
+            return new EquipmentData(
+                id: $"STIG_RAND_{DateTime.Now.Ticks}",
+                name: stigmataNames[rand.Next(stigmataNames.Length)],
+                type: EquipmentType.Stigmata,
+                stigmataPosition: position,
+                health: rand.Next(50, 200),
+                attack: rand.Next(20, 80),
+                critRate: (float)rand.NextDouble() * 0.05f,
+                critDamage: (float)rand.NextDouble() * 0.15f,
+                elementBonus: (float)rand.NextDouble() * 0.1f
+            );
+        }
+    }
+}

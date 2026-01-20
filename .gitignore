@@ -1,0 +1,19 @@
+# 这些是Unity临时文件，完全不需要上传
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# 这些是代码编辑器临时文件
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+
+# 这些是临时生成的大文件
+*.apk
+*.unitypackage
