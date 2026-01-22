@@ -28,6 +28,13 @@ public class PlayerData
     public float SFXVolume = 0.8f;
     public string LastLoginIP = "";
 
+    // ================== 任务系统 ==================
+    [Header("任务系统")]
+    public List<TaskData> Tasks = new List<TaskData>();                  // 所有任务
+    public DateTime LastTaskCheckTime = DateTime.Now;                    // 上次查看任务时间
+    public int DailyEXP = 0;                                            // 当日历练值
+    public List<DailyEXPReward> DailyEXPRewards = new List<DailyEXPReward>(); // 每日历练值奖励
+
     // ================== 构造函数 ==================
     public PlayerData(string playerName)
     {
@@ -44,6 +51,351 @@ public class PlayerData
         // 初始化默认角色和装备
         InitializeDefaultCharacters();
         InitializeDefaultEquipment();
+
+        // 初始化任务系统
+        InitializeDefaultTasks();
+        InitializeDailyEXPRewards();
+    }
+
+    // ================== 任务相关方法 ==================
+
+    /// <summary>
+    /// 初始化默认任务
+    /// </summary>
+    private void InitializeDefaultTasks()
+    {
+        // 日常任务
+        Tasks.Add(new TaskData(
+            id: "TASK_DAILY_001",
+            name: "Mei's Snack",
+            unlockLevel: 1,
+            frequency: TaskFrequency.Daily,
+            reward1: new TaskReward(RewardType.DailyEXP, 50),
+            reward2: new TaskReward(RewardType.Coins, 1000),
+            description: "挑战任意关卡，完成1次战斗",
+            sceneName: "BattleScene",
+            battleType: "Normal"
+        ));
+
+        Tasks.Add(new TaskData(
+            id: "TASK_DAILY_002",
+            name: "Coin Collection",
+            unlockLevel: 1,
+            frequency: TaskFrequency.Daily,
+            reward1: new TaskReward(RewardType.DailyEXP, 100),
+            reward2: new TaskReward(RewardType.Stamina, 30),
+            description: "在物资筹备关卡中完成3次挑战",
+            sceneName: "MaterialScene",
+            battleType: "Material"
+        ));
+
+        Tasks.Add(new TaskData(
+            id: "TASK_DAILY_003",
+            name: "Homeland Part-Time Job",
+            unlockLevel: 5,
+            frequency: TaskFrequency.Daily,
+            reward1: new TaskReward(RewardType.DailyEXP, 80),
+            reward2: new TaskReward(RewardType.Crystals, 30),
+            description: "挑战降临作战关卡",
+            sceneName: "BossScene",
+            battleType: "Boss"
+        ));
+
+        Tasks.Add(new TaskData(
+            id: "TASK_DAILY_004",
+            name: "Material activities",
+            unlockLevel: 5,
+            frequency: TaskFrequency.Daily,
+            reward1: new TaskReward(RewardType.DailyEXP, 60),
+            reward2: new TaskReward(RewardType.Coins, 800),
+            description: "强化任意装备1次",
+            sceneName: "EquipmentScene",
+            battleType: "None"
+        ));
+
+        Tasks.Add(new TaskData(
+            id: "TASK_DAILY_005",
+            name: "Story Level",
+            unlockLevel: 10,
+            frequency: TaskFrequency.Daily,
+            reward1: new TaskReward(RewardType.DailyEXP, 40),
+            reward2: new TaskReward(RewardType.Crystals, 20),
+            description: "累计消耗120点体力",
+            sceneName: "BattleScene",
+            battleType: "All"
+        ));
+
+        Tasks.Add(new TaskData(
+            id: "TASK_DAILY_006",
+            name: "Continuous combat",
+            unlockLevel: 10,
+            frequency: TaskFrequency.Daily,
+            reward1: new TaskReward(RewardType.DailyEXP, 40),
+            reward2: new TaskReward(RewardType.Crystals, 20),
+            description: "累计消耗120点体力",
+            sceneName: "BattleScene",
+            battleType: "All"
+        ));
+
+        // 周常任务
+        Tasks.Add(new TaskData(
+            id: "TASK_WEEKLY_001",
+            name: "完成20次任意关卡",
+            unlockLevel: 5,
+            frequency: TaskFrequency.Weekly,
+            reward1: new TaskReward(RewardType.Crystals, 200),
+            reward2: new TaskReward(RewardType.Coins, 5000),
+            description: "本周内完成20次任意关卡挑战",
+            sceneName: "BattleScene",
+            battleType: "Normal"
+        ));
+
+        Tasks.Add(new TaskData(
+            id: "TASK_WEEKLY_002",
+            name: "完成5次降临作战",
+            unlockLevel: 12,
+            frequency: TaskFrequency.Weekly,
+            reward1: new TaskReward(RewardType.Crystals, 300),
+            reward2: new TaskReward(RewardType.Equipment, 1, "WEAP_RANDOM"),
+            description: "本周内完成5次降临作战",
+            sceneName: "BossScene",
+            battleType: "Boss"
+        ));
+
+        Tasks.Add(new TaskData(
+            id: "TASK_WEEKLY_003",
+            name: "获得3件4星装备",
+            unlockLevel: 15,
+            frequency: TaskFrequency.Weekly,
+            reward1: new TaskReward(RewardType.Crystals, 250),
+            reward2: new TaskReward(RewardType.Materials, 10, "MAT_HIGH"),
+            description: "本周内获得3件4星或以上品质装备",
+            sceneName: "EquipmentScene",
+            battleType: "None"
+        ));
+    }
+
+    /// <summary>
+    /// 初始化每日历练值奖励
+    /// </summary>
+    private void InitializeDailyEXPRewards()
+    {
+        DailyEXPRewards.Clear();
+        DailyEXPRewards.Add(new DailyEXPReward(150, new TaskReward(RewardType.Crystals, 30)));
+        DailyEXPRewards.Add(new DailyEXPReward(300, new TaskReward(RewardType.Stamina, 40)));
+        DailyEXPRewards.Add(new DailyEXPReward(450, new TaskReward(RewardType.Crystals, 50)));
+        DailyEXPRewards.Add(new DailyEXPReward(600, new TaskReward(RewardType.Coins, 2000)));
+    }
+
+    /// <summary>
+    /// 刷新任务状态（检查是否需要重置日常/周常任务）
+    /// </summary>
+    public void RefreshTasks()
+    {
+        DateTime now = DateTime.Now;
+        DateTime lastCheck = LastTaskCheckTime;
+
+        // 计算每日刷新时间（4:00 AM）
+        DateTime dailyResetTime = new DateTime(now.Year, now.Month, now.Day, 4, 0, 0);
+        if (now.Hour < 4)
+        {
+            dailyResetTime = dailyResetTime.AddDays(-1);
+        }
+
+        // 计算每周刷新时间（周一4:00 AM）
+        DateTime weeklyResetTime = dailyResetTime;
+        while (weeklyResetTime.DayOfWeek != DayOfWeek.Monday)
+        {
+            weeklyResetTime = weeklyResetTime.AddDays(-1);
+        }
+
+        bool shouldRefreshDaily = lastCheck < dailyResetTime;
+        bool shouldRefreshWeekly = lastCheck < weeklyResetTime;
+
+        // 刷新日常任务
+        if (shouldRefreshDaily)
+        {
+            ResetDailyTasks();
+            DailyEXP = 0; // 重置每日历练值
+            ResetDailyEXPRewards(); // 重置奖励领取状态
+        }
+
+        // 刷新周常任务
+        if (shouldRefreshWeekly)
+        {
+            ResetWeeklyTasks();
+        }
+
+        // 解锁达到等级要求的任务
+        foreach (var task in Tasks)
+        {
+            if (task.Status == TaskStatus.Locked && Level >= task.UnlockLevel)
+            {
+                task.Status = TaskStatus.Unlocked;
+            }
+        }
+
+        LastTaskCheckTime = now;
+    }
+
+    /// <summary>
+    /// 重置日常任务
+    /// </summary>
+    private void ResetDailyTasks()
+    {
+        foreach (var task in Tasks)
+        {
+            if (task.Frequency == TaskFrequency.Daily &&
+                task.Status != TaskStatus.Locked)
+            {
+                task.Status = TaskStatus.Unlocked;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 重置周常任务
+    /// </summary>
+    private void ResetWeeklyTasks()
+    {
+        foreach (var task in Tasks)
+        {
+            if (task.Frequency == TaskFrequency.Weekly &&
+                task.Status != TaskStatus.Locked)
+            {
+                task.Status = TaskStatus.Unlocked;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 重置每日历练值奖励
+    /// </summary>
+    private void ResetDailyEXPRewards()
+    {
+        foreach (var reward in DailyEXPRewards)
+        {
+            reward.IsClaimed = false;
+        }
+    }
+
+    /// <summary>
+    /// 完成任务
+    /// </summary>
+    public bool CompleteTask(string taskId)
+    {
+        var task = Tasks.Find(t => t.TaskID == taskId);
+        if (task == null || task.Status != TaskStatus.Unlocked)
+            return false;
+
+        task.Status = TaskStatus.Completed;
+
+        // 增加每日历练值
+        DailyEXP += task.GetDailyEXPReward();
+
+        return true;
+    }
+
+    /// <summary>
+    /// 领取任务奖励
+    /// </summary>
+    public bool ClaimTaskReward(string taskId)
+    {
+        var task = Tasks.Find(t => t.TaskID == taskId);
+        if (task == null || task.Status != TaskStatus.Completed)
+            return false;
+
+        // 发放奖励1
+        GiveReward(task.Reward1);
+
+        // 发放奖励2
+        GiveReward(task.Reward2);
+
+        task.Status = TaskStatus.Claimed;
+        return true;
+    }
+
+    /// <summary>
+    /// 领取每日历练值奖励
+    /// </summary>
+    public bool ClaimDailyEXPReward(int index)
+    {
+        if (index < 0 || index >= DailyEXPRewards.Count)
+            return false;
+
+        var reward = DailyEXPRewards[index];
+        if (reward.IsClaimed || DailyEXP < reward.RequiredEXP)
+            return false;
+
+        GiveReward(reward.Reward);
+        reward.IsClaimed = true;
+        return true;
+    }
+
+    /// <summary>
+    /// 发放奖励
+    /// </summary>
+    private void GiveReward(TaskReward reward)
+    {
+        switch (reward.Type)
+        {
+            case RewardType.Crystals:
+                Crystals += reward.Amount;
+                break;
+            case RewardType.Coins:
+                Coins += reward.Amount;
+                break;
+            case RewardType.Stamina:
+                Stamina += reward.Amount;
+                break;
+            case RewardType.Equipment:
+                // 生成随机装备
+                EquipmentData randomEquipment = EquipmentHelper.GenerateRandomEquipment();
+                EquipmentBag.Add(randomEquipment);
+                break;
+            case RewardType.DailyEXP:
+                // 已在完成任务时处理
+                break;
+                // 其他奖励类型...
+        }
+    }
+
+    /// <summary>
+    /// 获取任务列表（排序：解锁的未完成 > 已完成的 > 未解锁的，按等级排序）
+    /// </summary>
+    public List<TaskData> GetSortedTasks(TaskFrequency? frequency = null)
+    {
+        var filteredTasks = frequency.HasValue
+            ? Tasks.FindAll(t => t.Frequency == frequency.Value)
+            : Tasks;
+
+        // 排序：未解锁(Locked)的在最后，完成的(Claimed)在次后，完成的(Completed)和未完成的(Unlocked)按等级排序
+        filteredTasks.Sort((a, b) =>
+        {
+            // 状态优先级：Unlocked > Completed > Claimed > Locked
+            int statusOrderA = GetStatusOrder(a.Status);
+            int statusOrderB = GetStatusOrder(b.Status);
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+
+            // 同状态按解锁等级排序
+            return a.UnlockLevel.CompareTo(b.UnlockLevel);
+        });
+
+        return filteredTasks;
+    }
+
+    private int GetStatusOrder(TaskStatus status)
+    {
+        switch (status)
+        {
+            case TaskStatus.Unlocked: return 3;
+            case TaskStatus.Completed: return 2;
+            case TaskStatus.Claimed: return 1;
+            case TaskStatus.Locked: return 0;
+            default: return 0;
+        }
     }
 
     // 空构造函数为JSON反序列化所需
