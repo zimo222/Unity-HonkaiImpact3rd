@@ -169,8 +169,9 @@ public class MissionItemUI : MonoBehaviour
                     break;
             }
         }
-
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/{iconName}");
+        iconName = task.TaskName;
+        //Debug.Log($"UI/Icons/{iconName}");
+        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Task_{iconName}");
         return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 
