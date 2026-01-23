@@ -155,26 +155,38 @@ public class TaskUIController : MonoBehaviour
 
     void LoadPlayerData()
     {
-        // 加载玩家数据
-        if (PlayerDataManager.Instance != null)
-        {
-            currentPlayerData = PlayerDataManager.Instance.CurrentPlayerData;
+        // 先重置数据加载状态
+        isDataLoaded = false;
 
-            if (currentPlayerData != null)
-            {
-                UpdateAllUI();
-                isDataLoaded = true;
-            }
-            else
-            {
-                LoadDefaultData();
-            }
-        }
-        else
+        // 检查PlayerDataManager是否存在
+        if (PlayerDataManager.Instance == null)
         {
+            Debug.LogWarning("PlayerDataManager.Instance 为空，加载默认数据");
             LoadDefaultData();
+            UpdateAllUI();
+            return;
         }
+
+        // 获取当前玩家数据
+        currentPlayerData = PlayerDataManager.Instance.CurrentPlayerData;
+
+        // 检查是否成功获取玩家数据
+        if (currentPlayerData == null)
+        {
+            Debug.LogWarning("当前没有登录的玩家，加载默认数据");
+            LoadDefaultData();
+            UpdateAllUI();
+            return;
+        }
+
+        // 成功加载玩家数据
+        Debug.Log($"成功加载玩家数据: {currentPlayerData.PlayerName}, 等级: {currentPlayerData.Level}, DailyEXP: {currentPlayerData.DailyEXP}");
+
+        // 刷新玩家数据中的任务状态
+        currentPlayerData.RefreshTasks();
+
         UpdateAllUI();
+        isDataLoaded = true;
     }
 
     void LoadDefaultData()
@@ -336,7 +348,7 @@ public class TaskUIController : MonoBehaviour
         
         // 添加背景点击关闭功能
         StartCoroutine(SetupBackgroundClick());
-        
+        UpdateDailyEXPDisplay();
     }
 
     void SwitchTaskPanel(int panelIndex)
@@ -352,6 +364,7 @@ public class TaskUIController : MonoBehaviour
                 ShowPanel(combatMissionPanel);
                 // 默认加载所有任务
                 SetTaskFilter(TaskFilter.All);
+                UpdateDailyEXPDisplay();
                 break;
             case 1: // 作战奖励
                 SetButtonSelected(combatRewardButton, true);
@@ -673,16 +686,46 @@ public class TaskUIController : MonoBehaviour
     }
 
     // ================== 每日历练值管理 ==================
-    void UpdateDailyEXPDisplay()
+    public void UpdateDailyEXPDisplay()
     {
-        if (currentPlayerData == null || dailyEXPSlider == null) return;
+        // 检查是否所有UI组件都已正确引用
+        /*
+        if (dailyEXPSlider == null)
+        {
+            Debug.LogError("dailyEXPSlider 为空！");
+            return;
+        }
+        */
+        if (dailyEXPText == null)
+        {
+            Debug.LogError("dailyEXPText 为空！");
+            return;
+        }
+
+        if (currentPlayerData == null)
+        {
+            Debug.LogWarning("UpdateDailyEXPDisplay: currentPlayerData 为空");
+            return;
+        }
+
+        // 调试信息
+        Debug.Log($"更新每日历练值显示: {currentPlayerData.DailyEXP}/600");
 
         // 更新滑动条
+        /*
         dailyEXPSlider.maxValue = 600;
         dailyEXPSlider.value = currentPlayerData.DailyEXP;
+        */
+        // 更新文本
+        dailyEXPText.text = $"{currentPlayerData.DailyEXP}";
+        Debug.Log($"{currentPlayerData.DailyEXP}");
 
-        if (dailyEXPText != null)
-            dailyEXPText.text = $"{currentPlayerData.DailyEXP}/600";
+        // 检查奖励按钮数组
+        if (dailyRewardButtons == null || dailyRewardButtons.Length == 0)
+        {
+            Debug.LogWarning("dailyRewardButtons 未配置");
+            return;
+        }
 
         // 更新奖励项状态
         for (int i = 0; i < dailyRewardButtons.Length && i < currentPlayerData.DailyEXPRewards.Count; i++)
@@ -691,20 +734,27 @@ public class TaskUIController : MonoBehaviour
             bool isClaimed = reward.IsClaimed;
             bool canClaim = currentPlayerData.DailyEXP >= reward.RequiredEXP && !isClaimed;
 
+            // 调试信息
+            Debug.Log($"奖励 {i}: 需要 {reward.RequiredEXP} EXP, 已领取: {isClaimed}, 可领取: {canClaim}");
+
             // 设置按钮交互状态
             if (dailyRewardButtons[i] != null)
             {
                 dailyRewardButtons[i].interactable = canClaim;
             }
+            else
+            {
+                Debug.LogWarning($"dailyRewardButtons[{i}] 为空");
+            }
 
             // 设置已领取标记
-            if (dailyRewardClaimed[i] != null)
+            if (dailyRewardClaimed != null && i < dailyRewardClaimed.Length && dailyRewardClaimed[i] != null)
             {
                 dailyRewardClaimed[i].SetActive(isClaimed);
             }
 
             // 设置阈值文本
-            if (dailyRewardThresholds[i] != null)
+            if (dailyRewardThresholds != null && i < dailyRewardThresholds.Length && dailyRewardThresholds[i] != null)
             {
                 dailyRewardThresholds[i].text = reward.RequiredEXP.ToString();
             }
@@ -893,5 +943,23 @@ public class TaskUIController : MonoBehaviour
                 break;
             }
         }
+    }
+
+    // 添加这个方法到TaskUIController类中
+    public void RefreshAllUI()
+    {
+        // 重新加载玩家数据
+        LoadPlayerData();
+
+        // 更新所有UI
+        UpdateAllUI();
+
+        // 更新每日历练值显示
+        UpdateDailyEXPDisplay();
+
+        // 刷新任务列表
+        RefreshMissionList();
+
+        Debug.Log("TaskUIController: 所有UI已刷新");
     }
 }

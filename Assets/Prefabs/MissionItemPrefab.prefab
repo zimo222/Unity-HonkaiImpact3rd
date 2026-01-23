@@ -1,5 +1,80 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &810599250105371373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8161297102662190752}
+  - component: {fileID: 274000296727899815}
+  - component: {fileID: 1582779478369124948}
+  m_Layer: 5
+  m_Name: Panel1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8161297102662190752
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810599250105371373}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8211219780728823697}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 603, y: -108}
+  m_SizeDelta: {x: 785, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &274000296727899815
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810599250105371373}
+  m_CullTransparentMesh: 1
+--- !u!114 &1582779478369124948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810599250105371373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 0.39215687}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 3
 --- !u!1 &1410482981415172800
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,7 +109,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 157, y: -55}
+  m_AnchoredPosition: {x: 157, y: -53}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5856530817695713645
@@ -245,7 +320,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 157, y: -55}
+  m_AnchoredPosition: {x: 157, y: -53}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7776902182064933175
@@ -297,7 +372,6 @@ GameObject:
   - component: {fileID: 8211219780728823697}
   - component: {fileID: 6831657528752721657}
   - component: {fileID: 7141464848542680628}
-  - component: {fileID: 3190993303354804943}
   m_Layer: 5
   m_Name: MissionItemPrefab
   m_TagString: Untagged
@@ -318,6 +392,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4836394871966743147}
+  - {fileID: 8161297102662190752}
   - {fileID: 1783093718476194811}
   - {fileID: 1582197153638709732}
   - {fileID: 1242854671625386824}
@@ -353,6 +428,7 @@ MonoBehaviour:
   actionButtonText: {fileID: 7841424210121607953}
   statusText: {fileID: 3717266957240381339}
   itemButton: {fileID: 7991253102558471422}
+  modularUIButton: {fileID: 0}
 --- !u!114 &7141464848542680628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,30 +473,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3190993303354804943
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4905589793797793795}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttonName: "\u529F\u80FD\u6309\u94AE"
-  actionType: 0
-  panelToOpen: {fileID: 0}
-  closeOtherPanelsOnOpen: 0
-  fadeDuration: 0.3
-  targetSceneName: 
-  sceneLoadMode: 0
-  onCustomEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  requireConfirmation: 0
-  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &5619973575477819849
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,7 +792,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 410, y: 90}
+  m_AnchoredPosition: {x: 380, y: 90}
   m_SizeDelta: {x: 200, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &650626940650730135
@@ -805,7 +857,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 4
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -1354,6 +1406,7 @@ GameObject:
   - component: {fileID: 150326206947898466}
   - component: {fileID: 1434548542184676257}
   - component: {fileID: 6907202367843720392}
+  - component: {fileID: 569843293572200406}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -1463,3 +1516,27 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &569843293572200406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8919302220421100153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u529F\u80FD\u6309\u94AE"
+  actionType: 0
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"

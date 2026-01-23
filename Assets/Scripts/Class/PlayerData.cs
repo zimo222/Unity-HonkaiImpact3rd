@@ -46,7 +46,7 @@ public class PlayerData
         // 初始化默认资源
         Crystals = 500;
         Coins = 3000;
-        Stamina = 120;
+        Stamina = Level + 80;
 
         // 初始化默认角色和装备
         InitializeDefaultCharacters();
@@ -68,19 +68,19 @@ public class PlayerData
         Tasks.Add(new TaskData(
             id: "TASK_DAILY_001",
             name: "Mei's Snack",
-            unlockLevel: 1,
+            unlockLevel: 0,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 50),
-            reward2: new TaskReward(RewardType.Coins, 1000),
+            reward2: new TaskReward(RewardType.Stamina, 60),
             description: "挑战任意关卡，完成1次战斗",
-            sceneName: "BattleScene",
+            sceneName: "NoneScene",
             battleType: "Normal"
         ));
 
         Tasks.Add(new TaskData(
             id: "TASK_DAILY_002",
             name: "Coin Collection",
-            unlockLevel: 1,
+            unlockLevel: 5,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 100),
             reward2: new TaskReward(RewardType.Stamina, 30),
@@ -354,6 +354,7 @@ public class PlayerData
                 EquipmentBag.Add(randomEquipment);
                 break;
             case RewardType.DailyEXP:
+                DailyEXP += reward.Amount;
                 // 已在完成任务时处理
                 break;
                 // 其他奖励类型...

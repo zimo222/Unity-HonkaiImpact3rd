@@ -240,23 +240,23 @@ public class TaskDetailPanelUI : MonoBehaviour
             switch (task.SceneName)
             {
                 case "BattleScene":
-                    iconName = "Icon_Battle_Large";
+                    iconName = "Icon_Battle";
                     break;
                 case "MaterialScene":
-                    iconName = "Icon_Material_Large";
+                    iconName = "Icon_Material";
                     break;
                 case "BossScene":
-                    iconName = "Icon_Boss_Large";
+                    iconName = "Icon_Boss";
                     break;
                 case "EquipmentScene":
-                    iconName = "Icon_Equipment_Large";
+                    iconName = "Icon_Equipment";
                     break;
             }
         }
 
-        Debug.Log($"UI/Icons/Large/{iconName}");
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Large/{iconName}");
-        return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Large/Icon_Default_Large");
+        Debug.Log($"UI/Icons/{iconName}");
+        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/{iconName}");
+        return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 
     Sprite GetRewardSprite(RewardType type)
@@ -264,20 +264,20 @@ public class TaskDetailPanelUI : MonoBehaviour
         string spriteName = "";
         switch (type)
         {
-            case RewardType.Crystals: spriteName = "Icon_Crystal_Large"; break;
-            case RewardType.Coins: spriteName = "Icon_Coin_Large"; break;
-            case RewardType.Stamina: spriteName = "Icon_Stamina_Large"; break;
-            case RewardType.DailyEXP: spriteName = "Icon_EXP_Large"; break;
-            case RewardType.Equipment: spriteName = "Icon_Equipment_Large"; break;
-            case RewardType.CharacterFragment: spriteName = "Icon_Fragment_Large"; break;
-            case RewardType.BattlePassEXP: spriteName = "Icon_BattlePass_Large"; break;
-            case RewardType.Materials: spriteName = "Icon_Material_Large"; break;
-            default: spriteName = "Icon_Default_Large"; break;
+            case RewardType.Crystals: spriteName = "Icon_Crystal"; break;
+            case RewardType.Coins: spriteName = "Icon_Coin"; break;
+            case RewardType.Stamina: spriteName = "Icon_Stamina"; break;
+            case RewardType.DailyEXP: spriteName = "Icon_DailyEXP"; break;
+            case RewardType.Equipment: spriteName = "Icon_Equipment"; break;
+            case RewardType.CharacterFragment: spriteName = "Icon_Fragment"; break;
+            case RewardType.BattlePassEXP: spriteName = "Icon_BattlePass"; break;
+            case RewardType.Materials: spriteName = "Icon_Material"; break;
+            default: spriteName = "Icon_Default"; break;
         }
 
         Debug.Log($"UI/Icons/Large/{spriteName}");
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Large/{spriteName}");
-        return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Large/Icon_Default_Large");
+        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/{spriteName}");
+        return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 
     string GetRewardName(RewardType type)
