@@ -37,15 +37,21 @@ public class TaskUIController : MonoBehaviour
     public TMP_Text combatLevelText;         // 作战等级文本
     public TMP_Text combatEXPText;           // 作战经验文本
     public GameObject combatEXPSlider;       // 作战经验进度条
+    public TMP_Text weekcombatEXPText;       // 本周作战经验文本
 
     [Header("每日历练值")]
     public TMP_Text dailyEXPText;            // 历练值文本
     public GameObject dailyEXPSlider;        // 历练值进度条
     public Button[] dailyRewardButtons;      // 四个档位奖励按钮
-    public Image[] dailyRewardIcons;         // 奖励图标
-    public TMP_Text[] dailyRewardAmounts;    // 奖励数量
-    public GameObject[] dailyRewardClaimed;  // 已领取标记
-    public TMP_Text[] dailyRewardThresholds; // 奖励阈值文本
+    private int[] crystalRewards = { 5, 5, 10, 10, 10 };
+    private int[] thresholds = { 120, 240, 360, 480, 600 };
+
+    // ================== 每日奖励按钮功能 ==================
+
+    [Header("简单奖励弹窗")]
+    public GameObject rewardPopup;
+    public TMP_Text rewardAmountText;
+
 
     [Header("任务详情面板")]
     public TaskDetailPanelUI taskDetailPanel;
@@ -62,6 +68,9 @@ public class TaskUIController : MonoBehaviour
         LoadPlayerData();
         UpdateAllUI();
         InitializeTaskSystem();
+
+        // 自动绑定按钮事件
+        SetupRewardButtonEvents();
     }
 
     void InitializeUI()
@@ -70,15 +79,25 @@ public class TaskUIController : MonoBehaviour
         if (HomogeneousPureCrystalText != null) HomogeneousPureCrystalText.text = "0";
         if (combatLevelText != null) combatLevelText.text = "Lv.1";
         if (combatEXPText != null) combatEXPText.text = "0/1000";
+        if (weekcombatEXPText != null) weekcombatEXPText.text = "0/10000";
+
+        // 初始化奖励弹窗
+        if (rewardPopup != null) rewardPopup.SetActive(false);
     }
 
     void InitializePanelFills()
     {
         RectTransform transform1 = combatEXPSlider.GetComponent<RectTransform>();
         // 设置位置（假设锚点是在中心）
-        transform1.anchoredPosition = new Vector2(934, -93.5f);
+        transform1.anchoredPosition = new Vector2(934.0f, -93.5f);
         // 设置大小
-        transform1.sizeDelta = new Vector2(0, 11);
+        transform1.sizeDelta = new Vector2(0.0f, 11.0f);
+
+        RectTransform transform2 = dailyEXPSlider.GetComponent<RectTransform>();
+        // 设置位置（假设锚点是在中心）
+        transform2.anchoredPosition = new Vector2(1545.0f, -96.0f);
+        // 设置大小
+        transform2.sizeDelta = new Vector2(0.0f, 11.0f);
     }
 
     void LoadPlayerData()
@@ -122,12 +141,13 @@ public class TaskUIController : MonoBehaviour
         // 创建默认数据
         currentPlayerData = new PlayerData("舰长")
         {
-            Level = 20, 
+            Level = 20,
             Experience = 25,
             Stamina = 120,
             Coins = 5000,
             Crystals = 1500,
-            HomogeneousPureCrystal = 8
+            HomogeneousPureCrystal = 8,
+            DailyEXP = 400
         };
 
         UpdateAllUI();
@@ -153,15 +173,24 @@ public class TaskUIController : MonoBehaviour
 
         if (combatEXPText != null)
             combatEXPText.text = currentPlayerData.CombatEXP.ToString() + "/1000";
+
+        if (weekcombatEXPText != null)
+            weekcombatEXPText.text = currentPlayerData.WeekCombatEXP.ToString() + "/10000";
     }
 
     void UpdatePanelFills()
     {
         RectTransform transform1 = combatEXPSlider.GetComponent<RectTransform>();
         // 设置位置（假设锚点是在中心）
-        transform1.anchoredPosition = new Vector2(218f + 1432 * currentPlayerData.CombatEXP / 1000f / 2f, -93.5f);
+        transform1.anchoredPosition = new Vector2(-802 + 1432 * currentPlayerData.CombatEXP / 1000.0f / 2.0f, -76.0f);
         // 设置大小
-        transform1.sizeDelta = new Vector2(1432 * currentPlayerData.CombatEXP / 1000, 11);
+        transform1.sizeDelta = new Vector2(1432 * currentPlayerData.CombatEXP / 1000.0f, 11.0f);
+
+        RectTransform transform2 = dailyEXPSlider.GetComponent<RectTransform>();
+        // 设置位置（假设锚点是在中心）
+        transform2.anchoredPosition = new Vector2(730 + 1630 * currentPlayerData.DailyEXP / 600.0f / 2.0f, -96.0f);
+        // 设置大小
+        transform2.sizeDelta = new Vector2(1630 * currentPlayerData.DailyEXP / 600.0f, 11.0f);
     }
 
     // ================== 任务系统初始化 ==================
@@ -435,29 +464,6 @@ public class TaskUIController : MonoBehaviour
             {
                 Debug.LogWarning($"dailyRewardButtons[{i}] 为空");
             }
-
-            // 设置已领取标记
-            if (dailyRewardClaimed != null && i < dailyRewardClaimed.Length && dailyRewardClaimed[i] != null)
-            {
-                dailyRewardClaimed[i].SetActive(isClaimed);
-            }
-
-            // 设置阈值文本
-            if (dailyRewardThresholds != null && i < dailyRewardThresholds.Length && dailyRewardThresholds[i] != null)
-            {
-                dailyRewardThresholds[i].text = reward.RequiredEXP.ToString();
-            }
-        }
-    }
-
-    public void OnDailyRewardClicked(int index)
-    {
-        if (currentPlayerData == null) return;
-
-        if (currentPlayerData.ClaimDailyEXPReward(index))
-        {
-            UpdateDailyEXPDisplay();
-            UpdateAllUI(); // 更新资源显示
         }
     }
 
@@ -597,7 +603,6 @@ public class TaskUIController : MonoBehaviour
             }
         }
     }
-
     public void RefreshAllUI()
     {
         // 重新加载玩家数据
@@ -613,5 +618,112 @@ public class TaskUIController : MonoBehaviour
         LoadAllTasks();
 
         Debug.Log("TaskUIController: 所有UI已刷新");
+    }
+
+    // 显示奖励弹窗的方法
+    void ShowRewardPopup(int crystalAmount)
+    {
+        if (rewardPopup != null && rewardAmountText != null)
+        {
+            rewardAmountText.text = $"{crystalAmount}";
+            rewardPopup.SetActive(true);
+
+            // 3秒后自动关闭弹窗
+            StartCoroutine(AutoClosePopup());
+        }
+    }
+
+    // 自动关闭弹窗的协程
+    IEnumerator AutoClosePopup()
+    {
+        yield return new WaitForSeconds(2);
+        if (rewardPopup != null)
+        {
+            rewardPopup.SetActive(false);
+        }
+    }
+
+    // 手动关闭弹窗的方法（在弹窗按钮上调用）
+    public void CloseRewardPopup()
+    {
+        if (rewardPopup != null)
+        {
+            rewardPopup.SetActive(false);
+        }
+    }
+    // ================== 每日奖励按钮功能 ==================
+
+    void SetupRewardButtonEvents()
+    {
+        // 检查按钮数组是否已设置
+        if (dailyRewardButtons == null || dailyRewardButtons.Length != 5)
+        {
+            Debug.LogError("dailyRewardButtons数组未正确设置！应有5个按钮。");
+            return;
+        }
+
+        // 为每个按钮绑定事件
+        for (int i = 0; i < dailyRewardButtons.Length; i++)
+        {
+            if (dailyRewardButtons[i] == null)
+            {
+                Debug.LogWarning($"dailyRewardButtons[{i}]为空！");
+                continue;
+            }
+
+            // 清除旧的事件监听器
+            dailyRewardButtons[i].onClick.RemoveAllListeners();
+
+            // 根据索引绑定对应的方法
+            int index = i;
+            dailyRewardButtons[i].onClick.AddListener(() => OnRewardButtonClicked(index));
+        }
+
+        Debug.Log("奖励按钮事件已自动绑定");
+    }
+
+    // 通用的奖励按钮点击方法
+    void OnRewardButtonClicked(int buttonIndex)
+    {
+        if (currentPlayerData == null)
+        {
+            Debug.LogError("当前没有玩家数据！");
+            return;
+        }
+
+        // 检查索引范围
+        if (buttonIndex < 0 || buttonIndex >= thresholds.Length)
+        {
+            Debug.LogError($"无效的按钮索引: {buttonIndex}");
+            return;
+        }
+
+        int requiredEXP = thresholds[buttonIndex];
+        int crystalAmount = crystalRewards[buttonIndex];
+
+        // 检查是否达到阈值
+        if (currentPlayerData.DailyEXP >= requiredEXP)
+        {
+            // 给予水晶奖励
+            currentPlayerData.Crystals += crystalAmount;
+
+            // 显示奖励弹窗
+            ShowRewardPopup(crystalAmount);
+
+            // 保存数据
+            if (PlayerDataManager.Instance != null)
+            {
+                PlayerDataManager.Instance.SaveCurrentPlayerData();
+            }
+
+            // 更新UI
+            UpdateAllUI();
+
+            Debug.Log($"成功领取奖励！获得水晶: {crystalAmount}");
+        }
+        else
+        {
+            Debug.Log($"每日历练值不足：需要{requiredEXP}，当前{currentPlayerData.DailyEXP}");
+        }
     }
 }

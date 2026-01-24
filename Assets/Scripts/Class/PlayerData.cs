@@ -35,6 +35,7 @@ public class PlayerData
     public DateTime LastTaskCheckTime = DateTime.Now;                    // 上次查看任务时间
     public int CombatLevel;
     public int CombatEXP;
+    public int WeekCombatEXP;
     public int DailyEXP = 0;                                            // 当日历练值
     public List<DailyEXPReward> DailyEXPRewards = new List<DailyEXPReward>(); // 每日历练值奖励
 
@@ -372,7 +373,8 @@ public class PlayerData
             case RewardType.DailyEXP:
                 DailyEXP += reward.Amount;
                 CombatEXP += reward.Amount;
-                if(CombatEXP >= 1000)
+                WeekCombatEXP += reward.Amount;
+                if (CombatEXP >= 1000)
                 {
                     CombatLevel++;
                     CombatEXP %= 1000;

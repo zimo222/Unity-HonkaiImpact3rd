@@ -30,6 +30,7 @@ public class TaskDetailPanelUI : MonoBehaviour
     public TMP_Text detailReward2Text;
 
     [Header("任务状态")]
+    public TMP_Text descriptionText;
     public TMP_Text taskStatusText;
 
     // 私有变量
@@ -131,6 +132,11 @@ public class TaskDetailPanelUI : MonoBehaviour
         if (taskIcon != null)
         {
             taskIcon.sprite = GetTaskIcon(task);
+        }
+
+        if(descriptionText != null)
+        {
+            descriptionText.text = task.Description;
         }
 
         // 主要奖励（图标）
