@@ -89,6 +89,7 @@ public class TaskData
         Status = unlockLevel <= 10 ? TaskStatus.Completed : (unlockLevel <= level ? TaskStatus.Unlocked : TaskStatus.Locked);
         Reward1 = reward1;
         Reward2 = reward2;
+        nowTimes = (Status == TaskStatus.Claimed || Status == TaskStatus.Completed ?  maxTime : 0);
         maxTimes = maxTime;
         Description = description;
         SceneName = sceneName;

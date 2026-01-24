@@ -15,6 +15,7 @@ public class MissionItemUI : MonoBehaviour
     public Button actionButton;
     public TMP_Text actionButtonText;
     public TMP_Text statusText;
+    public GameObject panel; 
 
     [Header("点击区域")]
     public Button itemButton;
@@ -263,13 +264,27 @@ public class MissionItemUI : MonoBehaviour
                     statusText.color = Color.gray;
                     break;
                 case TaskStatus.Unlocked:
-                    statusText.text = task.nowTimes + "/" + task.maxTimes;
-                    statusText.color = Color.white;
-                    break;
+                    {
+                        statusText.text = task.nowTimes + "/" + task.maxTimes;
+                        RectTransform transform = panel.GetComponent<RectTransform>();
+                        // 设置位置（假设锚点是在中心）
+                        transform.anchoredPosition = new Vector2(210.5f + 785 / task.maxTimes * task.nowTimes / 2.0f, -108);
+                        // 设置大小
+                        transform.sizeDelta = new Vector2(785 * task.nowTimes / task.maxTimes, 10);
+                        statusText.color = Color.white;
+                        break;
+                    }
                 case TaskStatus.Completed:
-                    statusText.text = task.maxTimes + "/" + task.maxTimes;
-                    statusText.color = Color.white;
-                    break;
+                    {
+                        statusText.text = task.nowTimes + "/" + task.maxTimes;
+                        RectTransform transform = panel.GetComponent<RectTransform>();
+                        // 设置位置（假设锚点是在中心）
+                        transform.anchoredPosition = new Vector2(210.5f + 785 / task.maxTimes * task.nowTimes / 2.0f, -108);
+                        // 设置大小
+                        transform.sizeDelta = new Vector2(785 * task.nowTimes / task.maxTimes, 10);
+                        statusText.color = Color.white;
+                        break;
+                    }
                 case TaskStatus.Claimed:
                     statusText.text = "Completed";
                     statusText.color = Color.green;

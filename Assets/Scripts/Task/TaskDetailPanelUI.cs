@@ -268,6 +268,7 @@ public class TaskDetailPanelUI : MonoBehaviour
             case RewardType.Coins: spriteName = "Icon_Coin"; break;
             case RewardType.Stamina: spriteName = "Icon_Stamina"; break;
             case RewardType.DailyEXP: spriteName = "Icon_DailyEXP"; break;
+            case RewardType.EXP: spriteName = "Icon_EXP"; break;
             case RewardType.Equipment: spriteName = "Icon_Equipment"; break;
             case RewardType.CharacterFragment: spriteName = "Icon_Fragment"; break;
             case RewardType.BattlePassEXP: spriteName = "Icon_BattlePass"; break;

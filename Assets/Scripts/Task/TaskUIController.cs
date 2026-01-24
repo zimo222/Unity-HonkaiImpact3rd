@@ -20,9 +20,9 @@ public class TaskUIController : MonoBehaviour
 
     // ================== 任务系统UI引用 ==================
     [Header("任务系统 - 左侧菜单")]
-    public Button combatMissionButton;      // 作战任务按钮
-    public Button combatRewardButton;       // 作战奖励按钮
-    public Button combatShopButton;         // 作战商店按钮
+    public Button combatMissionButton;       // 作战任务按钮
+    public Button combatRewardButton;        // 作战奖励按钮
+    public Button combatShopButton;          // 作战商店按钮
 
     [Header("任务系统 - 右侧内容区域")]
     public GameObject combatMissionPanel;    // 作战任务面板
@@ -33,9 +33,14 @@ public class TaskUIController : MonoBehaviour
     public Transform missionListContent;     // 任务列表容器
     public GameObject missionItemPrefab;     // 任务项预制体
 
+    [Header("作战任务")]
+    public TMP_Text combatLevelText;         // 作战等级文本
+    public TMP_Text combatEXPText;           // 作战经验文本
+    public GameObject combatEXPSlider;       // 作战经验进度条
+
     [Header("每日历练值")]
-    public Slider dailyEXPSlider;            // 历练值进度条
     public TMP_Text dailyEXPText;            // 历练值文本
+    public GameObject dailyEXPSlider;        // 历练值进度条
     public Button[] dailyRewardButtons;      // 四个档位奖励按钮
     public Image[] dailyRewardIcons;         // 奖励图标
     public TMP_Text[] dailyRewardAmounts;    // 奖励数量
@@ -45,25 +50,6 @@ public class TaskUIController : MonoBehaviour
     [Header("任务详情面板")]
     public TaskDetailPanelUI taskDetailPanel;
 
-    // ================== 其他原有系统（保持不变） ==================
-    [Header("Panel填充控制")]
-    public PanelFillData[] panelFillControllers;    // Panel填充控制器数组
-
-    [System.Serializable]
-    public class PanelFillData
-    {
-        public string fillName;                     // 填充名称（用于标识）
-        public GameObject targetPanel;              // 目标Panel对象
-        public float fillAmount;                    // 当前填充值
-        [Range(0f, 1f)] public float minFill = 0f;  // 最小填充值
-        [Range(0f, 1f)] public float maxFill = 1f;  // 最大填充值
-        public bool useCustomFill = false;          // 是否使用自定义填充值
-        public float customFillValue = 0.5f;        // 自定义填充值
-
-        [HideInInspector] public Image panelImage;  // Panel的Image组件
-        [HideInInspector] public bool isInitialized = false; // 是否已初始化
-    }
-
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
     private bool isDataLoaded = false;
@@ -72,33 +58,27 @@ public class TaskUIController : MonoBehaviour
     void Start()
     {
         InitializeUI();
-        LoadPlayerData();
-        InitializeTaskSystem();
-
-        // 初始化Panel填充
         InitializePanelFills();
+        LoadPlayerData();
+        UpdateAllUI();
+        InitializeTaskSystem();
     }
 
     void InitializeUI()
     {
         // 设置默认文本
         if (HomogeneousPureCrystalText != null) HomogeneousPureCrystalText.text = "0";
+        if (combatLevelText != null) combatLevelText.text = "Lv.1";
+        if (combatEXPText != null) combatEXPText.text = "0/1000";
     }
 
     void InitializePanelFills()
     {
-        foreach (PanelFillData fillData in panelFillControllers)
-        {
-            if (fillData.targetPanel != null)
-            {
-                fillData.panelImage = fillData.targetPanel.GetComponent<Image>();
-                if (fillData.panelImage != null)
-                {
-                    fillData.panelImage.fillAmount = fillData.minFill;
-                    fillData.isInitialized = true;
-                }
-            }
-        }
+        RectTransform transform1 = combatEXPSlider.GetComponent<RectTransform>();
+        // 设置位置（假设锚点是在中心）
+        transform1.anchoredPosition = new Vector2(934, -93.5f);
+        // 设置大小
+        transform1.sizeDelta = new Vector2(0, 11);
     }
 
     void LoadPlayerData()
@@ -167,47 +147,21 @@ public class TaskUIController : MonoBehaviour
 
         if (HomogeneousPureCrystalText != null)
             HomogeneousPureCrystalText.text = currentPlayerData.HomogeneousPureCrystal.ToString();
+
+        if (combatLevelText != null)
+            combatLevelText.text = "Lv." + currentPlayerData.CombatLevel.ToString();
+
+        if (combatEXPText != null)
+            combatEXPText.text = currentPlayerData.CombatEXP.ToString() + "/1000";
     }
 
     void UpdatePanelFills()
     {
-        if (panelFillControllers != null && currentPlayerData != null)
-        {
-            int expNeededForNextLevel = currentPlayerData.Level * 100;
-            float expPercent = expNeededForNextLevel > 0 ? (float)currentPlayerData.Experience / expNeededForNextLevel : 0;
-            float crystalPercent = Mathf.Clamp01(currentPlayerData.Crystals / 10000f);
-            float coinPercent = Mathf.Clamp01(currentPlayerData.Coins / 50000f);
-
-            foreach (PanelFillData fillData in panelFillControllers)
-            {
-                if (fillData.panelImage != null)
-                {
-                    float fillValue = fillData.fillAmount;
-
-                    switch (fillData.fillName)
-                    {
-                        case "Exp":
-                            fillValue = expPercent;
-                            break;
-                        case "水晶进度":
-                            fillValue = crystalPercent;
-                            break;
-                        case "金币进度":
-                            fillValue = coinPercent;
-                            break;
-                        default:
-                            if (fillData.useCustomFill)
-                            {
-                                fillValue = fillData.customFillValue;
-                            }
-                            break;
-                    }
-
-                    fillData.panelImage.fillAmount = Mathf.Clamp(fillValue, fillData.minFill, fillData.maxFill);
-                    fillData.fillAmount = fillData.panelImage.fillAmount;
-                }
-            }
-        }
+        RectTransform transform1 = combatEXPSlider.GetComponent<RectTransform>();
+        // 设置位置（假设锚点是在中心）
+        transform1.anchoredPosition = new Vector2(218f + 1432 * currentPlayerData.CombatEXP / 1000f / 2f, -93.5f);
+        // 设置大小
+        transform1.sizeDelta = new Vector2(1432 * currentPlayerData.CombatEXP / 1000, 11);
     }
 
     // ================== 任务系统初始化 ==================
@@ -433,14 +387,6 @@ public class TaskUIController : MonoBehaviour
     // ================== 每日历练值管理 ==================
     public void UpdateDailyEXPDisplay()
     {
-        // 检查是否所有UI组件都已正确引用
-        /*
-        if (dailyEXPSlider == null)
-        {
-            Debug.LogError("dailyEXPSlider 为空！");
-            return;
-        }
-        */
         if (dailyEXPText == null)
         {
             Debug.LogError("dailyEXPText 为空！");
@@ -456,13 +402,11 @@ public class TaskUIController : MonoBehaviour
         // 调试信息
         Debug.Log($"更新每日历练值显示: {currentPlayerData.DailyEXP}/600");
 
-        // 更新滑动条
-        /*
-        dailyEXPSlider.maxValue = 600;
-        dailyEXPSlider.value = currentPlayerData.DailyEXP;
-        */
         // 更新文本
         dailyEXPText.text = $"{currentPlayerData.DailyEXP}";
+        combatLevelText.text = $"Lv.{currentPlayerData.CombatLevel}";
+        combatEXPText.text = $"{currentPlayerData.CombatEXP}/1000";
+
         Debug.Log($"{currentPlayerData.DailyEXP}");
 
         // 检查奖励按钮数组
