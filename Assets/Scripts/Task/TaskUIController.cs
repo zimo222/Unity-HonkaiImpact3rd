@@ -9,20 +9,13 @@ using UnityEngine.SceneManagement;
 public class TaskUIController : MonoBehaviour
 {
     // ================== 基础玩家信息UI引用 ==================
-    [Header("玩家信息")]
-    public TMP_Text playerNameText;
-    public TMP_Text playerLevelText;
-    public TMP_Text playerExperienceText;
-    public Slider experienceSlider;
 
     [Header("资源信息")]
-    public TMP_Text tiliText;
-    public TMP_Text coinsText;
-    public TMP_Text crystalsText;
+    public TMP_Text HomogeneousPureCrystalText;
 
     // ================== 按钮引用 (可选) ==================
-    [Header("按钮引用 (如果你需要通过脚本访问它们)")]
-    [Tooltip("你可以在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
+    [Header("按钮引用")]
+    [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
     // ================== 任务系统UI引用 ==================
@@ -39,9 +32,6 @@ public class TaskUIController : MonoBehaviour
     [Header("任务列表")]
     public Transform missionListContent;     // 任务列表容器
     public GameObject missionItemPrefab;     // 任务项预制体
-    public TMP_Text missionTitleText;        // 任务标题
-    public TMP_Text dailyRefreshText;        // 每日刷新时间文本
-    public TMP_Text weeklyRefreshText;       // 每周刷新时间文本
 
     [Header("每日历练值")]
     public Slider dailyEXPSlider;            // 历练值进度条
@@ -54,22 +44,6 @@ public class TaskUIController : MonoBehaviour
 
     [Header("任务详情面板")]
     public TaskDetailPanelUI taskDetailPanel;
-
-    // ================== 任务筛选功能 ==================
-    [Header("任务筛选")]
-    public Button filterAllButton;
-    public Button filterDailyButton;
-    public Button filterWeeklyButton;
-    public TMP_Text currentFilterText;
-
-    private TaskFilter currentFilter = TaskFilter.All;
-
-    private enum TaskFilter
-    {
-        All,
-        Daily,
-        Weekly
-    }
 
     // ================== 其他原有系统（保持不变） ==================
     [Header("Panel填充控制")]
@@ -90,11 +64,6 @@ public class TaskUIController : MonoBehaviour
         [HideInInspector] public bool isInitialized = false; // 是否已初始化
     }
 
-    [Header("确认窗口")]
-    public GameObject confirmationWindow;           // 确认窗口
-    public TMP_Text confirmationText;               // 确认文本
-    private System.Action pendingAction;            // 待执行的动作
-
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
     private bool isDataLoaded = false;
@@ -113,28 +82,7 @@ public class TaskUIController : MonoBehaviour
     void InitializeUI()
     {
         // 设置默认文本
-        if (playerNameText != null) playerNameText.text = "加载中...";
-        if (playerLevelText != null) playerLevelText.text = "Lv.0";
-        if (playerExperienceText != null) playerExperienceText.text = "0/100";
-        if (tiliText != null) tiliText.text = "0";
-        if (coinsText != null) coinsText.text = "0";
-        if (crystalsText != null) crystalsText.text = "0";
-
-        // 初始化经验条
-        if (experienceSlider != null)
-        {
-            experienceSlider.minValue = 0;
-            experienceSlider.maxValue = 100;
-            experienceSlider.value = 0;
-        }
-
-        // 初始化确认窗口
-        if (confirmationWindow != null)
-            confirmationWindow.SetActive(false);
-
-        // 设置任务系统默认标题
-        if (missionTitleText != null)
-            missionTitleText.text = "作战任务";
+        if (HomogeneousPureCrystalText != null) HomogeneousPureCrystalText.text = "0";
     }
 
     void InitializePanelFills()
@@ -194,11 +142,12 @@ public class TaskUIController : MonoBehaviour
         // 创建默认数据
         currentPlayerData = new PlayerData("舰长")
         {
-            Level = 20, // 提高等级以便看到周常任务
+            Level = 20, 
             Experience = 25,
             Stamina = 120,
             Coins = 5000,
-            Crystals = 1500
+            Crystals = 1500,
+            HomogeneousPureCrystal = 8
         };
 
         UpdateAllUI();
@@ -208,46 +157,16 @@ public class TaskUIController : MonoBehaviour
     void UpdateAllUI()
     {
         if (currentPlayerData == null) return;
-
-        UpdatePlayerInfo();
         UpdateResources();
         UpdatePanelFills();
-    }
-
-    void UpdatePlayerInfo()
-    {
-        if (currentPlayerData == null) return;
-
-        if (playerNameText != null)
-            playerNameText.text = currentPlayerData.PlayerName;
-
-        if (playerLevelText != null)
-            playerLevelText.text = $"Lv.{currentPlayerData.Level}";
-
-        int expNeededForNextLevel = currentPlayerData.Level * 100;
-
-        if (playerExperienceText != null)
-            playerExperienceText.text = $"{currentPlayerData.Experience}/{expNeededForNextLevel}";
-
-        if (experienceSlider != null)
-        {
-            experienceSlider.maxValue = expNeededForNextLevel;
-            experienceSlider.value = currentPlayerData.Experience;
-        }
     }
 
     void UpdateResources()
     {
         if (currentPlayerData == null) return;
 
-        if (tiliText != null)
-            tiliText.text = FormatNumber(currentPlayerData.Stamina);
-
-        if (coinsText != null)
-            coinsText.text = FormatNumber(currentPlayerData.Coins);
-
-        if (crystalsText != null)
-            crystalsText.text = FormatNumber(currentPlayerData.Crystals);
+        if (HomogeneousPureCrystalText != null)
+            HomogeneousPureCrystalText.text = currentPlayerData.HomogeneousPureCrystal.ToString();
     }
 
     void UpdatePanelFills()
@@ -291,15 +210,6 @@ public class TaskUIController : MonoBehaviour
         }
     }
 
-    string FormatNumber(int number)
-    {
-        if (number >= 1000000)
-            return $"{(number / 1000000f):F1}M";
-        if (number >= 1000)
-            return $"{(number / 1000f):F1}K";
-        return number.ToString();
-    }
-
     // ================== 任务系统初始化 ==================
     void InitializeTaskSystem()
     {
@@ -327,18 +237,9 @@ public class TaskUIController : MonoBehaviour
             combatShopButton.onClick.AddListener(() => SwitchTaskPanel(2));
 
         // 初始化筛选按钮
-        if (filterAllButton != null)
-            filterAllButton.onClick.AddListener(() => SetTaskFilter(TaskFilter.All));
-        if (filterDailyButton != null)
-            filterDailyButton.onClick.AddListener(() => SetTaskFilter(TaskFilter.Daily));
-        if (filterWeeklyButton != null)
-            filterWeeklyButton.onClick.AddListener(() => SetTaskFilter(TaskFilter.Weekly));
 
         // 加载默认面板
         SwitchTaskPanel(0);
-
-        // 更新刷新时间文本
-        UpdateRefreshTimeText();
 
         // 初始化任务详情面板
         if (taskDetailPanel != null)
@@ -363,7 +264,7 @@ public class TaskUIController : MonoBehaviour
                 SetButtonSelected(combatMissionButton, true);
                 ShowPanel(combatMissionPanel);
                 // 默认加载所有任务
-                SetTaskFilter(TaskFilter.All);
+                LoadAllTasks(); // 加载所有任务
                 UpdateDailyEXPDisplay();
                 break;
             case 1: // 作战奖励
@@ -406,60 +307,8 @@ public class TaskUIController : MonoBehaviour
         if (panel != null) panel.SetActive(true);
     }
 
-    // ================== 任务筛选功能 ==================
-    void SetTaskFilter(TaskFilter filter)
-    {
-        currentFilter = filter;
-
-        // 更新按钮状态
-        UpdateFilterButtons();
-
-        // 根据筛选加载任务
-        switch (filter)
-        {
-            case TaskFilter.All:
-                LoadAllTasks(); // 加载所有任务
-                if (currentFilterText != null) currentFilterText.text = "全部任务";
-                break;
-            case TaskFilter.Daily:
-                LoadTasksByFrequency(TaskFrequency.Daily);
-                if (currentFilterText != null) currentFilterText.text = "日常任务";
-                break;
-            case TaskFilter.Weekly:
-                LoadTasksByFrequency(TaskFrequency.Weekly);
-                if (currentFilterText != null) currentFilterText.text = "周常任务";
-                break;
-        }
-    }
-
-    void UpdateFilterButtons()
-    {
-        // 设置按钮选中状态
-        SetFilterButtonSelected(filterAllButton, currentFilter == TaskFilter.All);
-        SetFilterButtonSelected(filterDailyButton, currentFilter == TaskFilter.Daily);
-        SetFilterButtonSelected(filterWeeklyButton, currentFilter == TaskFilter.Weekly);
-    }
-
-    void SetFilterButtonSelected(Button button, bool selected)
-    {
-        if (button == null) return;
-
-        var buttonImage = button.GetComponent<Image>();
-        if (buttonImage != null)
-        {
-            buttonImage.color = selected ? new Color(0.3f, 0.6f, 1f, 1f) : new Color(0.125f, 0.25f, 0.5f, 1f);
-        }
-
-        // 也可以改变按钮文本颜色
-        var buttonText = button.GetComponentInChildren<TMP_Text>();
-        if (buttonText != null)
-        {
-            buttonText.color = selected ? Color.white : new Color(0.8f, 0.8f, 0.8f, 1f);
-        }
-    }
-
     // ================== 任务列表管理 ==================
-    void LoadAllTasks()
+    public void LoadAllTasks()
     {
         if (currentPlayerData == null || missionListContent == null || missionItemPrefab == null)
             return;
@@ -485,58 +334,6 @@ public class TaskUIController : MonoBehaviour
 
             // 调试每个任务
             Debug.Log($"创建任务项: {task.TaskName} ({task.Frequency}) - 状态: {task.Status}");
-        }
-
-        // 如果没有任务，显示空状态
-        if (itemCount == 0)
-        {
-            ShowEmptyState();
-        }
-
-        // 更新任务标题
-        if (missionTitleText != null)
-        {
-            missionTitleText.text = "作战任务 - 全部";
-        }
-
-        // 强制布局重建（如果需要）
-        StartCoroutine(RebuildLayout());
-    }
-
-    void LoadTasksByFrequency(TaskFrequency frequency)
-    {
-        if (currentPlayerData == null || missionListContent == null || missionItemPrefab == null)
-            return;
-
-        // 清除现有任务项
-        ClearMissionList();
-
-        // 获取指定频率的任务
-        List<TaskData> tasks = currentPlayerData.GetSortedTasks(frequency);
-
-        // 调试信息
-        Debug.Log($"=== 加载{frequency}任务 ===");
-        Debug.Log($"任务数量: {tasks.Count}");
-
-        // 创建任务项
-        int itemCount = 0;
-        foreach (TaskData task in tasks)
-        {
-            CreateMissionItem(task);
-            itemCount++;
-        }
-
-        // 如果没有任务，显示空状态
-        if (itemCount == 0)
-        {
-            ShowEmptyState();
-        }
-
-        // 更新任务标题
-        if (missionTitleText != null)
-        {
-            string title = frequency == TaskFrequency.Daily ? "作战任务 - 日常" : "作战任务 - 周常";
-            missionTitleText.text = title;
         }
 
         // 强制布局重建（如果需要）
@@ -578,23 +375,6 @@ public class TaskUIController : MonoBehaviour
         }
     }
 
-    void ShowEmptyState()
-    {
-        // 创建一个空状态提示
-        GameObject emptyState = new GameObject("EmptyState");
-        emptyState.transform.SetParent(missionListContent);
-
-        RectTransform rect = emptyState.AddComponent<RectTransform>();
-        rect.sizeDelta = new Vector2(800, 100);
-        rect.localScale = Vector3.one;
-
-        TextMeshProUGUI text = emptyState.AddComponent<TextMeshProUGUI>();
-        text.text = "当前没有可显示的任务";
-        text.alignment = TextAlignmentOptions.Center;
-        text.color = Color.gray;
-        text.fontSize = 24;
-    }
-
     IEnumerator RebuildLayout()
     {
         // 等待一帧让Unity更新布局
@@ -602,23 +382,6 @@ public class TaskUIController : MonoBehaviour
 
         // 强制重建布局
         LayoutRebuilder.ForceRebuildLayoutImmediate(missionListContent as RectTransform);
-    }
-
-    public void RefreshMissionList()
-    {
-        // 根据当前筛选重新加载任务
-        switch (currentFilter)
-        {
-            case TaskFilter.All:
-                LoadAllTasks();
-                break;
-            case TaskFilter.Daily:
-                LoadTasksByFrequency(TaskFrequency.Daily);
-                break;
-            case TaskFilter.Weekly:
-                LoadTasksByFrequency(TaskFrequency.Weekly);
-                break;
-        }
     }
 
     public void OnMissionItemClicked(string taskId)
@@ -636,10 +399,7 @@ public class TaskUIController : MonoBehaviour
                 // 跳转到任务场景
                 if (!string.IsNullOrEmpty(task.SceneName))
                 {
-                    ShowConfirmationWindow($"是否前往{task.TaskName}？", () =>
-                    {
-                        SceneManager.LoadScene(task.SceneName);
-                    });
+                    SceneManager.LoadScene(task.SceneName);
                 }
                 break;
 
@@ -648,7 +408,7 @@ public class TaskUIController : MonoBehaviour
                 if (currentPlayerData.ClaimTaskReward(taskId))
                 {
                     // 刷新界面
-                    RefreshMissionList();
+                    LoadAllTasks();
                     UpdateDailyEXPDisplay();
                     UpdateAllUI(); // 更新资源显示
                 }
@@ -668,21 +428,6 @@ public class TaskUIController : MonoBehaviour
     {
         // 详情面板关闭后可以执行一些清理操作
         Debug.Log("任务详情面板已关闭");
-    }
-
-    public void GoToTaskScene(TaskData task)
-    {
-        if (task == null || string.IsNullOrEmpty(task.SceneName)) return;
-
-        // 显示确认窗口
-        ShowConfirmationWindow($"是否前往【{task.TaskName}】？", () =>
-        {
-            // 保存当前任务状态
-            PlayerPrefs.SetString("CurrentTask", task.TaskID);
-
-            // 加载场景
-            SceneManager.LoadScene(task.SceneName);
-        });
     }
 
     // ================== 每日历练值管理 ==================
@@ -772,20 +517,6 @@ public class TaskUIController : MonoBehaviour
         }
     }
 
-    // ================== 刷新时间文本 ==================
-    void UpdateRefreshTimeText()
-    {
-        if (dailyRefreshText != null)
-        {
-            dailyRefreshText.text = "每日4:00刷新";
-        }
-
-        if (weeklyRefreshText != null)
-        {
-            weeklyRefreshText.text = "每周一4:00刷新";
-        }
-    }
-
     // ================== 调试功能 ==================
     void DebugTaskData()
     {
@@ -830,28 +561,6 @@ public class TaskUIController : MonoBehaviour
         Debug.Log($"已解锁: {unlockedCount}");
         Debug.Log($"已完成: {completedCount}");
         Debug.Log($"已领取: {claimedCount}");
-    }
-
-    // ================== 确认窗口 ==================
-    void ShowConfirmationWindow(string message, System.Action confirmAction)
-    {
-        if (confirmationWindow == null || confirmationText == null) return;
-
-        confirmationText.text = message;
-        pendingAction = confirmAction;
-        confirmationWindow.SetActive(true);
-    }
-
-    public void OnConfirm()
-    {
-        pendingAction?.Invoke();
-        confirmationWindow.SetActive(false);
-    }
-
-    public void OnCancel()
-    {
-        pendingAction = null;
-        confirmationWindow.SetActive(false);
     }
     
     // ================== 背景点击关闭面板 ==================
@@ -945,7 +654,6 @@ public class TaskUIController : MonoBehaviour
         }
     }
 
-    // 添加这个方法到TaskUIController类中
     public void RefreshAllUI()
     {
         // 重新加载玩家数据
@@ -958,7 +666,7 @@ public class TaskUIController : MonoBehaviour
         UpdateDailyEXPDisplay();
 
         // 刷新任务列表
-        RefreshMissionList();
+        LoadAllTasks();
 
         Debug.Log("TaskUIController: 所有UI已刷新");
     }

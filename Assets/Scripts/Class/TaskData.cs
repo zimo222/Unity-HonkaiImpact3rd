@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 
 // ================== 任务奖励类型 ==================
 public enum RewardType
@@ -8,11 +9,12 @@ public enum RewardType
     Crystals,        // 水晶
     Coins,           // 金币
     Stamina,         // 体力
+    EXP,              //经验
+    DailyEXP,        // 每日历练值
     Equipment,       // 装备
     CharacterFragment, // 角色碎片
-    DailyEXP,        // 每日历练值
     BattlePassEXP,   // 作战凭证经验
-    Materials        // 材料
+    Materials       // 材料
 }
 
 // ================== 任务奖励结构 ==================
@@ -57,6 +59,8 @@ public class TaskData
     public int UnlockLevel;            // 解锁等级
     public TaskFrequency Frequency;    // 任务类型
     public TaskStatus Status;          // 任务状态
+    public int maxTimes;
+    public int nowTimes;
 
     // 任务奖励（最多两个）
     public TaskReward Reward1;
@@ -74,17 +78,18 @@ public class TaskData
 
     public TaskData() { }
 
-    public TaskData(string id, string name, int unlockLevel, TaskFrequency frequency,
-                    TaskReward reward1, TaskReward reward2, string description = "",
+    public TaskData(int level, string id, string name, int unlockLevel, TaskFrequency frequency,
+                    TaskReward reward1, TaskReward reward2, int maxTime,  string description = "",
                     string sceneName = "", string battleType = "")
     {
         TaskID = id;
         TaskName = name;
         UnlockLevel = unlockLevel;
         Frequency = frequency;
-        Status = unlockLevel == 1 ? TaskStatus.Unlocked : TaskStatus.Locked;
+        Status = unlockLevel <= 10 ? TaskStatus.Completed : (unlockLevel <= level ? TaskStatus.Unlocked : TaskStatus.Locked);
         Reward1 = reward1;
         Reward2 = reward2;
+        maxTimes = maxTime;
         Description = description;
         SceneName = sceneName;
         BattleType = battleType;

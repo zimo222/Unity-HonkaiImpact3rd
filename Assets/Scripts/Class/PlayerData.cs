@@ -12,11 +12,12 @@ public class PlayerData
     public DateTime LastLoginTime;                  // 上次登录时间
 
     // ================== 游戏进度与资源 ==================
-    public int Level = 1;
+    public int Level = 88;
     public int Experience;
     public int Crystals;                           // 水晶
     public int Coins;                              // 金币
     public int Stamina;                            // 体力
+    public int HomogeneousPureCrystal;             // 恒质纯晶
 
     // ================== 角色与装备系统 ==================
     [Header("角色系统")]
@@ -32,6 +33,8 @@ public class PlayerData
     [Header("任务系统")]
     public List<TaskData> Tasks = new List<TaskData>();                  // 所有任务
     public DateTime LastTaskCheckTime = DateTime.Now;                    // 上次查看任务时间
+    public int CombatLevel;
+    public int CombatEXP;
     public int DailyEXP = 0;                                            // 当日历练值
     public List<DailyEXPReward> DailyEXPRewards = new List<DailyEXPReward>(); // 每日历练值奖励
 
@@ -66,72 +69,84 @@ public class PlayerData
     {
         // 日常任务
         Tasks.Add(new TaskData(
+            level: Level,
             id: "TASK_DAILY_001",
             name: "Mei's Snack",
-            unlockLevel: 0,
+            unlockLevel: 10,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 50),
             reward2: new TaskReward(RewardType.Stamina, 60),
-            description: "挑战任意关卡，完成1次战斗",
+            maxTime: 0,
+            description: "Check-in Task",
             sceneName: "NoneScene",
             battleType: "Normal"
         ));
 
         Tasks.Add(new TaskData(
+            level: Level,
             id: "TASK_DAILY_002",
             name: "Coin Collection",
-            unlockLevel: 5,
+            unlockLevel: 15,
             frequency: TaskFrequency.Daily,
-            reward1: new TaskReward(RewardType.DailyEXP, 100),
-            reward2: new TaskReward(RewardType.Stamina, 30),
-            description: "在物资筹备关卡中完成3次挑战",
+            reward1: new TaskReward(RewardType.DailyEXP, 50),
+            reward2: new TaskReward(RewardType.EXP, 50),
+            maxTime: 1,
+            description: "Go to the home base to collect coins",
+            sceneName: "HomeLandScene",
+            battleType: "Normal"
+        ));
+
+        Tasks.Add(new TaskData(
+            level: Level,
+            id: "TASK_DAILY_003",
+            name: "Material activities",
+            unlockLevel: 15,
+            frequency: TaskFrequency.Daily,
+            reward1: new TaskReward(RewardType.DailyEXP, 200),
+            reward2: new TaskReward(RewardType.EXP, 200),
+            maxTime: 3,
+            description: "Go to battle to obtain materials",
             sceneName: "MaterialScene",
             battleType: "Material"
         ));
 
         Tasks.Add(new TaskData(
-            id: "TASK_DAILY_003",
+            level: Level,
+            id: "TASK_DAILY_004",
             name: "Homeland Part-Time Job",
-            unlockLevel: 5,
+            unlockLevel: 15,
             frequency: TaskFrequency.Daily,
-            reward1: new TaskReward(RewardType.DailyEXP, 80),
-            reward2: new TaskReward(RewardType.Crystals, 30),
+            reward1: new TaskReward(RewardType.DailyEXP, 50),
+            reward2: new TaskReward(RewardType.EXP, 50),
+            maxTime: 1,
             description: "挑战降临作战关卡",
             sceneName: "BossScene",
             battleType: "Boss"
         ));
 
         Tasks.Add(new TaskData(
-            id: "TASK_DAILY_004",
-            name: "Material activities",
-            unlockLevel: 5,
-            frequency: TaskFrequency.Daily,
-            reward1: new TaskReward(RewardType.DailyEXP, 60),
-            reward2: new TaskReward(RewardType.Coins, 800),
-            description: "强化任意装备1次",
-            sceneName: "EquipmentScene",
-            battleType: "None"
-        ));
-
-        Tasks.Add(new TaskData(
+            level: Level,
             id: "TASK_DAILY_005",
             name: "Story Level",
-            unlockLevel: 10,
+            unlockLevel: 20,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 40),
             reward2: new TaskReward(RewardType.Crystals, 20),
+            maxTime: 5,
             description: "累计消耗120点体力",
             sceneName: "BattleScene",
             battleType: "All"
         ));
 
         Tasks.Add(new TaskData(
+            level: Level,
             id: "TASK_DAILY_006",
             name: "Continuous combat",
-            unlockLevel: 10,
+            unlockLevel: 20,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 40),
             reward2: new TaskReward(RewardType.Crystals, 20),
+            maxTime: 5,
             description: "累计消耗120点体力",
             sceneName: "BattleScene",
             battleType: "All"
@@ -139,36 +154,42 @@ public class PlayerData
 
         // 周常任务
         Tasks.Add(new TaskData(
+            level: Level,
             id: "TASK_WEEKLY_001",
             name: "完成20次任意关卡",
-            unlockLevel: 5,
+            unlockLevel: 25,
             frequency: TaskFrequency.Weekly,
             reward1: new TaskReward(RewardType.Crystals, 200),
             reward2: new TaskReward(RewardType.Coins, 5000),
+            maxTime: 5,
             description: "本周内完成20次任意关卡挑战",
             sceneName: "BattleScene",
             battleType: "Normal"
         ));
 
         Tasks.Add(new TaskData(
+            level: Level,
             id: "TASK_WEEKLY_002",
             name: "完成5次降临作战",
-            unlockLevel: 12,
+            unlockLevel: 32,
             frequency: TaskFrequency.Weekly,
             reward1: new TaskReward(RewardType.Crystals, 300),
             reward2: new TaskReward(RewardType.Equipment, 1, "WEAP_RANDOM"),
+            maxTime: 5,
             description: "本周内完成5次降临作战",
             sceneName: "BossScene",
             battleType: "Boss"
         ));
 
         Tasks.Add(new TaskData(
+            level: Level,
             id: "TASK_WEEKLY_003",
             name: "获得3件4星装备",
-            unlockLevel: 15,
+            unlockLevel: 35,
             frequency: TaskFrequency.Weekly,
             reward1: new TaskReward(RewardType.Crystals, 250),
             reward2: new TaskReward(RewardType.Materials, 10, "MAT_HIGH"),
+            maxTime: 5,
             description: "本周内获得3件4星或以上品质装备",
             sceneName: "EquipmentScene",
             battleType: "None"
@@ -391,8 +412,8 @@ public class PlayerData
     {
         switch (status)
         {
-            case TaskStatus.Unlocked: return 3;
-            case TaskStatus.Completed: return 2;
+            case TaskStatus.Completed: return 3;
+            case TaskStatus.Unlocked: return 2;
             case TaskStatus.Claimed: return 1;
             case TaskStatus.Locked: return 0;
             default: return 0;

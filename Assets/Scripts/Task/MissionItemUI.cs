@@ -199,7 +199,7 @@ public class MissionItemUI : MonoBehaviour
                 // 使用反射或修改TaskUIController以提供公共方法
                 uiController.RefreshAllUI();
                 uiController.UpdateDailyEXPDisplay();
-                uiController.RefreshMissionList();
+                uiController.LoadAllTasks();
 
                 // 同时调用OnMissionItemClicked以保持原有逻辑
                 uiController.OnMissionItemClicked(taskId);
@@ -263,11 +263,12 @@ public class MissionItemUI : MonoBehaviour
                     statusText.color = Color.gray;
                     break;
                 case TaskStatus.Unlocked:
-                    statusText.text = "";
+                    statusText.text = task.nowTimes + "/" + task.maxTimes;
+                    statusText.color = Color.white;
                     break;
                 case TaskStatus.Completed:
-                    statusText.text = "Completed";
-                    statusText.color = Color.yellow;
+                    statusText.text = task.maxTimes + "/" + task.maxTimes;
+                    statusText.color = Color.white;
                     break;
                 case TaskStatus.Claimed:
                     statusText.text = "Completed";
@@ -351,6 +352,7 @@ public class MissionItemUI : MonoBehaviour
             case RewardType.Coins: spriteName = "Icon_Coin"; break;
             case RewardType.Stamina: spriteName = "Icon_Stamina"; break;
             case RewardType.DailyEXP: spriteName = "Icon_DailyEXP"; break;
+            case RewardType.EXP: spriteName = "Icon_EXP"; break;
             case RewardType.Equipment: spriteName = "Icon_Equipment"; break;
             case RewardType.CharacterFragment: spriteName = "Icon_Fragment"; break;
             case RewardType.BattlePassEXP: spriteName = "Icon_BattlePass"; break;

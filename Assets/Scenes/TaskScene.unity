@@ -2072,8 +2072,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50, y: -25}
-  m_SizeDelta: {x: 60, y: 60}
+  m_AnchoredPosition: {x: 51, y: -28}
+  m_SizeDelta: {x: 65, y: 65}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &493465105
 MonoBehaviour:
@@ -2095,7 +2095,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: 4d9e225338a2e974dab020b48717d4aa, type: 3}
+  m_Texture: {fileID: 2800000, guid: abef008f3057de84aafde0e04cd22c94, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
@@ -3096,7 +3096,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &812929337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3991,13 +3991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c889465ef7565a64f9662eb75b373661, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNameText: {fileID: 0}
-  playerLevelText: {fileID: 0}
-  playerExperienceText: {fileID: 0}
-  experienceSlider: {fileID: 0}
-  tiliText: {fileID: 0}
-  coinsText: {fileID: 0}
-  crystalsText: {fileID: 0}
+  HomogeneousPureCrystalText: {fileID: 1696151231}
   referencedButtons:
   - {fileID: 1015348876}
   - {fileID: 1885420286}
@@ -4009,9 +4003,6 @@ MonoBehaviour:
   combatShopPanel: {fileID: 1218439121}
   missionListContent: {fileID: 390913771}
   missionItemPrefab: {fileID: 4905589793797793795, guid: f3766fd43c057a54589cb7713765246b, type: 3}
-  missionTitleText: {fileID: 0}
-  dailyRefreshText: {fileID: 0}
-  weeklyRefreshText: {fileID: 0}
   dailyEXPSlider: {fileID: 0}
   dailyEXPText: {fileID: 420024688}
   dailyRewardButtons: []
@@ -4020,13 +4011,7 @@ MonoBehaviour:
   dailyRewardClaimed: []
   dailyRewardThresholds: []
   taskDetailPanel: {fileID: 65957954}
-  filterAllButton: {fileID: 0}
-  filterDailyButton: {fileID: 0}
-  filterWeeklyButton: {fileID: 0}
-  currentFilterText: {fileID: 0}
   panelFillControllers: []
-  confirmationWindow: {fileID: 0}
-  confirmationText: {fileID: 0}
 --- !u!1 &1360736345
 GameObject:
   m_ObjectHideFlags: 0
@@ -5077,14 +5062,14 @@ RectTransform:
   m_GameObject: {fileID: 1696151229}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1.1, z: 1}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1866080460}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 200, y: -30}
+  m_AnchoredPosition: {x: 215, y: -30}
   m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1696151231
