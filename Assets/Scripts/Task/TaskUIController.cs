@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class TaskUIController : MonoBehaviour
 {
@@ -49,9 +50,8 @@ public class TaskUIController : MonoBehaviour
     // ================== 每日奖励按钮功能 ==================
 
     [Header("简单奖励弹窗")]
-    public GameObject rewardPopup;
+    public RewardDetailPanelUI rewardDetailPanel;
     public TMP_Text rewardAmountText;
-
 
     [Header("任务详情面板")]
     public TaskDetailPanelUI taskDetailPanel;
@@ -80,9 +80,6 @@ public class TaskUIController : MonoBehaviour
         if (combatLevelText != null) combatLevelText.text = "Lv.1";
         if (combatEXPText != null) combatEXPText.text = "0/1000";
         if (weekcombatEXPText != null) weekcombatEXPText.text = "0/10000";
-
-        // 初始化奖励弹窗
-        if (rewardPopup != null) rewardPopup.SetActive(false);
     }
 
     void InitializePanelFills()
@@ -176,6 +173,26 @@ public class TaskUIController : MonoBehaviour
 
         if (weekcombatEXPText != null)
             weekcombatEXPText.text = currentPlayerData.WeekCombatEXP.ToString() + "/10000";
+
+        for (int i = 0; i < dailyRewardButtons.Length; i++)
+        {
+            if (currentPlayerData.DailyEXPRewards[i].IsClaimed)
+            {
+                Transform iconTransform = dailyRewardButtons[i].transform.Find("Image");
+                Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Price_DailyEXP Claimed");
+                Image childImage = iconTransform.GetComponent<Image>();
+                Debug.Log($"UI/Icons/Price_DailyEXP Claimed");
+                childImage.sprite = (sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default"));
+            }
+            else
+            {
+                Transform iconTransform = dailyRewardButtons[i].transform.Find("Image");
+                Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Price_DailyEXP UnClaim");
+                Image childImage = iconTransform.GetComponent<Image>();
+                Debug.Log($"UI/Icons/Price_DailyEXP UnClaim");
+                childImage.sprite = (sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default"));
+            }
+        }
     }
 
     void UpdatePanelFills()
@@ -413,6 +430,12 @@ public class TaskUIController : MonoBehaviour
         Debug.Log("任务详情面板已关闭");
     }
 
+    public void OnRewardDetailClosed()
+    {
+        // 详情面板关闭后可以执行一些清理操作
+        Debug.Log("任务详情面板已关闭");
+    }
+
     // ================== 每日历练值管理 ==================
     public void UpdateDailyEXPDisplay()
     {
@@ -458,7 +481,9 @@ public class TaskUIController : MonoBehaviour
             // 设置按钮交互状态
             if (dailyRewardButtons[i] != null)
             {
+                /*
                 dailyRewardButtons[i].interactable = canClaim;
+                */
             }
             else
             {
@@ -621,13 +646,13 @@ public class TaskUIController : MonoBehaviour
     }
 
     // 显示奖励弹窗的方法
-    void ShowRewardPopup(int crystalAmount)
+    public void ShowRewardPopup(TaskReward rewarda, TaskReward rewardb)
     {
-        if (rewardPopup != null && rewardAmountText != null)
+        if (rewardDetailPanel != null)
         {
-            rewardAmountText.text = $"{crystalAmount}";
-            rewardPopup.SetActive(true);
+            rewardDetailPanel.ShowRewardDetail(rewarda, rewardb);
 
+        Debug.Log("111");
             // 3秒后自动关闭弹窗
             StartCoroutine(AutoClosePopup());
         }
@@ -637,18 +662,18 @@ public class TaskUIController : MonoBehaviour
     IEnumerator AutoClosePopup()
     {
         yield return new WaitForSeconds(2);
-        if (rewardPopup != null)
+        if (rewardDetailPanel != null)
         {
-            rewardPopup.SetActive(false);
+            rewardDetailPanel.HidePanel();
         }
     }
 
     // 手动关闭弹窗的方法（在弹窗按钮上调用）
     public void CloseRewardPopup()
     {
-        if (rewardPopup != null)
+        if (rewardDetailPanel != null)
         {
-            rewardPopup.SetActive(false);
+            rewardDetailPanel.HidePanel();
         }
     }
     // ================== 每日奖励按钮功能 ==================
@@ -677,6 +702,7 @@ public class TaskUIController : MonoBehaviour
             // 根据索引绑定对应的方法
             int index = i;
             dailyRewardButtons[i].onClick.AddListener(() => OnRewardButtonClicked(index));
+            Debug.Log(index); 
         }
 
         Debug.Log("奖励按钮事件已自动绑定");
@@ -704,18 +730,21 @@ public class TaskUIController : MonoBehaviour
         // 检查是否达到阈值
         if (currentPlayerData.DailyEXP >= requiredEXP)
         {
+            if (currentPlayerData.DailyEXPRewards[buttonIndex].IsClaimed)
+            {
+                Debug.Log("已领取");
+                return;
+            }
             // 给予水晶奖励
-            currentPlayerData.Crystals += crystalAmount;
-
+            currentPlayerData.ClaimDailyEXPReward(buttonIndex);
             // 显示奖励弹窗
-            ShowRewardPopup(crystalAmount);
+            ShowRewardPopup(currentPlayerData.DailyEXPRewards[buttonIndex].Reward1, currentPlayerData.DailyEXPRewards[buttonIndex].Reward2);
 
             // 保存数据
             if (PlayerDataManager.Instance != null)
             {
                 PlayerDataManager.Instance.SaveCurrentPlayerData();
             }
-
             // 更新UI
             UpdateAllUI();
 

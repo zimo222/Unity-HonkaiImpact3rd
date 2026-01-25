@@ -201,6 +201,7 @@ public class MissionItemUI : MonoBehaviour
                 uiController.RefreshAllUI();
                 uiController.UpdateDailyEXPDisplay();
                 uiController.LoadAllTasks();
+                uiController.ShowRewardPopup(taskData.Reward1, taskData.Reward2);
 
                 // 同时调用OnMissionItemClicked以保持原有逻辑
                 uiController.OnMissionItemClicked(taskId);

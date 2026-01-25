@@ -203,10 +203,11 @@ public class PlayerData
     private void InitializeDailyEXPRewards()
     {
         DailyEXPRewards.Clear();
-        DailyEXPRewards.Add(new DailyEXPReward(150, new TaskReward(RewardType.Crystals, 30)));
-        DailyEXPRewards.Add(new DailyEXPReward(300, new TaskReward(RewardType.Stamina, 40)));
-        DailyEXPRewards.Add(new DailyEXPReward(450, new TaskReward(RewardType.Crystals, 50)));
-        DailyEXPRewards.Add(new DailyEXPReward(600, new TaskReward(RewardType.Coins, 2000)));
+        DailyEXPRewards.Add(new DailyEXPReward(120, new TaskReward(RewardType.Crystals, 5), new TaskReward(RewardType.Coins, 100)));
+        DailyEXPRewards.Add(new DailyEXPReward(240, new TaskReward(RewardType.Crystals, 5), new TaskReward(RewardType.Coins, 100)));
+        DailyEXPRewards.Add(new DailyEXPReward(360, new TaskReward(RewardType.Crystals, 10), new TaskReward(RewardType.Coins, 200)));
+        DailyEXPRewards.Add(new DailyEXPReward(480, new TaskReward(RewardType.Crystals, 10), new TaskReward(RewardType.Coins, 200)));
+        DailyEXPRewards.Add(new DailyEXPReward(600, new TaskReward(RewardType.Crystals, 10), new TaskReward(RewardType.Coins, 200)));
     }
 
     /// <summary>
@@ -349,7 +350,8 @@ public class PlayerData
         if (reward.IsClaimed || DailyEXP < reward.RequiredEXP)
             return false;
 
-        GiveReward(reward.Reward);
+        GiveReward(reward.Reward1);
+        GiveReward(reward.Reward2);
         reward.IsClaimed = true;
         return true;
     }

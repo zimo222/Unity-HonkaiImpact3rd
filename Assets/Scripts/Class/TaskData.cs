@@ -112,13 +112,15 @@ public class TaskData
 public class DailyEXPReward
 {
     public int RequiredEXP;    // 所需历练值
-    public TaskReward Reward;  // 奖励
+    public TaskReward Reward1;  // 奖励
+    public TaskReward Reward2;  // 奖励
     public bool IsClaimed;     // 是否已领取
 
-    public DailyEXPReward(int exp, TaskReward reward)
+    public DailyEXPReward(int exp, TaskReward rewarda, TaskReward rewardb)
     {
         RequiredEXP = exp;
-        Reward = reward;
+        Reward1 = rewarda;
+        Reward2 = rewardb;
         IsClaimed = false;
     }
 }
