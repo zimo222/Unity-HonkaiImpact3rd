@@ -926,6 +926,7 @@ GameObject:
   - component: {fileID: 171271649}
   - component: {fileID: 171271648}
   - component: {fileID: 171271647}
+  - component: {fileID: 171271650}
   m_Layer: 5
   m_Name: EquipmentButton
   m_TagString: Untagged
@@ -1035,6 +1036,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 171271645}
   m_CullTransparentMesh: 1
+--- !u!114 &171271650
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171271645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u88C5\u5907"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 3EquipmentScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &172279649
 GameObject:
   m_ObjectHideFlags: 0
@@ -1515,6 +1540,7 @@ GameObject:
   - component: {fileID: 234355441}
   - component: {fileID: 234355440}
   - component: {fileID: 234355439}
+  - component: {fileID: 234355442}
   m_Layer: 5
   m_Name: HomelandButton
   m_TagString: Untagged
@@ -1624,6 +1650,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 234355437}
   m_CullTransparentMesh: 1
+--- !u!114 &234355442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 234355437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u5BB6\u56ED"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 4HomelandScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &269038264
 GameObject:
   m_ObjectHideFlags: 0
@@ -1762,6 +1812,7 @@ GameObject:
   - component: {fileID: 281621967}
   - component: {fileID: 281621966}
   - component: {fileID: 281621965}
+  - component: {fileID: 281621968}
   m_Layer: 5
   m_Name: SupplyButton
   m_TagString: Untagged
@@ -1871,6 +1922,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 281621963}
   m_CullTransparentMesh: 1
+--- !u!114 &281621968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281621963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u8865\u7ED9"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 5SupplyScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &284364287
 GameObject:
   m_ObjectHideFlags: 0
@@ -2410,6 +2485,7 @@ GameObject:
   - component: {fileID: 375868648}
   - component: {fileID: 375868647}
   - component: {fileID: 375868646}
+  - component: {fileID: 375868649}
   m_Layer: 5
   m_Name: WelfareButton
   m_TagString: Untagged
@@ -2520,6 +2596,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 375868644}
   m_CullTransparentMesh: 1
+--- !u!114 &375868649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375868644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u798F\u5229"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 3WelfareScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &385952551
 GameObject:
   m_ObjectHideFlags: 0
@@ -3555,6 +3655,7 @@ GameObject:
   - component: {fileID: 593073482}
   - component: {fileID: 593073481}
   - component: {fileID: 593073480}
+  - component: {fileID: 593073483}
   m_Layer: 5
   m_Name: MallButton
   m_TagString: Untagged
@@ -3665,6 +3766,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 593073478}
   m_CullTransparentMesh: 1
+--- !u!114 &593073483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593073478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u5546\u57CE"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 6MallScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &596121740
 GameObject:
   m_ObjectHideFlags: 0
@@ -4026,6 +4151,7 @@ GameObject:
   - component: {fileID: 643541656}
   - component: {fileID: 643541655}
   - component: {fileID: 643541654}
+  - component: {fileID: 643541657}
   m_Layer: 5
   m_Name: MailButton
   m_TagString: Untagged
@@ -4136,6 +4262,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 643541652}
   m_CullTransparentMesh: 1
+--- !u!114 &643541657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643541652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u90AE\u7BB1"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 4MailScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &644249191
 GameObject:
   m_ObjectHideFlags: 0
@@ -4275,7 +4425,7 @@ MonoBehaviour:
   panelToOpen: {fileID: 0}
   closeOtherPanelsOnOpen: 0
   fadeDuration: 0.3
-  targetSceneName: ValkyrieScene
+  targetSceneName: 2ValkyrieScene
   sceneLoadMode: 0
   onCustomEvent:
     m_PersistentCalls:
@@ -4524,6 +4674,7 @@ GameObject:
   - component: {fileID: 710076942}
   - component: {fileID: 710076941}
   - component: {fileID: 710076940}
+  - component: {fileID: 710076943}
   m_Layer: 5
   m_Name: ActivityButton
   m_TagString: Untagged
@@ -4634,6 +4785,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710076938}
   m_CullTransparentMesh: 1
+--- !u!114 &710076943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710076938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u6D3B\u52A8"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 2ActivityScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &713194827
 GameObject:
   m_ObjectHideFlags: 0
@@ -6609,7 +6784,7 @@ MonoBehaviour:
   panelToOpen: {fileID: 0}
   closeOtherPanelsOnOpen: 0
   fadeDuration: 0.3
-  targetSceneName: TaskScene
+  targetSceneName: 1TaskScene
   sceneLoadMode: 0
   onCustomEvent:
     m_PersistentCalls:
@@ -7139,6 +7314,7 @@ GameObject:
   - component: {fileID: 1277850787}
   - component: {fileID: 1277850786}
   - component: {fileID: 1277850785}
+  - component: {fileID: 1277850788}
   m_Layer: 5
   m_Name: AnnouncementButton
   m_TagString: Untagged
@@ -7249,6 +7425,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1277850783}
   m_CullTransparentMesh: 1
+--- !u!114 &1277850788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277850783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u516C\u544A"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 5AnnouncementScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &1283924850
 GameObject:
   m_ObjectHideFlags: 0
@@ -7555,6 +7755,11 @@ MonoBehaviour:
   crystalsText: {fileID: 1696151231}
   referencedButtons:
   - {fileID: 1200996804}
+  - {fileID: 710076943}
+  - {fileID: 375868649}
+  - {fileID: 643541657}
+  - {fileID: 1277850788}
+  - {fileID: 593073483}
   - {fileID: 644249196}
   panelFillControllers:
   - fillName: 
@@ -7580,6 +7785,7 @@ GameObject:
   - component: {fileID: 1362373937}
   - component: {fileID: 1362373936}
   - component: {fileID: 1362373935}
+  - component: {fileID: 1362373938}
   m_Layer: 5
   m_Name: AttackButton
   m_TagString: Untagged
@@ -7689,6 +7895,30 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1362373933}
   m_CullTransparentMesh: 1
+--- !u!114 &1362373938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362373933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1f519832414cd34788122ea53acd2ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonName: "\u51FA\u51FB"
+  actionType: 2
+  panelToOpen: {fileID: 0}
+  closeOtherPanelsOnOpen: 0
+  fadeDuration: 0.3
+  targetSceneName: 1AttackScene
+  sceneLoadMode: 0
+  onCustomEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  requireConfirmation: 0
+  confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
 --- !u!1 &1389943544
 GameObject:
   m_ObjectHideFlags: 0
