@@ -444,6 +444,7 @@ public class PlayerData
             id: "CHAR_001",
             name: "琪亚娜·薪炎之律者",
             isUnlocked: true,
+            element: "YN",
             health: 1500,
             attack: 300,
             critRate: 0.1f,
@@ -456,6 +457,7 @@ public class PlayerData
             id: "CHAR_002",
             name: "琪亚娜·白练",
             isUnlocked: false,
+            element: "JX",
             health: 1200,
             attack: 250,
             critRate: 0.08f,
@@ -468,18 +470,19 @@ public class PlayerData
             id: "CHAR_003",
             name: "叶瞬光",
             isUnlocked: false,
+            element: "SW",
             health: 1400,
             attack: 280,
             critRate: 0.12f,
             critDamage: 1.6f,
             elementBonus: 0.2f
         ));
-
         // 胡桃
         Characters.Add(new CharacterData(
             id: "CHAR_004",
             name: "胡桃",
             isUnlocked: false,
+            element: "SW",
             health: 1100,
             attack: 320,
             critRate: 0.15f,
@@ -492,6 +495,7 @@ public class PlayerData
             id: "CHAR_005",
             name: "流萤",
             isUnlocked: false,
+            element: "YN",
             health: 1300,
             attack: 270,
             critRate: 0.09f,
@@ -530,6 +534,42 @@ public class PlayerData
     public List<CharacterData> GetUnlockedCharacters()
     {
         return Characters.FindAll(c => c.IsUnlocked);
+    }
+
+    /// <summary>
+    /// 获取女武神列表（排序：解锁的 > 未解锁的，按等级排序）
+    /// </summary>
+    public List<CharacterData> GetSortedCharacters(string Element = null)
+    {
+        var filteredCharacters = Element != null
+            ? Characters.FindAll(t => t.BaseStats.Element == Element)
+            : Characters;
+
+        // 排序：未解锁(Locked)的在最后，完成的(Claimed)在次后，完成的(Completed)和未完成的(Unlocked)按等级排序
+        filteredCharacters.Sort((a, b) =>
+        {
+            // 状态优先级：Unlocked > Completed > Claimed > Locked
+            int statusOrderA = GetUnlockOrder(a.IsUnlocked);
+            int statusOrderB = GetUnlockOrder(b.IsUnlocked);
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+
+            // 同状态按解锁等级排序
+            return b.BaseStats.Level.CompareTo(a.BaseStats.Level);
+        });
+
+        return filteredCharacters;
+    }
+
+    private int GetUnlockOrder(bool status)
+    {
+        switch (status)
+        {
+            case true: return 1;
+            case false: return 0;
+            default: return 0;
+        }
     }
 
     // ================== 装备相关方法 ==================
@@ -928,7 +968,7 @@ public class CharacterData
 
     public CharacterData() { }
 
-    public CharacterData(string id, string name, bool isUnlocked,
+    public CharacterData(string id, string name, bool isUnlocked, string element,
                         int health, int attack, float critRate,
                         float critDamage, float elementBonus)
     {
@@ -937,6 +977,8 @@ public class CharacterData
         IsUnlocked = isUnlocked;
         BaseStats = new CharacterStats()
         {
+            Level = 1,
+            Element = element,
             Health = health,
             Attack = attack,
             CritRate = critRate,
@@ -997,6 +1039,8 @@ public class EquipmentData
 [System.Serializable]
 public struct CharacterStats
 {
+    public int Level;                                // 等级
+    public string Element;                           // 元素
     public int Health;                               // 生命值
     public int Attack;                               // 攻击力
     public float CritRate;                           // 暴击率（0-1）

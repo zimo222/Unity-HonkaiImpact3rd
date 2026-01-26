@@ -1,87 +1,192 @@
 using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class ValkyrieUIController : MonoBehaviour
 {
     // ================== 基础玩家信息UI引用 ==================
-    [Header("玩家信息")]
-    public TMP_Text playerNameText;
-    public TMP_Text playerLevelText;
-    public TMP_Text playerExperienceText;
-    public Slider experienceSlider;
-
     [Header("资源信息")]
-    public TMP_Text crystalsText;
+    public TMP_Text tiliText;
     public TMP_Text coinsText;
+    public TMP_Text crystalsText;
 
     // ================== 按钮引用 (可选) ==================
-    [Header("按钮引用 (如果你需要通过脚本访问它们)")]
-    [Tooltip("你可以在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
+    [Header("按钮引用 (如果需要通过脚本访问它们)")]
+    [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
-    // ================== 其他原有系统（保持不变） ==================
-    // ... [你的Panel填充控制系统、确认窗口等] ...
 
+    [Header("女武神列表")]
+    public Transform valkyrieListContent;     // 女武神列表容器
+    public GameObject valkyrieItemPrefab;     // 女武神项预制体
+
+    // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
+    private List<ValkyrieItemUI> valkyrieItemUIs = new List<ValkyrieItemUI>();
 
     void Start()
     {
         InitializeUI();
         LoadPlayerData();
-        // 不再需要初始化按钮，因为每个ModularUIButton会自己管理自己
+        UpdateAllUI();
+        LoadAllValkyries(); // 加载所有任务
     }
 
     void InitializeUI()
     {
-        // ... [你的UI初始化代码] ...
+        // 设置默认文本
+        if (tiliText != null) tiliText.text = "0/81";
+        if (coinsText != null) coinsText.text = "0";
+        if (crystalsText != null) crystalsText.text = "0";
     }
 
     void LoadPlayerData()
     {
-        // ... [你的数据加载代码] ...
+
+        // 检查PlayerDataManager是否存在
+        if (PlayerDataManager.Instance == null)
+        {
+            Debug.LogWarning("PlayerDataManager.Instance 为空，加载默认数据");
+            LoadDefaultData();
+            UpdateAllUI();
+            return;
+        }
+
+        // 获取当前玩家数据
+        currentPlayerData = PlayerDataManager.Instance.CurrentPlayerData;
+
+        // 检查是否成功获取玩家数据
+        if (currentPlayerData == null)
+        {
+            Debug.LogWarning("当前没有登录的玩家，加载默认数据");
+            LoadDefaultData();
+            UpdateAllUI();
+            return;
+        }
+
+        // 成功加载玩家数据
+        Debug.Log($"成功加载玩家数据: {currentPlayerData.PlayerName}, 等级: {currentPlayerData.Level}, DailyEXP: {currentPlayerData.DailyEXP}");
+
+        // 刷新玩家数据中的任务状态
+        currentPlayerData.RefreshTasks();
+
+        UpdateAllUI();
+    }
+
+    //加载默认玩家数据
+    void LoadDefaultData()
+    {
+        // 创建默认数据
+        currentPlayerData = new PlayerData("舰长")
+        {
+            Stamina = 120,
+            Coins = 5000,
+            Crystals = 1500
+        };
+
         UpdateAllUI();
     }
 
     void UpdateAllUI()
     {
-        // ... [你的UI更新代码] ...
+        if (currentPlayerData == null) return;
+        UpdateResources();
     }
 
-    // ================== 示例：如何通过脚本与模块化按钮交互 ==================
-    /// <summary>
-    /// 示例：动态禁用一个按钮。
-    /// </summary>
-    public void DisableButtonByName(string targetButtonName)
+    void UpdateResources()
     {
-        foreach (var button in referencedButtons)
+        if (currentPlayerData == null) return;
+
+        if (tiliText != null)
+            tiliText.text = currentPlayerData.Stamina.ToString() + '/' + (currentPlayerData.Level + 80).ToString();
+
+        if (coinsText != null)
+            coinsText.text = currentPlayerData.Coins.ToString();
+
+        if (crystalsText != null)
+            crystalsText.text = currentPlayerData.Crystals.ToString();
+    }
+
+    // ================== 女武神列表管理 ==================
+    public void LoadAllValkyries()
+    {
+        if (currentPlayerData == null || valkyrieListContent == null || valkyrieItemPrefab == null)
+            return;
+
+        // 清除现有女武神项
+        ClearValkyrieList();
+
+        // 获取所有女武神（不筛选频率）
+        List<CharacterData> allCharacters = currentPlayerData.GetSortedCharacters(null);
+
+        // 调试信息
+        Debug.Log($"=== 加载所有女武神 ===");
+        Debug.Log($"任务总数: {allCharacters.Count}");
+        Debug.Log($"机械女武神: {allCharacters.FindAll(t => t.BaseStats.Element == "JX").Count}");
+        Debug.Log($"异能女武神: {allCharacters.FindAll(t => t.BaseStats.Element == "YN").Count}");
+        Debug.Log($"生物女武神: {allCharacters.FindAll(t => t.BaseStats.Element == "SW").Count}");
+
+        // 创建女武神项
+        int itemCount = 0;
+        foreach (CharacterData character in allCharacters)
         {
-            if (button.buttonName == targetButtonName)
-            {
-                button.GetComponent<Button>().interactable = false;
-                Debug.Log($"已禁用按钮: {targetButtonName}");
-                break;
-            }
+            CreateValkyrieItem(character);
+            itemCount++;
+
+            // 调试每个女武神
+        }
+
+        // 强制布局重建（如果需要）
+        StartCoroutine(RebuildLayout());
+    }
+
+    //清空女武神列表容器
+    void ClearValkyrieList()
+    {
+        // 清除现有任务项
+        for (int i = valkyrieListContent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(valkyrieListContent.GetChild(i).gameObject);
+        }
+        valkyrieItemUIs.Clear();
+    }
+
+    //生成女武神项
+    void CreateValkyrieItem(CharacterData valkyrie)
+    {
+        GameObject valkyrieItemObj = Instantiate(valkyrieItemPrefab, valkyrieListContent);
+        valkyrieItemObj.name = $"ValkyrieItem_{valkyrie.Id}_{valkyrie.Name}";
+
+        // 确保预制体的RectTransform正确
+        RectTransform rectTransform = valkyrieItemObj.GetComponent<RectTransform>();
+        if (rectTransform != null)
+        {
+            rectTransform.localScale = Vector3.one;
+        }
+
+        ValkyrieItemUI valkyrieItemUI = valkyrieItemObj.GetComponent<ValkyrieItemUI>();
+
+        if (valkyrieItemUI != null)
+        {
+            valkyrieItemUI.Initialize(valkyrie, this);
+            valkyrieItemUIs.Add(valkyrieItemUI);
+        }
+        else
+        {
+            Debug.LogError("valkyrieItemPrefab上没有valkyrieItemUI组件！");
         }
     }
 
-    /// <summary>
-    /// 示例：动态改变一个按钮的行为。
-    /// </summary>
-    public void ChangeButtonToOpenDifferentPanel(string targetButtonName, GameObject newPanel)
+    IEnumerator RebuildLayout()
     {
-        foreach (var modularButton in referencedButtons)
-        {
-            if (modularButton.buttonName == targetButtonName)
-            {
-                modularButton.SetActionType(ModularUIButton.ButtonAction.OpenPanel);
-                modularButton.SetPanelToOpen(newPanel);
-                Debug.Log($"已修改按钮 '{targetButtonName}' 行为，将打开新面板: {newPanel.name}");
-                break;
-            }
-        }
+        // 等待一帧让Unity更新布局
+        yield return null;
+
+        // 强制重建布局
+        LayoutRebuilder.ForceRebuildLayoutImmediate(valkyrieListContent as RectTransform);
     }
 }

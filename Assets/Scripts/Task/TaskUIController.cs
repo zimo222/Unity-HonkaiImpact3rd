@@ -58,7 +58,6 @@ public class TaskUIController : MonoBehaviour
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
-    private bool isDataLoaded = false;
     private List<MissionItemUI> missionItemUIs = new List<MissionItemUI>();
 
     void Start()
@@ -99,8 +98,6 @@ public class TaskUIController : MonoBehaviour
 
     void LoadPlayerData()
     {
-        // 先重置数据加载状态
-        isDataLoaded = false;
 
         // 检查PlayerDataManager是否存在
         if (PlayerDataManager.Instance == null)
@@ -130,7 +127,6 @@ public class TaskUIController : MonoBehaviour
         currentPlayerData.RefreshTasks();
 
         UpdateAllUI();
-        isDataLoaded = true;
     }
 
     void LoadDefaultData()
@@ -148,7 +144,6 @@ public class TaskUIController : MonoBehaviour
         };
 
         UpdateAllUI();
-        isDataLoaded = true;
     }
 
     void UpdateAllUI()

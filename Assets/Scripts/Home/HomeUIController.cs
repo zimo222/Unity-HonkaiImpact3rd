@@ -20,8 +20,8 @@ public class HomeUIControllerRefactored : MonoBehaviour
     public TMP_Text crystalsText;
 
     // ================== 按钮引用 (可选) ==================
-    [Header("按钮引用 (如果你需要通过脚本访问它们)")]
-    [Tooltip("你可以在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
+    [Header("按钮引用 (如果需要通过脚本访问它们)")]
+    [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
     // ================== 其他原有系统（保持不变） ==================
@@ -53,7 +53,6 @@ public class HomeUIControllerRefactored : MonoBehaviour
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
-    private bool isDataLoaded = false;
 
     void Start()
     {
@@ -96,7 +95,6 @@ public class HomeUIControllerRefactored : MonoBehaviour
             if (currentPlayerData != null)
             {
                 UpdateAllUI();
-                isDataLoaded = true;
             }
             else
             {
@@ -123,7 +121,6 @@ public class HomeUIControllerRefactored : MonoBehaviour
         };
 
         UpdateAllUI();
-        isDataLoaded = true;
     }
 
     void UpdateAllUI()
