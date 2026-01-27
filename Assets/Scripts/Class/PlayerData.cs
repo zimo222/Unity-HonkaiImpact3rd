@@ -587,7 +587,7 @@ public class PlayerData
         // 添加一些初始武器
         EquipmentBag.Add(new EquipmentData(
             id: "WEAP_001",
-            name: "薪炎双枪",
+            name: "焢煌之钥",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.DualPistols,
             health: 0,

@@ -31,6 +31,14 @@ public class ValkyrieUIController : MonoBehaviour
     public TMP_Text LevelText;
     public TMP_Text CombatPowerText;
 
+    // ====================== 右侧面板 =========================
+    [Header("上面板")]
+    public TMP_Text WeaponText;
+    [Header("中面板")]
+    public Image TopStigmataImage;
+    public Image MiddleStigmataImage;
+    public Image BottomStigmataImage;
+
 
     [Header("女武神列表")]
     public Transform valkyrieListContent;     // 女武神列表容器
@@ -129,27 +137,28 @@ public class ValkyrieUIController : MonoBehaviour
 
         string[] Name = currentPlayerData.Characters[currentValkyrie].Name.Split('-');
 
+        //左面板
         //上面板
         if (Name1Text != null)
             Name1Text.text = Name[0];
 
-        if(ElementImage != null)
+        if (ElementImage != null)
             ElementImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/ElementIcon_{currentPlayerData.Characters[currentValkyrie].BaseStats.Element}");
 
-        if(ElementText != null)
-            switch(currentPlayerData.Characters[currentValkyrie].BaseStats.Element)
+        if (ElementText != null)
+            switch (currentPlayerData.Characters[currentValkyrie].BaseStats.Element)
             {
                 case "SW":
                     ElementText.text = "生物";
-                    ElementText.color = new Color(1, 178/255.0f, 45/255.0f, 1);
+                    ElementText.color = new Color(1, 178 / 255.0f, 45 / 255.0f, 1);
                     break;
                 case "YN":
                     ElementText.text = "异能";
-                    ElementText.color = new Color(1, 70/255.0f, 211/255.0f, 1);
+                    ElementText.color = new Color(1, 70 / 255.0f, 211 / 255.0f, 1);
                     break;
                 case "JX":
                     ElementText.text = "机械";
-                    ElementText.color = new Color(43/255.0f, 226/255.0f, 1, 255);
+                    ElementText.color = new Color(43 / 255.0f, 226 / 255.0f, 1, 255);
                     break;
             }
 
@@ -157,13 +166,26 @@ public class ValkyrieUIController : MonoBehaviour
             Name2Text.text = Name[1];
 
         //下面板
-        if(StarImage != null)
+        if (StarImage != null)
         {
             StarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}");
         }
 
         if (LevelText != null)
             LevelText.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
+
+        //右面板
+        //上面板
+        if (WeaponText != null)
+            WeaponText.text = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "无";
+
+        //下面板
+        if (TopStigmataImage != null)
+            TopStigmataImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
+        if (MiddleStigmataImage != null)
+            MiddleStigmataImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
+        if (BottomStigmataImage != null)
+            BottomStigmataImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
     }
 
     // ================== 女武神列表管理 ==================
