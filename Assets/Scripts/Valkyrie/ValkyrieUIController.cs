@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -19,6 +20,17 @@ public class ValkyrieUIController : MonoBehaviour
     [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
+    // ====================== 左侧面板 =========================
+    [Header("上面板")]
+    public TMP_Text Name1Text;
+    public Image ElementImage;
+    public TMP_Text ElementText;
+    public TMP_Text Name2Text;
+    [Header("下面板")]
+    public Image StarImage;
+    public TMP_Text LevelText;
+    public TMP_Text CombatPowerText;
+
 
     [Header("女武神列表")]
     public Transform valkyrieListContent;     // 女武神列表容器
@@ -27,6 +39,7 @@ public class ValkyrieUIController : MonoBehaviour
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
     private List<ValkyrieItemUI> valkyrieItemUIs = new List<ValkyrieItemUI>();
+    private int currentValkyrie = 0;
 
     void Start()
     {
@@ -42,6 +55,10 @@ public class ValkyrieUIController : MonoBehaviour
         if (tiliText != null) tiliText.text = "0/81";
         if (coinsText != null) coinsText.text = "0";
         if (crystalsText != null) crystalsText.text = "0";
+        if (Name1Text != null) Name1Text.text = "Name1";
+        if (Name2Text != null) Name2Text.text = "Name2";
+        if (LevelText != null) LevelText.text = "Lv.1";
+        if (CombatPowerText != null) CombatPowerText.text = "0";
     }
 
     void LoadPlayerData()
@@ -109,6 +126,44 @@ public class ValkyrieUIController : MonoBehaviour
 
         if (crystalsText != null)
             crystalsText.text = currentPlayerData.Crystals.ToString();
+
+        string[] Name = currentPlayerData.Characters[currentValkyrie].Name.Split('-');
+
+        //上面板
+        if (Name1Text != null)
+            Name1Text.text = Name[0];
+
+        if(ElementImage != null)
+            ElementImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/ElementIcon_{currentPlayerData.Characters[currentValkyrie].BaseStats.Element}");
+
+        if(ElementText != null)
+            switch(currentPlayerData.Characters[currentValkyrie].BaseStats.Element)
+            {
+                case "SW":
+                    ElementText.text = "生物";
+                    ElementText.color = new Color(1, 178/255.0f, 45/255.0f, 1);
+                    break;
+                case "YN":
+                    ElementText.text = "异能";
+                    ElementText.color = new Color(1, 70/255.0f, 211/255.0f, 1);
+                    break;
+                case "JX":
+                    ElementText.text = "机械";
+                    ElementText.color = new Color(43/255.0f, 226/255.0f, 1, 255);
+                    break;
+            }
+
+        if (Name2Text != null)
+            Name2Text.text = Name[1];
+
+        //下面板
+        if(StarImage != null)
+        {
+            StarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}");
+        }
+
+        if (LevelText != null)
+            LevelText.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
     }
 
     // ================== 女武神列表管理 ==================
@@ -134,7 +189,7 @@ public class ValkyrieUIController : MonoBehaviour
         int itemCount = 0;
         foreach (CharacterData character in allCharacters)
         {
-            CreateValkyrieItem(character);
+            CreateValkyrieItem(character, itemCount);
             itemCount++;
 
             // 调试每个女武神
@@ -156,7 +211,7 @@ public class ValkyrieUIController : MonoBehaviour
     }
 
     //生成女武神项
-    void CreateValkyrieItem(CharacterData valkyrie)
+    void CreateValkyrieItem(CharacterData valkyrie, int num)
     {
         GameObject valkyrieItemObj = Instantiate(valkyrieItemPrefab, valkyrieListContent);
         valkyrieItemObj.name = $"ValkyrieItem_{valkyrie.Id}_{valkyrie.Name}";
@@ -172,13 +227,19 @@ public class ValkyrieUIController : MonoBehaviour
 
         if (valkyrieItemUI != null)
         {
-            valkyrieItemUI.Initialize(valkyrie, this);
+            valkyrieItemUI.Initialize(num, valkyrie, this);
             valkyrieItemUIs.Add(valkyrieItemUI);
         }
         else
         {
             Debug.LogError("valkyrieItemPrefab上没有valkyrieItemUI组件！");
         }
+    }
+
+    public void ShowValkyrieSummary(int CurrentValkyrie)
+    {
+        currentValkyrie = CurrentValkyrie;
+        UpdateAllUI();
     }
 
     IEnumerator RebuildLayout()

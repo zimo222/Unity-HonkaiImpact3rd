@@ -1,4 +1,7 @@
+using JetBrains.Annotations;
+using System.Runtime.InteropServices;
 using TMPro;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.U2D;
@@ -18,6 +21,7 @@ public class ValkyrieItemUI : MonoBehaviour
     public ModularUIButton modularUIButton;
 
     // 私有变量
+    private int num;
     private string valkyrieId;
     private ValkyrieUIController uiController;
     private CharacterData valkyrieData;
@@ -39,8 +43,9 @@ public class ValkyrieItemUI : MonoBehaviour
         }
     }
 
-    public void Initialize(CharacterData valkyrie, ValkyrieUIController controller)
+    public void Initialize(int Num, CharacterData valkyrie, ValkyrieUIController controller)
     {
+        num = Num;
         valkyrieId = valkyrie.Id;
         uiController = controller;
 
@@ -73,7 +78,7 @@ public class ValkyrieItemUI : MonoBehaviour
         if (itemButton != null)
         {
             itemButton.onClick.RemoveAllListeners();
-            //itemButton.onClick.AddListener(OnItemClicked);
+            itemButton.onClick.AddListener(OnItemClicked);
         }
 
         // 根据任务状态设置ModularUIButton
@@ -94,7 +99,7 @@ public class ValkyrieItemUI : MonoBehaviour
         //Debug.Log($"Picture/Valkyrie/{valkyrie.BaseStats.Element}Back");
         //Debug.Log($"Picture/Valkyrie/CharacterCard/{valkyrie.Id}");
 
-        ElementImage.sprite =  Resources.Load<Sprite>($"Picture/Valkyrie/{valkyrie.BaseStats.Element}Element");
+        ElementImage.sprite =  Resources.Load<Sprite>($"Picture/Valkyrie/ElementBack_{valkyrie.BaseStats.Element}");
         ValkyrieImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/CharacterCard/{valkyrie.Id}");
     }
 
@@ -103,10 +108,11 @@ public class ValkyrieItemUI : MonoBehaviour
         if (modularUIButton == null) return;
 
         // 根据任务状态配置ModularUIButton
+        /*
         switch (valkyrie.IsUnlocked)
         {
         }
-
+        */
         // 设置其他通用配置
         modularUIButton.requireConfirmation = false;
         modularUIButton.fadeDuration = 0.2f;
@@ -115,5 +121,13 @@ public class ValkyrieItemUI : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorUtility.SetDirty(modularUIButton);
 #endif
+    }
+
+    void OnItemClicked()
+    {
+        if (uiController != null && valkyrieData != null)
+        {
+            uiController.ShowValkyrieSummary(num);
+        }
     }
 }

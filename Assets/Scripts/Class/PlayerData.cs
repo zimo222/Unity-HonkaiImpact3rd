@@ -442,9 +442,10 @@ public class PlayerData
         // 琪亚娜·薪炎之律者
         Characters.Add(new CharacterData(
             id: "CHAR_001",
-            name: "琪亚娜·薪炎之律者",
+            name: "琪亚娜-薪炎之律者",
             isUnlocked: true,
             element: "YN",
+            stars: "S",
             health: 1500,
             attack: 300,
             critRate: 0.1f,
@@ -455,9 +456,10 @@ public class PlayerData
         // 琪亚娜·白练
         Characters.Add(new CharacterData(
             id: "CHAR_002",
-            name: "琪亚娜·白练",
+            name: "琪亚娜-领域装·白练",
             isUnlocked: false,
             element: "JX",
+            stars: "S",
             health: 1200,
             attack: 250,
             critRate: 0.08f,
@@ -468,9 +470,10 @@ public class PlayerData
         // 叶瞬光
         Characters.Add(new CharacterData(
             id: "CHAR_003",
-            name: "叶瞬光",
+            name: "叶瞬光-虚狩·青暝司命",
             isUnlocked: false,
             element: "SW",
+            stars: "S",
             health: 1400,
             attack: 280,
             critRate: 0.12f,
@@ -480,9 +483,10 @@ public class PlayerData
         // 胡桃
         Characters.Add(new CharacterData(
             id: "CHAR_004",
-            name: "胡桃",
+            name: "胡桃-往生堂堂主",
             isUnlocked: false,
             element: "SW",
+            stars: "S",
             health: 1100,
             attack: 320,
             critRate: 0.15f,
@@ -493,9 +497,10 @@ public class PlayerData
         // 流萤
         Characters.Add(new CharacterData(
             id: "CHAR_005",
-            name: "流萤",
+            name: "流萤-神秘机甲女",
             isUnlocked: false,
             element: "YN",
+            stars: "S",
             health: 1300,
             attack: 270,
             critRate: 0.09f,
@@ -568,7 +573,7 @@ public class PlayerData
         {
             case true: return 1;
             case false: return 0;
-            default: return 0;
+           //default: return 0;
         }
     }
 
@@ -968,7 +973,7 @@ public class CharacterData
 
     public CharacterData() { }
 
-    public CharacterData(string id, string name, bool isUnlocked, string element,
+    public CharacterData(string id, string name, bool isUnlocked, string element, string stars,
                         int health, int attack, float critRate,
                         float critDamage, float elementBonus)
     {
@@ -979,6 +984,7 @@ public class CharacterData
         {
             Level = 1,
             Element = element,
+            Stars = stars,
             Health = health,
             Attack = attack,
             CritRate = critRate,
@@ -1041,6 +1047,7 @@ public struct CharacterStats
 {
     public int Level;                                // 等级
     public string Element;                           // 元素
+    public string Stars;                             // 星级
     public int Health;                               // 生命值
     public int Attack;                               // 攻击力
     public float CritRate;                           // 暴击率（0-1）
