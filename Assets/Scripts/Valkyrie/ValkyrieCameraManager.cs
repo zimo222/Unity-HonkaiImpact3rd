@@ -11,6 +11,7 @@ public class ValkyrieCameraManager : MonoBehaviour
         public string presetName;                 // 预设名称
         public Vector3 cameraPosition;            // 摄像头位置
         public Vector3 cameraRotation;            // 摄像头旋转角度
+        public Vector3 playerRotation;            // 角色模型旋转角度（新增）
         public bool[] uiModuleStates;             // 对应UI组件数组中每个组件的显示状态
         public float transitionTime = 1.0f;       // 过渡时间
         public Ease moveEase = Ease.InOutQuad;    // 移动缓动类型
@@ -31,19 +32,22 @@ public class ValkyrieCameraManager : MonoBehaviour
     public Camera characterCamera;                // 引用 Cam_CharacterUI
     public Transform characterCameraTransform;    // 摄像头的Transform组件
 
+    [Header("角色模型设置")]
+    public Transform playerModelTransform;        // 角色模型的Transform（新增）
+
     [Header("CharImage 设置")]
     public RawImage characterRawImage;            // RawImage组件
     public RectTransform characterImageTransform; // CharImage的RectTransform
 
     [Header("预设数量")]
     [Range(1, 20)]
-    public int presetCount = 6;                   // 预设数量（可以设置更多）
+    public int presetCount = 6;                   // 预设数量
 
     [Header("UI组件数组")]
     public CanvasGroup[] uiModules = new CanvasGroup[0]; // 所有可能用到的UI组件
 
     [Header("摄像头预设数组")]
-    public CameraPreset[] cameraPresets;          // 预设数组（根据presetCount自动调整）
+    public CameraPreset[] cameraPresets;          // 预设数组
 
     [Header("CharImage预设数组")]
     public CharImagePreset[] charImagePresets;    // 对应预设数组
@@ -58,6 +62,7 @@ public class ValkyrieCameraManager : MonoBehaviour
 
     [Header("控制选项")]
     public bool syncCharImageWithCamera = true;   // 是否同步CharImage
+    public bool syncPlayerRotation = true;        // 是否同步角色旋转（新增）
 
     [Header("默认状态")]
     public bool startWithFirstPreset = true;      // 是否以第一个预设开始
@@ -124,7 +129,7 @@ public class ValkyrieCameraManager : MonoBehaviour
             System.Array.Resize(ref charImagePresets, presetCount);
         }
 
-        // 调整按钮数组（可选，如果按钮数量不够可以不用管）
+        // 调整按钮数组
         if (presetButtons == null || presetButtons.Length != presetCount)
         {
             System.Array.Resize(ref presetButtons, presetCount);
@@ -153,7 +158,10 @@ public class ValkyrieCameraManager : MonoBehaviour
                         ? characterCameraTransform.position + Vector3.right * i * 2
                         : new Vector3(i * 2, 1, -5),
                     cameraRotation = Vector3.zero,
-                    uiModuleStates = new bool[uiModules.Length], // 创建对应长度的bool数组
+                    playerRotation = playerModelTransform != null
+                        ? playerModelTransform.eulerAngles
+                        : Vector3.zero, // 默认使用角色当前旋转
+                    uiModuleStates = new bool[uiModules.Length],
                     transitionTime = 1.0f,
                     moveEase = Ease.InOutQuad
                 };
@@ -179,14 +187,13 @@ public class ValkyrieCameraManager : MonoBehaviour
                 System.Array.Resize(ref cameraPresets[i].uiModuleStates, uiModules.Length);
             }
 
-            // CharImage预设默认值（基于当前状态）
+            // CharImage预设默认值
             if (charImagePresets[i] == null)
             {
                 charImagePresets[i] = new CharImagePreset();
 
                 if (characterImageTransform != null)
                 {
-                    // 位置和变换（包含Z坐标）
                     charImagePresets[i].position = characterImageTransform.localPosition;
                     charImagePresets[i].rotation = characterImageTransform.localEulerAngles;
                     charImagePresets[i].scale = characterImageTransform.localScale;
@@ -195,7 +202,6 @@ public class ValkyrieCameraManager : MonoBehaviour
 
                 if (characterRawImage != null)
                 {
-                    // 视觉效果
                     charImagePresets[i].alpha = characterRawImage.color.a;
                     charImagePresets[i].color = characterRawImage.color;
                 }
@@ -258,6 +264,7 @@ public class ValkyrieCameraManager : MonoBehaviour
                 presetName = "默认角度",
                 cameraPosition = characterCameraTransform != null ? characterCameraTransform.position : new Vector3(0, 1, -5),
                 cameraRotation = Vector3.zero,
+                playerRotation = playerModelTransform != null ? playerModelTransform.eulerAngles : Vector3.zero,
                 uiModuleStates = new bool[uiModules.Length],
                 transitionTime = 1.0f,
                 moveEase = Ease.InOutQuad
@@ -272,6 +279,7 @@ public class ValkyrieCameraManager : MonoBehaviour
 
         // 强制设置到第一个预设（无过渡）
         SetCameraToPreset(0);
+        SetPlayerRotationToPreset(0); // 新增：设置角色旋转
         SetCharImageToPreset(0);
         SetUIToPreset(0);
 
@@ -330,6 +338,7 @@ public class ValkyrieCameraManager : MonoBehaviour
         {
             // 直接设置（用于初始化）
             SetCameraToPreset(presetIndex);
+            SetPlayerRotationToPreset(presetIndex); // 新增：设置角色旋转
             SetCharImageToPreset(presetIndex);
             SetUIToPreset(presetIndex);
             currentPresetIndex = presetIndex;
@@ -337,7 +346,7 @@ public class ValkyrieCameraManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 过渡协程（根据bool数组控制UI）
+    /// 过渡协程（包含角色旋转）
     /// </summary>
     private System.Collections.IEnumerator TransitionToPreset(int newIndex)
     {
@@ -362,17 +371,14 @@ public class ValkyrieCameraManager : MonoBehaviour
             bool currentState = currentUIStates[i];
             bool targetState = toPreset.uiModuleStates[i];
 
-            // 如果当前显示但目标不显示，需要隐藏
             if (currentState && !targetState)
             {
                 modulesToHide.Add(uiModules[i]);
             }
-            // 如果当前不显示但目标显示，需要显示
             else if (!currentState && targetState)
             {
                 modulesToShow.Add(uiModules[i]);
             }
-            // 如果状态相同，什么都不做
         }
 
         // 步骤2：淡出需要隐藏的UI组件
@@ -428,46 +434,49 @@ public class ValkyrieCameraManager : MonoBehaviour
             ).SetEase(toPreset.moveEase));
         }
 
-        // 步骤6：CharImage同步移动（如果启用）
+        // 步骤6：角色模型旋转（如果启用）
+        if (syncPlayerRotation && playerModelTransform != null)
+        {
+            currentTransitionSequence.Join(playerModelTransform.DORotate(
+                toPreset.playerRotation,
+                toPreset.transitionTime,
+                RotateMode.Fast
+            ).SetEase(toPreset.moveEase));
+        }
+
+        // 步骤7：CharImage同步移动（如果启用）
         if (syncCharImageWithCamera && characterImageTransform != null)
         {
             float charImageTime = Mathf.Min(toPreset.transitionTime, charImageTransitionTime);
 
-            // 位置变换（包含Z坐标）
             currentTransitionSequence.Join(characterImageTransform.DOLocalMove(
                 toCharImagePreset.position,
                 charImageTime
             ).SetEase(Ease.InOutQuad));
 
-            // 旋转变换
             currentTransitionSequence.Join(characterImageTransform.DOLocalRotate(
                 toCharImagePreset.rotation,
                 charImageTime,
                 RotateMode.Fast
             ).SetEase(Ease.InOutQuad));
 
-            // 缩放变换
             currentTransitionSequence.Join(characterImageTransform.DOScale(
                 toCharImagePreset.scale,
                 charImageTime
             ).SetEase(Ease.InOutQuad));
 
-            // UI大小变换
             currentTransitionSequence.Join(characterImageTransform.DOSizeDelta(
                 toCharImagePreset.size,
                 charImageTime
             ).SetEase(Ease.InOutQuad));
 
-            // 视觉效果
             if (characterRawImage != null)
             {
-                // 透明度变化
                 currentTransitionSequence.Join(characterRawImage.DOFade(
                     toCharImagePreset.alpha,
                     charImageTime
                 ).SetEase(Ease.InOutQuad));
 
-                // 颜色变化
                 currentTransitionSequence.Join(characterRawImage.DOColor(
                     toCharImagePreset.color,
                     charImageTime
@@ -475,10 +484,10 @@ public class ValkyrieCameraManager : MonoBehaviour
             }
         }
 
-        // 步骤7：等待动画完成
+        // 步骤8：等待动画完成
         yield return currentTransitionSequence.WaitForCompletion();
 
-        // 步骤8：淡出遮罩
+        // 步骤9：淡出遮罩
         if (fadeOverlay != null)
         {
             fadeOverlay.DOFade(0, uiFadeTime * 0.3f).SetEase(Ease.InQuad)
@@ -486,7 +495,7 @@ public class ValkyrieCameraManager : MonoBehaviour
             yield return new WaitForSeconds(uiFadeTime * 0.3f);
         }
 
-        // 步骤9：显示需要显示的UI组件
+        // 步骤10：显示需要显示的UI组件
         if (modulesToShow.Count > 0)
         {
             Sequence showSequence = DOTween.Sequence();
@@ -548,6 +557,22 @@ public class ValkyrieCameraManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 直接设置角色旋转（无过渡）
+    /// </summary>
+    private void SetPlayerRotationToPreset(int presetIndex)
+    {
+        if (!syncPlayerRotation || playerModelTransform == null || presetIndex >= presetCount)
+            return;
+
+        CameraPreset preset = cameraPresets[presetIndex];
+        if (preset == null) return;
+
+        playerModelTransform.eulerAngles = preset.playerRotation;
+
+        Debug.Log($"设置角色旋转到预设{presetIndex}: {preset.playerRotation}");
+    }
+
+    /// <summary>
     /// 直接设置CharImage位置（无过渡）
     /// </summary>
     private void SetCharImageToPreset(int presetIndex)
@@ -558,19 +583,11 @@ public class ValkyrieCameraManager : MonoBehaviour
         CharImagePreset preset = charImagePresets[presetIndex];
         if (preset == null) return;
 
-        // 设置位置（包含Z坐标）
         characterImageTransform.localPosition = preset.position;
-
-        // 设置旋转
         characterImageTransform.localEulerAngles = preset.rotation;
-
-        // 设置缩放
         characterImageTransform.localScale = preset.scale;
-
-        // 设置UI大小
         characterImageTransform.sizeDelta = preset.size;
 
-        // 设置视觉效果
         if (characterRawImage != null)
         {
             Color color = preset.color;
@@ -591,7 +608,6 @@ public class ValkyrieCameraManager : MonoBehaviour
         CameraPreset preset = cameraPresets[presetIndex];
         if (preset == null || preset.uiModuleStates == null) return;
 
-        // 根据bool数组设置每个UI组件
         for (int i = 0; i < uiModules.Length; i++)
         {
             if (uiModules[i] == null) continue;
@@ -613,12 +629,13 @@ public class ValkyrieCameraManager : MonoBehaviour
                 uiModules[i].blocksRaycasts = false;
             }
 
-            // 更新当前状态
             currentUIStates[i] = shouldShow;
         }
 
         Debug.Log($"设置UI到预设{presetIndex}");
     }
+
+    // ========== 保存方法 ==========
 
     /// <summary>
     /// 保存当前UI状态到指定预设
@@ -634,7 +651,6 @@ public class ValkyrieCameraManager : MonoBehaviour
             cameraPresets[presetIndex].uiModuleStates = new bool[uiModules.Length];
         }
 
-        // 保存当前所有UI组件的状态
         for (int i = 0; i < uiModules.Length; i++)
         {
             if (uiModules[i] != null)
@@ -645,8 +661,6 @@ public class ValkyrieCameraManager : MonoBehaviour
 
         Debug.Log($"已保存当前UI状态到预设{presetIndex}");
     }
-
-    // ========== 工具方法 ==========
 
     /// <summary>
     /// 保存当前摄像头状态到指定索引
@@ -660,11 +674,27 @@ public class ValkyrieCameraManager : MonoBehaviour
         if (presetIndex >= cameraPresets.Length || cameraPresets[presetIndex] == null)
             cameraPresets[presetIndex] = new CameraPreset();
 
-        // 保存当前状态
         cameraPresets[presetIndex].cameraPosition = characterCameraTransform.position;
         cameraPresets[presetIndex].cameraRotation = characterCameraTransform.eulerAngles;
 
         Debug.Log($"已保存摄像头状态到预设 {presetIndex}");
+    }
+
+    /// <summary>
+    /// 保存当前角色旋转状态到指定索引
+    /// </summary>
+    public void SaveCurrentPlayerRotationToPreset(int presetIndex)
+    {
+        if (presetIndex < 0 || presetIndex >= presetCount ||
+            playerModelTransform == null)
+            return;
+
+        if (presetIndex >= cameraPresets.Length || cameraPresets[presetIndex] == null)
+            cameraPresets[presetIndex] = new CameraPreset();
+
+        cameraPresets[presetIndex].playerRotation = playerModelTransform.eulerAngles;
+
+        Debug.Log($"已保存角色旋转状态到预设 {presetIndex}: {playerModelTransform.eulerAngles}");
     }
 
     /// <summary>
@@ -679,13 +709,10 @@ public class ValkyrieCameraManager : MonoBehaviour
         if (presetIndex >= charImagePresets.Length || charImagePresets[presetIndex] == null)
             charImagePresets[presetIndex] = new CharImagePreset();
 
-        // 保存位置和变换（包含Z坐标）
         charImagePresets[presetIndex].position = characterImageTransform.localPosition;
         charImagePresets[presetIndex].rotation = characterImageTransform.localEulerAngles;
         charImagePresets[presetIndex].scale = characterImageTransform.localScale;
         charImagePresets[presetIndex].size = characterImageTransform.sizeDelta;
-
-        // 保存视觉效果
         charImagePresets[presetIndex].alpha = characterRawImage.color.a;
         charImagePresets[presetIndex].color = characterRawImage.color;
 
@@ -698,11 +725,14 @@ public class ValkyrieCameraManager : MonoBehaviour
     public void SaveCurrentAllToPreset(int presetIndex)
     {
         SaveCurrentCameraToPreset(presetIndex);
+        SaveCurrentPlayerRotationToPreset(presetIndex);
         SaveCurrentCharImageToPreset(presetIndex);
         SaveCurrentUIStateToPreset(presetIndex);
 
         Debug.Log($"已保存所有状态到预设 {presetIndex}");
     }
+
+    // ========== 其他工具方法 ==========
 
     /// <summary>
     /// 重置到第一个预设状态
@@ -722,6 +752,7 @@ public class ValkyrieCameraManager : MonoBehaviour
         else
         {
             SetCameraToPreset(0);
+            SetPlayerRotationToPreset(0);
             SetCharImageToPreset(0);
             SetUIToPreset(0);
             currentPresetIndex = 0;
@@ -761,6 +792,15 @@ public class ValkyrieCameraManager : MonoBehaviour
     {
         syncCharImageWithCamera = enable;
         Debug.Log($"CharImage同步: {(enable ? "启用" : "禁用")}");
+    }
+
+    /// <summary>
+    /// 切换角色旋转同步功能
+    /// </summary>
+    public void TogglePlayerRotationSync(bool enable)
+    {
+        syncPlayerRotation = enable;
+        Debug.Log($"角色旋转同步: {(enable ? "启用" : "禁用")}");
     }
 
     /// <summary>
@@ -851,6 +891,27 @@ public class ValkyrieCameraManager : MonoBehaviour
         SaveCurrentAllToPreset(0);
         UnityEditor.EditorUtility.SetDirty(this);
         Debug.Log("已保存当前状态到第一个预设");
+    }
+
+    [ContextMenu("保存当前角色旋转到所有预设")]
+    void SaveCurrentPlayerRotationToAllPresetsInEditor()
+    {
+        if (playerModelTransform == null)
+        {
+            Debug.LogError("角色模型Transform为空！");
+            return;
+        }
+
+        for (int i = 0; i < presetCount && i < cameraPresets.Length; i++)
+        {
+            if (cameraPresets[i] == null)
+                cameraPresets[i] = new CameraPreset();
+
+            cameraPresets[i].playerRotation = playerModelTransform.eulerAngles;
+        }
+
+        UnityEditor.EditorUtility.SetDirty(this);
+        Debug.Log($"已将当前角色旋转保存到所有{presetCount}个预设");
     }
 
     [ContextMenu("同步所有预设的UI数组长度")]

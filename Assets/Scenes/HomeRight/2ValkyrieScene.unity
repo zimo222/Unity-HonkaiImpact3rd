@@ -2249,6 +2249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterCamera: {fileID: 1149164674}
   characterCameraTransform: {fileID: 1149164675}
+  playerModelTransform: {fileID: 1586442804}
   characterRawImage: {fileID: 500019114}
   characterImageTransform: {fileID: 500019113}
   presetCount: 6
@@ -2263,36 +2264,42 @@ MonoBehaviour:
   - presetName: 
     cameraPosition: {x: -37, y: 70, z: -350}
     cameraRotation: {x: 0, y: 0, z: 0}
+    playerRotation: {x: 0, y: 0, z: 0}
     uiModuleStates: 010000000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -85, y: 127, z: -280}
-    cameraRotation: {x: 0, y: 25, z: 0}
+    cameraPosition: {x: -16, y: 122, z: -290}
+    cameraRotation: {x: -0.5, y: 0, z: 0}
+    playerRotation: {x: 0, y: -17, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -85, y: 127, z: -280}
-    cameraRotation: {x: 0, y: 25, z: 0}
+    cameraPosition: {x: -16, y: 122, z: -290}
+    cameraRotation: {x: -0.5, y: 0, z: 0}
+    playerRotation: {x: 0, y: -17, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -150, y: 55, z: -127}
-    cameraRotation: {x: 7.5, y: 57, z: 0}
+    cameraPosition: {x: -25, y: 40, z: -190}
+    cameraRotation: {x: -0.5, y: 0, z: -2}
+    playerRotation: {x: 0, y: -40, z: 0}
     uiModuleStates: 000100010000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -73, y: 138, z: 160}
-    cameraRotation: {x: 7.5, y: 180, z: 0}
+    cameraPosition: {x: 36, y: 105, z: -150}
+    cameraRotation: {x: -3, y: 0, z: 0}
+    playerRotation: {x: 0, y: -180, z: 0}
     uiModuleStates: 000100000100
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -85, y: 127, z: -280}
-    cameraRotation: {x: 7.5, y: 25, z: 0}
+    cameraPosition: {x: -16, y: 122, z: -290}
+    cameraRotation: {x: -0.5, y: 0, z: 0}
+    playerRotation: {x: 0, y: -17, z: 0}
     uiModuleStates: 000100000001
     transitionTime: 0.5
     moveEase: 0
@@ -2303,31 +2310,31 @@ MonoBehaviour:
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -300, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 850}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -300, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 850}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -300, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 850}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -300, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 850}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -300, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 850}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
@@ -2344,6 +2351,7 @@ MonoBehaviour:
   uiFadeTime: 0.3
   charImageTransitionTime: 0.5
   syncCharImageWithCamera: 1
+  syncPlayerRotation: 1
   startWithFirstPreset: 1
 --- !u!1 &331325487
 GameObject:
@@ -5115,7 +5123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &812929337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5148,14 +5156,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5137255}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.7647059}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: c381dc174d05e2e41a97ec6e6cea8a50, type: 3}
+  m_Texture: {fileID: 2800000, guid: 0ffa6c14538b03f439ee671b76ee20fc, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0
