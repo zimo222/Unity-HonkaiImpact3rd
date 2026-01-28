@@ -20,7 +20,9 @@ public class ValkyrieUIController : MonoBehaviour
     [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
+    // ======================   UI0   =========================
     // ====================== 左侧面板 =========================
+    [Header("UI0")]
     [Header("上面板")]
     public TMP_Text Name1Text;
     public Image ElementImage;
@@ -30,7 +32,6 @@ public class ValkyrieUIController : MonoBehaviour
     public Image StarImage;
     public TMP_Text LevelText;
     public TMP_Text CombatPowerText;
-
     // ====================== 右侧面板 =========================
     [Header("上面板")]
     public TMP_Text WeaponText;
@@ -39,10 +40,21 @@ public class ValkyrieUIController : MonoBehaviour
     public Image MiddleStigmataImage;
     public Image BottomStigmataImage;
 
-
     [Header("女武神列表")]
     public Transform valkyrieListContent;     // 女武神列表容器
     public GameObject valkyrieItemPrefab;     // 女武神项预制体
+
+    // ======================   UI1   =========================
+    // ====================== 左侧面板 =========================
+    [Header("UI1")]
+    public TMP_Text Name2Text1;
+    public Image ElementImage1;
+    public TMP_Text LevelText1;
+    // ====================== 右侧面板 =========================
+    [Header("上面板")]
+    [Header("中面板")]
+
+
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
@@ -137,14 +149,13 @@ public class ValkyrieUIController : MonoBehaviour
 
         string[] Name = currentPlayerData.Characters[currentValkyrie].Name.Split('-');
 
+        //UI1
         //左面板
         //上面板
         if (Name1Text != null)
             Name1Text.text = Name[0];
-
         if (ElementImage != null)
             ElementImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/ElementIcon_{currentPlayerData.Characters[currentValkyrie].BaseStats.Element}");
-
         if (ElementText != null)
             switch (currentPlayerData.Characters[currentValkyrie].BaseStats.Element)
             {
@@ -161,24 +172,19 @@ public class ValkyrieUIController : MonoBehaviour
                     ElementText.color = new Color(43 / 255.0f, 226 / 255.0f, 1, 255);
                     break;
             }
-
         if (Name2Text != null)
             Name2Text.text = Name[1];
-
         //下面板
         if (StarImage != null)
         {
             StarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}");
         }
-
         if (LevelText != null)
             LevelText.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
-
         //右面板
         //上面板
         if (WeaponText != null)
             WeaponText.text = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "无";
-
         //下面板
         if (TopStigmataImage != null)
             TopStigmataImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
@@ -186,6 +192,14 @@ public class ValkyrieUIController : MonoBehaviour
             MiddleStigmataImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
         if (BottomStigmataImage != null)
             BottomStigmataImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
+
+        //UI1
+        if (ElementImage1 != null)
+            ElementImage1.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/ElementIcon_{currentPlayerData.Characters[currentValkyrie].BaseStats.Element}");
+        if (Name2Text1 != null)
+            Name2Text1.text = Name[1];
+        if (LevelText1 != null)
+            LevelText1.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
     }
 
     // ================== 女武神列表管理 ==================
