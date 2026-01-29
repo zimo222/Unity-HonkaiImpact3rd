@@ -1045,9 +1045,11 @@ public class EquipmentData
 [System.Serializable]
 public struct CharacterStats
 {
-    public int Level;                                // 等级
     public string Element;                           // 元素
+    public int Level;                                // 等级
+    public int Exp;                                  // 经验
     public string Stars;                             // 星级
+    public int Fragments;                            // 碎片
     public int Health;                               // 生命值
     public int Attack;                               // 攻击力
     public float CritRate;                           // 暴击率（0-1）

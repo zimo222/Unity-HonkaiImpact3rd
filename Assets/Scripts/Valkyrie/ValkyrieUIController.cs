@@ -9,20 +9,20 @@ using UnityEngine.UI;
 
 public class ValkyrieUIController : MonoBehaviour
 {
-    // ================== 基础玩家信息UI引用 ==================
+    // ========================= 基础玩家信息UI引用 =========================
     [Header("资源信息")]
     public TMP_Text tiliText;
     public TMP_Text coinsText;
     public TMP_Text crystalsText;
 
-    // ================== 按钮引用 (可选) ==================
+    // =========================  按钮引用 (可选)   =========================
     [Header("按钮引用 (如果需要通过脚本访问它们)")]
     [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
-    // ======================   UI0   =========================
-    // ====================== 左侧面板 =========================
+    // =========================        UI0         =========================
     [Header("UI0")]
+    // ==================== 左侧面板 ====================
     [Header("上面板")]
     public TMP_Text Name1Text;
     public Image ElementImage;
@@ -32,27 +32,36 @@ public class ValkyrieUIController : MonoBehaviour
     public Image StarImage;
     public TMP_Text LevelText;
     public TMP_Text CombatPowerText;
-    // ====================== 右侧面板 =========================
+    // ==================== 右侧面板 ====================
     [Header("上面板")]
     public TMP_Text WeaponText;
     [Header("中面板")]
     public Image TopStigmataImage;
     public Image MiddleStigmataImage;
     public Image BottomStigmataImage;
-
     [Header("女武神列表")]
     public Transform valkyrieListContent;     // 女武神列表容器
     public GameObject valkyrieItemPrefab;     // 女武神项预制体
 
-    // ======================   UI1   =========================
-    // ====================== 左侧面板 =========================
+    // =========================        UI1         =========================
     [Header("UI1")]
+    // ==================== 左侧面板 ==================== 
     public TMP_Text Name2Text1;
     public Image ElementImage1;
     public TMP_Text LevelText1;
-    // ====================== 右侧面板 =========================
+    // ==================== 右侧面板 ==================== 
+    [Header("Panel1")]
     [Header("上面板")]
+    public Image StarImage1;
+    public TMP_Text HealthText;
+    public TMP_Text AttackText;
+    public TMP_Text CritRateText;
+    public TMP_Text CritDamageText;
     [Header("中面板")]
+    public TMP_Text ExpText;
+    [Header("下面板")]
+    public Image StarImage2;
+    public TMP_Text FragmentText;
 
 
 
@@ -137,18 +146,14 @@ public class ValkyrieUIController : MonoBehaviour
     void UpdateResources()
     {
         if (currentPlayerData == null) return;
-
         if (tiliText != null)
             tiliText.text = currentPlayerData.Stamina.ToString() + '/' + (currentPlayerData.Level + 80).ToString();
-
         if (coinsText != null)
             coinsText.text = currentPlayerData.Coins.ToString();
-
         if (crystalsText != null)
             crystalsText.text = currentPlayerData.Crystals.ToString();
 
         string[] Name = currentPlayerData.Characters[currentValkyrie].Name.Split('-');
-
         //UI1
         //左面板
         //上面板
@@ -194,12 +199,36 @@ public class ValkyrieUIController : MonoBehaviour
             BottomStigmataImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
 
         //UI1
+        //左面板
         if (ElementImage1 != null)
             ElementImage1.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/ElementIcon_{currentPlayerData.Characters[currentValkyrie].BaseStats.Element}");
         if (Name2Text1 != null)
             Name2Text1.text = Name[1];
         if (LevelText1 != null)
             LevelText1.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
+        //右面板
+        if (StarImage1 != null)
+        {
+            StarImage1.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}");
+        }
+        if (HealthText != null)
+            HealthText.text = currentPlayerData.Characters[currentValkyrie].BaseStats.Health.ToString();
+        if (AttackText != null)
+            AttackText.text = currentPlayerData.Characters[currentValkyrie].BaseStats.Attack.ToString();
+        if (CritRateText != null)
+            CritRateText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.CritRate * 100).ToString();
+        if (CritDamageText != null)
+            CritDamageText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.CritDamage * 100).ToString();
+        if (ExpText != null)
+            ExpText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Exp).ToString() + '/' + (currentPlayerData.Characters[currentValkyrie].BaseStats.Level * 100).ToString();
+        if (StarImage2 != null)
+        {
+            StarImage2.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}");
+        }
+        if(FragmentText != null)
+        {
+            FragmentText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Fragments).ToString() + "/50";
+        }
     }
 
     // ================== 女武神列表管理 ==================
