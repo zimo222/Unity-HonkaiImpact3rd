@@ -2571,79 +2571,79 @@ MonoBehaviour:
   - {fileID: 2080684992}
   cameraPresets:
   - presetName: 
-    cameraPosition: {x: -37, y: 70, z: -350}
+    cameraPosition: {x: -37, y: 70, z: 0}
     cameraRotation: {x: 0, y: 0, z: 0}
     playerRotation: {x: 0, y: 0, z: 0}
     uiModuleStates: 010000000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -16, y: 122, z: -290}
+    cameraPosition: {x: -16, y: 122, z: 60}
     cameraRotation: {x: -0.5, y: 0, z: 0}
     playerRotation: {x: 0, y: -17, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -16, y: 122, z: -290}
+    cameraPosition: {x: -16, y: 122, z: 60}
     cameraRotation: {x: -0.5, y: 0, z: 0}
     playerRotation: {x: 0, y: -17, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -25, y: 40, z: -190}
+    cameraPosition: {x: -25, y: 40, z: 160}
     cameraRotation: {x: -0.5, y: 0, z: -2}
     playerRotation: {x: 0, y: -40, z: 0}
     uiModuleStates: 000100010000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: 36, y: 105, z: -150}
+    cameraPosition: {x: 36, y: 105, z: 200}
     cameraRotation: {x: -3, y: 0, z: 0}
     playerRotation: {x: 0, y: -180, z: 0}
     uiModuleStates: 000100000100
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -16, y: 122, z: -290}
+    cameraPosition: {x: -16, y: 122, z: 60}
     cameraRotation: {x: -0.5, y: 0, z: 0}
     playerRotation: {x: 0, y: -17, z: 0}
     uiModuleStates: 000100000001
     transitionTime: 0.5
     moveEase: 0
   charImagePresets:
-  - position: {x: 120, y: -80, z: 850}
+  - position: {x: 120, y: -80, z: 1200}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -600, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 1200}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -600, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 1200}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -600, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 1200}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -600, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 1200}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
     alpha: 1
     color: {r: 1, g: 1, b: 1, a: 1}
-  - position: {x: -600, y: -80, z: 850}
+  - position: {x: -600, y: -80, z: 1200}
     rotation: {x: 0, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
     size: {x: 1600, y: 1600}
@@ -3342,7 +3342,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 500019112}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 850}
+  m_LocalPosition: {x: 0, y: 0, z: 1200}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3682,7 +3682,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 564935011}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 850}
+  m_LocalPosition: {x: 0, y: 0, z: 1200}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5012,7 +5012,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &730943267
 Transform:
   m_ObjectHideFlags: 0
@@ -5534,7 +5534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &812929337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7727,7 +7727,7 @@ Transform:
   m_GameObject: {fileID: 1149164672}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -37, y: 70, z: -350}
+  m_LocalPosition: {x: -37, y: 70, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10093,7 +10093,7 @@ Transform:
   m_GameObject: {fileID: 1447859322}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -350}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13498,7 +13498,7 @@ Transform:
   m_GameObject: {fileID: 1586442803}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 350}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -16968,7 +16968,7 @@ Transform:
   m_GameObject: {fileID: 1930590665}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 600}
+  m_LocalPosition: {x: 0, y: 5, z: 850}
   m_LocalScale: {x: 1954, y: 1142, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
