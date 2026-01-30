@@ -72,7 +72,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_DAILY_001",
-            name: "Mei's Snack",
+            name: "芽衣的加餐",
             unlockLevel: 10,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 50),
@@ -86,7 +86,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_DAILY_002",
-            name: "Coin Collection",
+            name: "金币采集",
             unlockLevel: 15,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 50),
@@ -100,7 +100,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_DAILY_003",
-            name: "Material Activities",
+            name: "材料活动",
             unlockLevel: 15,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 200),
@@ -114,7 +114,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_DAILY_004",
-            name: "Homeland Part-Time Job",
+            name: "家园打工",
             unlockLevel: 20,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 50),
@@ -128,7 +128,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_DAILY_005",
-            name: "Story Level",
+            name: "剧情关卡",
             unlockLevel: 1,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 150),
@@ -142,7 +142,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_DAILY_006",
-            name: "Continuous Combat",
+            name: "持续作战",
             unlockLevel: 10,
             frequency: TaskFrequency.Daily,
             reward1: new TaskReward(RewardType.DailyEXP, 100),
@@ -157,7 +157,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_WEEKLY_001",
-            name: "Weekly Exam",
+            name: "每周考题",
             unlockLevel: 30,
             frequency: TaskFrequency.Weekly,
             reward1: new TaskReward(RewardType.DailyEXP, 300),
@@ -171,7 +171,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_WEEKLY_002",
-            name: "Simulation Operations Room",
+            name: "模拟作战室",
             unlockLevel: 20,
             frequency: TaskFrequency.Weekly,
             reward1: new TaskReward(RewardType.DailyEXP, 300),
@@ -185,7 +185,7 @@ public class PlayerData
         Tasks.Add(new TaskData(
             level: Level,
             id: "TASK_WEEKLY_003",
-            name: "Endless Abyss",
+            name: "无尽深渊",
             unlockLevel: 25,
             frequency: TaskFrequency.Weekly,
             reward1: new TaskReward(RewardType.DailyEXP, 1000),

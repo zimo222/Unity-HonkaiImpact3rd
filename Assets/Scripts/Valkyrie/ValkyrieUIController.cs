@@ -23,19 +23,15 @@ public class ValkyrieUIController : MonoBehaviour
     // =========================        UI0         =========================
     [Header("UI0")]
     // ==================== 左侧面板 ====================
-    [Header("上面板")]
     public TMP_Text Name1Text;
     public Image ElementImage;
     public TMP_Text ElementText;
     public TMP_Text Name2Text;
-    [Header("下面板")]
     public Image StarImage;
     public TMP_Text LevelText;
     public TMP_Text CombatPowerText;
     // ==================== 右侧面板 ====================
-    [Header("上面板")]
     public TMP_Text WeaponText;
-    [Header("中面板")]
     public Image TopStigmataImage;
     public Image MiddleStigmataImage;
     public Image BottomStigmataImage;
@@ -51,17 +47,18 @@ public class ValkyrieUIController : MonoBehaviour
     public TMP_Text LevelText1;
     // ==================== 右侧面板 ==================== 
     [Header("Panel1")]
-    [Header("上面板")]
     public Image StarImage1;
     public TMP_Text HealthText;
     public TMP_Text AttackText;
     public TMP_Text CritRateText;
     public TMP_Text CritDamageText;
-    [Header("中面板")]
+    public TMP_Text ElementBonusText;
     public TMP_Text ExpText;
-    [Header("下面板")]
     public Image StarImage2;
     public TMP_Text FragmentText;
+    [Header("Panel2")]
+    public TMP_Text WeaponNameText;
+    public TMP_Text WeaponLevelText;
 
 
 
@@ -219,16 +216,19 @@ public class ValkyrieUIController : MonoBehaviour
             CritRateText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.CritRate * 100).ToString();
         if (CritDamageText != null)
             CritDamageText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.CritDamage * 100).ToString();
+        if (ElementBonusText != null)
+            ElementBonusText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.ElementBonus * 100).ToString();
         if (ExpText != null)
             ExpText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Exp).ToString() + '/' + (currentPlayerData.Characters[currentValkyrie].BaseStats.Level * 100).ToString();
         if (StarImage2 != null)
-        {
-            StarImage2.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}");
-        }
+             StarImage2.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}");
         if(FragmentText != null)
-        {
             FragmentText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Fragments).ToString() + "/50";
-        }
+
+        if (WeaponNameText != null)
+            WeaponNameText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "无");
+        if (WeaponLevelText != null)
+            WeaponLevelText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? "Lv." + currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Level.ToString() : "");
     }
 
     // ================== 女武神列表管理 ==================

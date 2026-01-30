@@ -261,7 +261,7 @@ public class MissionItemUI : MonoBehaviour
             switch (task.Status)
             {
                 case TaskStatus.Locked:
-                    statusText.text = "Locked";
+                    statusText.text = "未解锁";
                     statusText.color = Color.gray;
                     break;
                 case TaskStatus.Unlocked:
@@ -287,7 +287,7 @@ public class MissionItemUI : MonoBehaviour
                         break;
                     }
                 case TaskStatus.Claimed:
-                    statusText.text = "Completed";
+                    statusText.text = "已完成";
                     statusText.color = Color.green;
                     break;
             }
