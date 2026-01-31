@@ -298,16 +298,16 @@ public class MissionItemUI : MonoBehaviour
             switch (task.Status)
             {
                 case TaskStatus.Locked:
-                    actionButtonText.text = "Locked";
+                    actionButtonText.text = "未解锁";
                     break;
                 case TaskStatus.Unlocked:
-                    actionButtonText.text = "Action";
+                    actionButtonText.text = "前往";
                     break;
                 case TaskStatus.Completed:
-                    actionButtonText.text = "Receive";
+                    actionButtonText.text = "领取";
                     break;
                 case TaskStatus.Claimed:
-                    actionButtonText.text = "Received";
+                    actionButtonText.text = "已领取";
                     break;
             }
         }

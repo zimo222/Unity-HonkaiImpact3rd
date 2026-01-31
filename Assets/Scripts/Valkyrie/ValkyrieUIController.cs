@@ -59,6 +59,16 @@ public class ValkyrieUIController : MonoBehaviour
     [Header("Panel2")]
     public TMP_Text WeaponNameText;
     public TMP_Text WeaponLevelText;
+    [Header("Panel3")]
+    public Image StigmataTOPImage;
+    public TMP_Text StigmataTOPNameText;
+    public TMP_Text StigmataTOPLevelText;
+    public Image StigmataMIDImage;
+    public TMP_Text StigmataMIDNameText;
+    public TMP_Text StigmataMIDLevelText;
+    public Image StigmataBOTImage;
+    public TMP_Text StigmataBOTNameText;
+    public TMP_Text StigmataBOTLevelText;
 
 
 
@@ -229,6 +239,26 @@ public class ValkyrieUIController : MonoBehaviour
             WeaponNameText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "无");
         if (WeaponLevelText != null)
             WeaponLevelText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? "Lv." + currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Level.ToString() : "");
+
+        if (StigmataTOPImage != null)
+            StigmataTOPImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Illustration_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
+        if (StigmataTOPNameText != null)
+            StigmataTOPNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Name : "无";
+        if (StigmataTOPLevelText != null)
+            StigmataTOPLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? "Lv." + currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Stats.Level.ToString() : "";
+        if (StigmataMIDImage != null)
+            StigmataMIDImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Illustration_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
+        if (StigmataMIDNameText != null)
+            StigmataMIDNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Name : "无";
+        if (StigmataMIDLevelText != null)
+            StigmataMIDLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? "Lv." + currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Stats.Level.ToString() : "";
+        if (StigmataBOTImage != null)
+            StigmataBOTImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Illustration_{currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Valkyrie/Stigmata/Icon_-1");
+        if (StigmataBOTNameText != null)
+            StigmataBOTNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Name : "无";
+        if (StigmataBOTLevelText != null)
+            StigmataBOTLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? "Lv." + currentPlayerData.EquipmentBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Stats.Level.ToString() : "";
+
     }
 
     // ================== 女武神列表管理 ==================

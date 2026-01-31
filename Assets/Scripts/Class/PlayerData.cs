@@ -625,7 +625,7 @@ public class PlayerData
         // 上位圣痕
         EquipmentBag.Add(new EquipmentData(
             id: "STIG_001_TOP",
-            name: "燃烧之羽",
+            name: "无量塔姬子(上)",
             type: EquipmentType.Stigmata,
             stigmataPosition: StigmataPosition.Top,
             health: 200,
@@ -638,7 +638,7 @@ public class PlayerData
         // 中位圣痕
         EquipmentBag.Add(new EquipmentData(
             id: "STIG_001_MID",
-            name: "燃烧之心",
+            name: "无量塔姬子(中)",
             type: EquipmentType.Stigmata,
             stigmataPosition: StigmataPosition.Middle,
             health: 150,
@@ -651,7 +651,7 @@ public class PlayerData
         // 下位圣痕
         EquipmentBag.Add(new EquipmentData(
             id: "STIG_001_BOT",
-            name: "燃烧之足",
+            name: "无量塔姬子(下)",
             type: EquipmentType.Stigmata,
             stigmataPosition: StigmataPosition.Bottom,
             health: 180,
