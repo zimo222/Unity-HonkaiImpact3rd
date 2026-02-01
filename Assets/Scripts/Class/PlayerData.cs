@@ -590,6 +590,7 @@ public class PlayerData
             name: "焢煌之钥",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.DualPistols,
+            stars: "5S",
             health: 0,
             attack: 150,
             critRate: 0.05f,
@@ -602,6 +603,7 @@ public class PlayerData
             name: "训练单手剑",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.SingleHandedSword,
+            stars: "4S",
             health: 0,
             attack: 80,
             critRate: 0f,
@@ -614,6 +616,7 @@ public class PlayerData
             name: "新手长枪",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.Spear,
+            stars: "4S",
             health: 0,
             attack: 90,
             critRate: 0.02f,
@@ -628,6 +631,7 @@ public class PlayerData
             name: "无量塔姬子(上)",
             type: EquipmentType.Stigmata,
             stigmataPosition: StigmataPosition.Top,
+            stars: "5S",
             health: 200,
             attack: 50,
             critRate: 0.03f,
@@ -641,6 +645,7 @@ public class PlayerData
             name: "无量塔姬子(中)",
             type: EquipmentType.Stigmata,
             stigmataPosition: StigmataPosition.Middle,
+            stars: "5S",
             health: 150,
             attack: 60,
             critRate: 0.02f,
@@ -654,6 +659,7 @@ public class PlayerData
             name: "无量塔姬子(下)",
             type: EquipmentType.Stigmata,
             stigmataPosition: StigmataPosition.Bottom,
+            stars: "5S",
             health: 180,
             attack: 40,
             critRate: 0.04f,
@@ -1013,7 +1019,7 @@ public class EquipmentData
 
     public EquipmentData(string id, string name, EquipmentType type,
                         WeaponType weaponType = WeaponType.None,
-                        StigmataPosition stigmataPosition = StigmataPosition.None,
+                        StigmataPosition stigmataPosition = StigmataPosition.None, string stars = "4S", 
                         int health = 0, int attack = 0,
                         float critRate = 0f, float critDamage = 0f,
                         float elementBonus = 0f)
@@ -1026,6 +1032,7 @@ public class EquipmentData
 
         Stats = new CharacterStats()
         {
+            Stars = stars,
             Health = health,
             Attack = attack,
             CritRate = critRate,
