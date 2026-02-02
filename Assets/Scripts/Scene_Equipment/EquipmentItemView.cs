@@ -1,16 +1,16 @@
-// Scripts/Equipment/EquipmentItemUI.cs
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
-public class EquipmentItemUI : MonoBehaviour, IPointerClickHandler
+public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
 {
-    // UI组件
     [Header("UI组件")]
-    public Image iconImage;           // 装备图标
-    public Text nameText;             // 装备名称
-    public Text levelText;            // 装备等级
+    public Image iconImage;           // 图标
+    public TMP_Text nameText;             // 名称
+    public TMP_Text levelText;            // 等级
     public Image rarityFrame;         // 稀有度边框
+    public TMP_Text starsText;            // 星级显示
     public GameObject equippedBadge;  // 已装备标志
 
     // 数据
@@ -39,6 +39,10 @@ public class EquipmentItemUI : MonoBehaviour, IPointerClickHandler
         if (levelText != null)
             levelText.text = $"Lv.{equipmentData.Stats.Level}";
 
+        // 星级
+        if (starsText != null)
+            starsText.text = equipmentData.Stats.Stars;
+
         // 已装备标志
         if (equippedBadge != null)
             equippedBadge.SetActive(equipmentData.EquippedToCharacterIndex >= 0);
@@ -46,13 +50,12 @@ public class EquipmentItemUI : MonoBehaviour, IPointerClickHandler
         // 稀有度边框颜色
         if (rarityFrame != null)
         {
-            // 根据星级设置颜色（这里简化处理）
+            // 根据星级设置颜色
             string stars = equipmentData.Stats.Stars;
-            Color rarityColor = GetRarityColor(stars);
-            rarityFrame.color = rarityColor;
+            rarityFrame.color = GetRarityColor(stars);
         }
 
-        // 加载图标（同步加载，简单实现）
+        // 加载图标
         LoadIcon();
     }
 
@@ -61,7 +64,7 @@ public class EquipmentItemUI : MonoBehaviour, IPointerClickHandler
     {
         if (iconImage == null) return;
 
-        // 构建图标路径（根据你的项目结构）
+        // 构建图标路径
         string iconPath = $"Equipment/Icons/{equipmentData.Id}";
         Sprite icon = Resources.Load<Sprite>(iconPath);
 
@@ -72,14 +75,16 @@ public class EquipmentItemUI : MonoBehaviour, IPointerClickHandler
         else
         {
             // 加载失败，使用默认图标
-            Debug.LogWarning($"无法加载装备图标: {iconPath}");
-            iconImage.sprite = Resources.Load<Sprite>("Equipment/Icons/default");
+            string defaultIcon = equipmentData.Type == EquipmentType.Weapon ?
+                "Equipment/Icons/weapon_default" : "Equipment/Icons/stigmata_default";
+            iconImage.sprite = Resources.Load<Sprite>(defaultIcon);
         }
     }
 
     // 获取稀有度颜色
     Color GetRarityColor(string stars)
     {
+        // 5星橙色，4星紫色，3星蓝色，其他灰色
         if (stars.Contains("5"))
             return new Color(1f, 0.5f, 0f); // 橙色
         else if (stars.Contains("4"))

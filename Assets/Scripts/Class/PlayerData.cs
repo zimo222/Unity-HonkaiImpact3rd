@@ -23,6 +23,7 @@ public class PlayerData
     [Header("角色系统")]
     public List<CharacterData> Characters = new List<CharacterData>();          // 角色列表
     public List<EquipmentData> EquipmentBag = new List<EquipmentData>();        // 装备背包
+    public List<MaterialData> MaterialBag = new List<MaterialData>();        // 装备背包
 
     // ================== 设置与其他 ==================
     public float MusicVolume = 0.8f;
@@ -1019,7 +1020,7 @@ public class EquipmentData
 
     public EquipmentData(string id, string name, EquipmentType type,
                         WeaponType weaponType = WeaponType.None,
-                        StigmataPosition stigmataPosition = StigmataPosition.None, string stars = "4S", 
+                        StigmataPosition stigmataPosition = StigmataPosition.None, string stars = "4S",
                         int health = 0, int attack = 0,
                         float critRate = 0f, float critDamage = 0f,
                         float elementBonus = 0f)
@@ -1046,6 +1047,23 @@ public class EquipmentData
     public float CritRate => Stats.CritRate;
     public float CritDamage => Stats.CritDamage;
     public float ElementBonus => Stats.ElementBonus;
+}
+// ================== 材料数据类 ==================
+[System.Serializable]
+public class MaterialData
+{
+    public string Id;                                // 材料ID
+    public string Name;                              // 材料名称
+    public int Count;                                // 材料数量
+
+    public MaterialData() { }
+
+    public MaterialData(string id, string name, int count = 0)
+    {
+        Id = id;
+        Name = name;
+        Count = count;
+    }
 }
 
 // ================== 属性结构体 ==================

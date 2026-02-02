@@ -1,4 +1,3 @@
-// Scripts/Equipment/EquipmentUIController.cs
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,7 +7,7 @@ public class EquipmentUIController : MonoBehaviour
 {
     // ========================= 基础玩家信息UI引用 =========================
     [Header("资源信息")]
-    public TMP_Text tiliText;
+    public TMP_Text staminaText;
     public TMP_Text coinsText;
     public TMP_Text crystalsText;
 
@@ -18,74 +17,100 @@ public class EquipmentUIController : MonoBehaviour
     public ModularUIButton[] referencedButtons;
 
     // ================== UI引用 ==================
-    [Header("装备列表区域")]
-    public Transform equipmentListContent;     // 装备列表容器
-    public GameObject equipmentItemPrefab;     // 装备项预制体
+    [Header("分类标签")]
+    public Button weaponTabButton;      // 武器标签
+    public Button stigmataTabButton;    // 圣痕标签
+    public Button materialTabButton;    // 材料标签
 
-    [Header("筛选按钮")]
-    //public Button allButton;                   // 全部按钮
-    public Button weaponButton;                // 武器按钮
-    public Button stigmataButton;              // 圣痕按钮
+    [Header("装备列表")]
+    public Transform equipmentListContent;  // 装备/材料列表容器
+    public GameObject equipmentItemPrefab;  // 装备项预制体
+    public GameObject materialItemPrefab;   // 材料项预制体
 
     [Header("详情面板")]
-    public GameObject detailPanel;             // 详情面板
-    public Text detailNameText;                // 装备名称
-    public Text detailTypeText;                // 装备类型
-    public Text detailLevelText;               // 装备等级
-    //public Button equipButton;                 // 装备/卸下按钮
-    public Button closeDetailButton;           // 关闭详情按钮
+    public GameObject detailPanel;          // 全屏详情面板
+    public Text detailNameText;             // 详情-名称
+    public Text detailTypeText;             // 详情-类型
+    public Text detailLevelText;            // 详情-等级
+    public Text detailStatsText;            // 详情-属性
+    public Button closeDetailButton;        // 关闭详情按钮
 
     // ================== 数据 ==================
-    private PlayerData playerData;             // 玩家数据
-    private List<EquipmentData> currentDisplayEquipments;  // 当前显示的装备
-    private EquipmentData selectedEquipment;   // 当前选中的装备
+    private PlayerData playerData;
+    private List<EquipmentData> currentWeapons;
+    private List<EquipmentData> currentStigmatas;
+    private List<MaterialData> currentMaterials;
 
-    // 当前筛选类型
-    private EquipmentType currentFilterType = EquipmentType.Weapon;
+    private object selectedItem;  // 当前选中的项（可能是EquipmentData或MaterialData）
+    private ItemType currentTab = ItemType.Weapon;  // 当前标签
+
+    // 分类枚举
+    private enum ItemType
+    {
+        Weapon,
+        Stigmata,
+        Material
+    }
 
     void Start()
     {
-        // 获取玩家数据（这里假设有全局的PlayerDataManager）
+        // 获取玩家数据
         LoadPlayerData();
 
         // 初始化UI
         InitializeUI();
 
-        // 加载装备列表
-        LoadEquipmentList();
+        // 加载默认标签内容
+        SwitchToTab(ItemType.Weapon);
     }
 
     void LoadPlayerData()
     {
-        // 从PlayerDataManager获取数据
         if (PlayerDataManager.Instance != null)
         {
             playerData = PlayerDataManager.Instance.CurrentPlayerData;
         }
         else
         {
-            // 如果没有PlayerDataManager，创建测试数据
+            // 创建测试数据
             playerData = new PlayerData("测试玩家");
+
+            // 添加一些测试材料
+            playerData.MaterialBag.Add(new MaterialData("MAT_001", "经验芯片", 50));
+            playerData.MaterialBag.Add(new MaterialData("MAT_002", "强化合金", 30));
+            playerData.MaterialBag.Add(new MaterialData("MAT_003", "突破核心", 10));
         }
+
+        // 预分类装备数据
+        CategorizeEquipments();
+    }
+
+    // 预分类装备数据（优化性能）
+    void CategorizeEquipments()
+    {
+        if (playerData == null) return;
+
+        // 分离武器和圣痕
+        currentWeapons = playerData.EquipmentBag.FindAll(e => e.Type == EquipmentType.Weapon);
+        currentStigmatas = playerData.EquipmentBag.FindAll(e => e.Type == EquipmentType.Stigmata);
+        currentMaterials = new List<MaterialData>(playerData.MaterialBag);
+
+        Debug.Log($"分类完成：武器 {currentWeapons.Count} 件，圣痕 {currentStigmatas.Count} 件，材料 {currentMaterials.Count} 件");
     }
 
     void InitializeUI()
     {
-        // 绑定按钮事件
-        /*
-        if (allButton != null)
-            allButton.onClick.AddListener(() => OnFilterButtonClicked(null)); // null表示显示全部
-        */
+        // 绑定标签按钮事件
+        if (weaponTabButton != null)
+            weaponTabButton.onClick.AddListener(() => SwitchToTab(ItemType.Weapon));
 
-        if (weaponButton != null)
-            weaponButton.onClick.AddListener(() => OnFilterButtonClicked(EquipmentType.Weapon));
+        if (stigmataTabButton != null)
+            stigmataTabButton.onClick.AddListener(() => SwitchToTab(ItemType.Stigmata));
 
-        if (stigmataButton != null)
-            stigmataButton.onClick.AddListener(() => OnFilterButtonClicked(EquipmentType.Stigmata));
-        /*
-        if (equipButton != null)
-            equipButton.onClick.AddListener(OnEquipButtonClicked);
-        */
+        if (materialTabButton != null)
+            materialTabButton.onClick.AddListener(() => SwitchToTab(ItemType.Material));
+
+        // 绑定详情面板关闭按钮
         if (closeDetailButton != null)
             closeDetailButton.onClick.AddListener(HideDetailPanel);
 
@@ -97,49 +122,120 @@ public class EquipmentUIController : MonoBehaviour
         UpdateResourceDisplay();
     }
 
-    // 加载装备列表
-    void LoadEquipmentList()
+    // 切换到指定标签
+    void SwitchToTab(ItemType tabType)
     {
-        if (playerData == null || playerData.EquipmentBag == null)
-        {
-            Debug.LogWarning("玩家数据或装备背包为空");
-            return;
-        }
+        currentTab = tabType;
 
-        // 根据当前筛选类型获取装备
-        currentDisplayEquipments = GetFilteredEquipments(currentFilterType);
+        // 更新标签按钮状态（这里可以添加选中效果）
+        UpdateTabButtons(tabType);
 
-        // 清除现有列表
-        ClearEquipmentList();
-
-        // 创建装备项
-        for (int i = 0; i < currentDisplayEquipments.Count; i++)
-        {
-            CreateEquipmentItem(currentDisplayEquipments[i]);
-        }
-
-        Debug.Log($"加载了 {currentDisplayEquipments.Count} 件装备");
+        // 加载对应标签的内容
+        LoadCurrentTabContent();
     }
 
-    // 获取筛选后的装备列表
-    List<EquipmentData> GetFilteredEquipments(EquipmentType? filterType)
+    // 更新标签按钮状态
+    void UpdateTabButtons(ItemType selectedTab)
     {
-        if (playerData == null) return new List<EquipmentData>();
+        // 这里可以设置按钮的选中状态
+        // 例如：改变颜色、添加下划线等
+        if (weaponTabButton != null)
+            weaponTabButton.interactable = (selectedTab != ItemType.Weapon);
 
-        if (filterType == null)
+        if (stigmataTabButton != null)
+            stigmataTabButton.interactable = (selectedTab != ItemType.Stigmata);
+
+        if (materialTabButton != null)
+            materialTabButton.interactable = (selectedTab != ItemType.Material);
+    }
+
+    // 加载当前标签内容
+    void LoadCurrentTabContent()
+    {
+        ClearItemList();
+
+        switch (currentTab)
         {
-            // 显示全部
-            return new List<EquipmentData>(playerData.EquipmentBag);
-        }
-        else
-        {
-            // 显示指定类型
-            return playerData.EquipmentBag.FindAll(e => e.Type == filterType);
+            case ItemType.Weapon:
+                LoadWeapons();
+                break;
+            case ItemType.Stigmata:
+                LoadStigmatas();
+                break;
+            case ItemType.Material:
+                LoadMaterials();
+                break;
         }
     }
 
-    // 清除装备列表
-    void ClearEquipmentList()
+    // 加载武器列表
+    void LoadWeapons()
+    {
+        if (currentWeapons == null) return;
+
+        foreach (var weapon in currentWeapons)
+        {
+            CreateEquipmentItem(weapon);
+        }
+
+        Debug.Log($"加载了 {currentWeapons.Count} 件武器");
+    }
+
+    // 加载圣痕列表
+    void LoadStigmatas()
+    {
+        if (currentStigmatas == null) return;
+
+        foreach (var stigmata in currentStigmatas)
+        {
+            CreateEquipmentItem(stigmata);
+        }
+
+        Debug.Log($"加载了 {currentStigmatas.Count} 件圣痕");
+    }
+
+    // 加载材料列表
+    void LoadMaterials()
+    {
+        if (currentMaterials == null) return;
+
+        foreach (var material in currentMaterials)
+        {
+            CreateMaterialItem(material);
+        }
+
+        Debug.Log($"加载了 {currentMaterials.Count} 件材料");
+    }
+
+    // 创建装备项
+    void CreateEquipmentItem(EquipmentData equipment)
+    {
+        if (equipmentItemPrefab == null || equipmentListContent == null) return;
+        GameObject itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
+        EquipmentItemView itemView = itemObj.GetComponent<EquipmentItemView>();
+
+        if (itemView != null)
+        {
+            itemView.Initialize(equipment, OnEquipmentItemClicked);
+        }
+    }
+
+    // 创建材料项
+    void CreateMaterialItem(MaterialData material)
+    {
+        if (materialItemPrefab == null || equipmentListContent == null) return;
+
+        GameObject itemObj = Instantiate(materialItemPrefab, equipmentListContent);
+        MaterialItemView itemView = itemObj.GetComponent<MaterialItemView>();
+
+        if (itemView != null)
+        {
+            itemView.Initialize(material, OnMaterialItemClicked);
+        }
+    }
+
+    // 清空列表
+    void ClearItemList()
     {
         if (equipmentListContent == null) return;
 
@@ -149,61 +245,71 @@ public class EquipmentUIController : MonoBehaviour
         }
     }
 
-    // 创建装备项
-    void CreateEquipmentItem(EquipmentData equipment)
-    {
-        if (equipmentItemPrefab == null || equipmentListContent == null) return;
-
-        GameObject itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
-        EquipmentItemUI itemUI = itemObj.GetComponent<EquipmentItemUI>();
-
-        if (itemUI != null)
-        {
-            itemUI.Initialize(equipment, OnEquipmentItemClicked);
-        }
-    }
-
     // ================== 事件处理 ==================
-
-    // 筛选按钮点击
-    void OnFilterButtonClicked(EquipmentType? type)
-    {
-        currentFilterType = type ?? EquipmentType.Weapon;
-        LoadEquipmentList();
-    }
 
     // 装备项点击
     void OnEquipmentItemClicked(EquipmentData equipment)
     {
-        selectedEquipment = equipment;
-        ShowDetailPanel(equipment);
+        selectedItem = equipment;
+        ShowEquipmentDetail(equipment);
     }
 
-    // 显示详情面板
-    void ShowDetailPanel(EquipmentData equipment)
+    // 材料项点击
+    void OnMaterialItemClicked(MaterialData material)
+    {
+        selectedItem = material;
+        ShowMaterialDetail(material);
+    }
+
+    // 显示装备详情
+    void ShowEquipmentDetail(EquipmentData equipment)
     {
         if (detailPanel == null) return;
 
         detailPanel.SetActive(true);
 
-        // 更新详情信息
         if (detailNameText != null)
             detailNameText.text = equipment.Name;
 
         if (detailTypeText != null)
-            detailTypeText.text = GetEquipmentTypeName(equipment);
+        {
+            string typeName = equipment.Type == EquipmentType.Weapon ?
+                "武器" : $"圣痕({EquipmentHelper.GetStigmataPositionName(equipment.StigmataPosition)})";
+            detailTypeText.text = typeName;
+        }
 
         if (detailLevelText != null)
             detailLevelText.text = $"Lv.{equipment.Stats.Level}";
 
-        // 更新装备按钮文本
-        /*
-        if (equipButton != null)
+        if (detailStatsText != null)
         {
-            bool isEquipped = equipment.EquippedToCharacterIndex >= 0;
-            equipButton.GetComponentInChildren<Text>().text = isEquipped ? "卸下" : "装备";
+            string stats = $"攻击: {equipment.Attack}\n";
+            if (equipment.Health > 0) stats += $"生命: {equipment.Health}\n";
+            if (equipment.CritRate > 0) stats += $"暴击: {equipment.CritRate:P0}\n";
+            if (equipment.CritDamage > 0) stats += $"爆伤: {equipment.CritDamage:P0}\n";
+            if (equipment.ElementBonus > 0) stats += $"元素: {equipment.ElementBonus:P0}";
+            detailStatsText.text = stats;
         }
-        */
+    }
+
+    // 显示材料详情
+    void ShowMaterialDetail(MaterialData material)
+    {
+        if (detailPanel == null) return;
+
+        detailPanel.SetActive(true);
+
+        if (detailNameText != null)
+            detailNameText.text = material.Name;
+
+        if (detailTypeText != null)
+            detailTypeText.text = "材料";
+
+        if (detailLevelText != null)
+            detailLevelText.text = "";
+
+        if (detailStatsText != null)
+            detailStatsText.text = $"数量: {material.Count}";
     }
 
     // 隐藏详情面板
@@ -212,20 +318,7 @@ public class EquipmentUIController : MonoBehaviour
         if (detailPanel != null)
             detailPanel.SetActive(false);
 
-        selectedEquipment = null;
-    }
-
-    // 装备/卸下按钮点击
-    void OnEquipButtonClicked()
-    {
-        if (selectedEquipment == null) return;
-
-        // TODO: 实现装备/卸下逻辑
-        Debug.Log($"装备/卸下: {selectedEquipment.Name}");
-
-        // 重新加载列表以更新显示
-        LoadEquipmentList();
-        HideDetailPanel();
+        selectedItem = null;
     }
 
     // 更新资源显示
@@ -233,28 +326,13 @@ public class EquipmentUIController : MonoBehaviour
     {
         if (playerData == null) return;
 
-        if (tiliText != null)
-            tiliText.text = playerData.Stamina.ToString();
-
         if (coinsText != null)
             coinsText.text = playerData.Coins.ToString();
 
         if (crystalsText != null)
             crystalsText.text = playerData.Crystals.ToString();
-    }
 
-    // 获取装备类型名称
-    string GetEquipmentTypeName(EquipmentData equipment)
-    {
-        if (equipment.Type == EquipmentType.Weapon)
-        {
-            return "武器";
-        }
-        else if (equipment.Type == EquipmentType.Stigmata)
-        {
-            string position = equipment.StigmataPosition.ToString();
-            return $"圣痕·{position}";
-        }
-        return "未知";
+        if (staminaText != null)
+            staminaText.text = $"{playerData.Stamina}/{playerData.Level + 80}";
     }
 }
