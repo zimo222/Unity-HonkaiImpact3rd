@@ -601,10 +601,23 @@ public class PlayerData
 
         EquipmentBag.Add(new EquipmentData(
             id: "WEAP_002",
-            name: "训练单手剑",
+            name: "月神之守护",
+            type: EquipmentType.Weapon,
+            weaponType: WeaponType.DualPistols,
+            stars: "5S",
+            health: 0,
+            attack: 150,
+            critRate: 0.05f,
+            critDamage: 0f,
+            elementBonus: 0.15f
+        ));
+
+        EquipmentBag.Add(new EquipmentData(
+            id: "WEAP_003",
+            name: "青溟剑",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.SingleHandedSword,
-            stars: "4S",
+            stars: "5S",
             health: 0,
             attack: 80,
             critRate: 0f,
@@ -613,10 +626,23 @@ public class PlayerData
         ));
 
         EquipmentBag.Add(new EquipmentData(
-            id: "WEAP_003",
-            name: "新手长枪",
+            id: "WEAP_004",
+            name: "萨姆召唤剑",
             type: EquipmentType.Weapon,
-            weaponType: WeaponType.Spear,
+            weaponType: WeaponType.SingleHandedSword,
+            stars: "4S",
+            health: 0,
+            attack: 90,
+            critRate: 0.02f,
+            critDamage: 0f,
+            elementBonus: 0f
+        ));
+
+        EquipmentBag.Add(new EquipmentData(
+            id: "WEAP_005",
+            name: "护摩之剑(杖)",
+            type: EquipmentType.Weapon,
+            weaponType: WeaponType.SingleHandedSword,
             stars: "4S",
             health: 0,
             attack: 90,

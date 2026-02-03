@@ -6,11 +6,10 @@ using TMPro;
 public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
 {
     [Header("UI组件")]
+    public Image rarityImage;         // 稀有度背景
     public Image iconImage;           // 图标
-    public TMP_Text nameText;             // 名称
-    public TMP_Text levelText;            // 等级
-    public Image rarityFrame;         // 稀有度边框
-    public TMP_Text starsText;            // 星级显示
+    public TMP_Text levelText;        // 等级
+    public Image starsImage;          // 星级显示
     public GameObject equippedBadge;  // 已装备标志
 
     // 数据
@@ -31,29 +30,25 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
     {
         if (equipmentData == null) return;
 
-        // 名称
-        if (nameText != null)
-            nameText.text = equipmentData.Name;
+        // 稀有度边框颜色
+        if (rarityImage != null)
+        {
+            // 根据星级设置颜色
+            string stars = equipmentData.Stats.Stars;
+            rarityImage.color = GetRarityColor(stars);
+        }
+
+        // 已装备标志
+        if (equippedBadge != null)
+            equippedBadge.SetActive(equipmentData.EquippedToCharacterIndex >= 0);
 
         // 等级
         if (levelText != null)
             levelText.text = $"Lv.{equipmentData.Stats.Level}";
 
         // 星级
-        if (starsText != null)
-            starsText.text = equipmentData.Stats.Stars;
-
-        // 已装备标志
-        if (equippedBadge != null)
-            equippedBadge.SetActive(equipmentData.EquippedToCharacterIndex >= 0);
-
-        // 稀有度边框颜色
-        if (rarityFrame != null)
-        {
-            // 根据星级设置颜色
-            string stars = equipmentData.Stats.Stars;
-            rarityFrame.color = GetRarityColor(stars);
-        }
+        if (starsImage != null)
+            starsImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{equipmentData.Stats.Stars}");
 
         // 加载图标
         LoadIcon();
@@ -65,7 +60,7 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
         if (iconImage == null) return;
 
         // 构建图标路径
-        string iconPath = $"Equipment/Icons/{equipmentData.Id}";
+        string iconPath = equipmentData.Type == EquipmentType.Weapon ? $"Picture/Scene_Equipment/Weapon/Icon_{equipmentData.Id}" : $"Picture/Scene_Equipment/Stigmata/Icon_{equipmentData.Id}";
         Sprite icon = Resources.Load<Sprite>(iconPath);
 
         if (icon != null)
@@ -84,11 +79,12 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
     // 获取稀有度颜色
     Color GetRarityColor(string stars)
     {
+        Debug.Log(stars);
         // 5星橙色，4星紫色，3星蓝色，其他灰色
-        if (stars.Contains("5"))
-            return new Color(1f, 0.5f, 0f); // 橙色
-        else if (stars.Contains("4"))
-            return new Color(0.5f, 0f, 1f); // 紫色
+        if (stars == "5S")
+            return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
+        else if (stars == "4S")
+            return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
         else if (stars.Contains("3"))
             return new Color(0f, 0.5f, 1f); // 蓝色
         else

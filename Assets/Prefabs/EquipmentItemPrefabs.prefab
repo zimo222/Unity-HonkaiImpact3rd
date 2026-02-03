@@ -140,11 +140,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf74b1be30082c54da07e5af0e148e25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rarityImage: {fileID: 4455943307098695082}
   iconImage: {fileID: 6271867967789852454}
-  nameText: {fileID: 0}
   levelText: {fileID: 30048937878497378}
-  rarityFrame: {fileID: 0}
-  starsText: {fileID: 0}
+  starsImage: {fileID: 8642461298960539218}
   equippedBadge: {fileID: 0}
 --- !u!1 &492940226883846275
 GameObject:
@@ -181,7 +180,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 141, y: -250}
-  m_SizeDelta: {x: 275, y: 50}
+  m_SizeDelta: {x: 185, y: 42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2286334520923113422
 CanvasRenderer:
@@ -204,15 +203,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 0.22352941, a: 1}
+  m_Color: {r: 1, g: 1, b: 0.31764707, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ce98e2da948124846806206cb764fb5e, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: d57b092690a06c64db9a0a947bf35b79, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -238,7 +237,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1733093209010246119
 RectTransform:
   m_ObjectHideFlags: 0
@@ -330,7 +329,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 141, y: -295}
+  m_AnchoredPosition: {x: 141, y: -298}
   m_SizeDelta: {x: 185, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1935952739480673104
@@ -383,7 +382,7 @@ GameObject:
   - component: {fileID: 1388291879790056644}
   - component: {fileID: 4455943307098695082}
   m_Layer: 5
-  m_Name: BackImage
+  m_Name: RarityImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -429,7 +428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 0.52156866, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -548,7 +547,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -10
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -638,7 +637,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 0.52156866, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -689,8 +688,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 141, y: -145}
-  m_SizeDelta: {x: 280, y: 280}
+  m_AnchoredPosition: {x: 140, y: -145}
+  m_SizeDelta: {x: 274, y: 283}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3851732179841827612
 CanvasRenderer:
