@@ -29,12 +29,13 @@ public class EquipmentUIController : MonoBehaviour
     public GameObject materialItemPrefab;   // 材料项预制体
 
     [Header("详情面板 - 用于材料显示")]
-    public GameObject detailPanel;          // 全屏详情面板（仅用于材料）
-    public Text detailNameText;             // 详情-名称
-    public Text detailTypeText;             // 详情-类型
-    public Text detailLevelText;            // 详情-等级
-    public Text detailStatsText;            // 详情-属性
-    public Button closeDetailButton;        // 关闭详情按钮
+    public GameObject detailPanel;              // 详情面板（仅用于材料）
+    public Image detailRarityImage;             // 详情-背景
+    public Image detailIconImage;             // 详情-图标
+    public TMP_Text detailNameText;             // 详情-名称
+    public TMP_Text detailDescriptionText;      // 详情-简介
+    public TMP_Text detailCountText;            // 详情-数量
+    public Button closeDetailButton;            // 关闭详情按钮
 
     // ================== 数据 ==================
     private PlayerData playerData;
@@ -65,7 +66,7 @@ public class EquipmentUIController : MonoBehaviour
         InitializeUI();
 
         // 加载默认标签内容
-        SwitchToTab(ItemType.Weapon);
+        SwitchToTab(currentTab);
     }
     //加载玩家数据
     void LoadPlayerData()
@@ -274,18 +275,37 @@ public class EquipmentUIController : MonoBehaviour
 
         detailPanel.SetActive(true);
 
+        if (detailRarityImage != null)
+            detailRarityImage.color = GetRarityColor(material.Stars);
+
+        if (detailIconImage != null)
+            detailIconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Icon_{material.Id}");
+
         if (detailNameText != null)
             detailNameText.text = material.Name;
 
-        if (detailTypeText != null)
-            detailTypeText.text = "材料";
+        if (detailCountText != null)
+            detailCountText.text = $"{material.Count}";
 
-        if (detailLevelText != null)
-            detailLevelText.text = "";
+        if (detailDescriptionText != null)
+            detailDescriptionText.text = $"{material.Description}";
 
-        if (detailStatsText != null)
-            detailStatsText.text = $"数量: {material.Count}";
     }
+    // 获取稀有度颜色
+    Color GetRarityColor(string stars)
+    {
+        Debug.Log(stars);
+        // 5星橙色，4星紫色，3星蓝色，其他灰色
+        if (stars == "5S" || stars == "4S")
+            return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
+        else if (stars == "3S" || stars == "2S")
+            return new Color(40 / 255.0f, 165 / 255.0f, 225 / 255.0f); // 蓝色
+        else if (stars == "1S")
+            return new Color(78 / 255.0f, 179 / 255.0f, 131 / 255.0f); // 绿色
+        else
+            return Color.gray; // 灰色
+    }
+
     //隐藏详情面板
     void HideDetailPanel()
     {

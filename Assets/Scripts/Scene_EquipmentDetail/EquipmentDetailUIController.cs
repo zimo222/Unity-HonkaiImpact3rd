@@ -68,33 +68,8 @@ public class EquipmentDetailUIController : MonoBehaviour
 
     void LoadSelectedEquipment()
     {
-        // 获取玩家数据
-        if (PlayerDataManager.Instance != null)
-        {
-            playerData = PlayerDataManager.Instance.CurrentPlayerData;
-        }
-        else
-        {
-            Debug.LogError("PlayerDataManager未找到！");
-            //return;
-        }
-
-        // 方法1: 使用静态变量获取装备ID
+        // 使用静态变量获取装备
         currentEquipment = EquipmentUIController.GetSelectedEquipment();
-        /*
-        // 方法2: 如果静态变量为空，从PlayerPrefs获取
-        if (string.IsNullOrEmpty(equipmentId))
-        {
-            equipmentId = EquipmentUIController.GetSelectedEquipmentIdFromPrefs();
-        }
-        */
-        if (equipmentIndex == null)
-        {
-            Debug.LogError("未找到选中的装备ID！");
-            return;
-        }
-
-
 
         Debug.Log($"已选择装备: {currentEquipment.Name}, ID: {currentEquipment.Id}, Tab: {currentEquipment.WeaponType}");
 
