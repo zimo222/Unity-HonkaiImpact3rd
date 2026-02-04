@@ -74,11 +74,6 @@ public class EquipmentUIController : MonoBehaviour
         {
             // 创建测试数据
             playerData = new PlayerData("测试玩家");
-
-            // 添加一些测试材料
-            playerData.MaterialBag.Add(new MaterialData("MAT_001", "经验芯片", 50));
-            playerData.MaterialBag.Add(new MaterialData("MAT_002", "强化合金", 30));
-            playerData.MaterialBag.Add(new MaterialData("MAT_003", "突破核心", 10));
         }
 
         // 预分类装备数据

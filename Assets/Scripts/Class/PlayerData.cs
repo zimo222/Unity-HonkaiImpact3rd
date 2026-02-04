@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
@@ -53,9 +55,10 @@ public class PlayerData
         Coins = 3000;
         Stamina = Level + 80;
 
-        // 初始化默认角色和装备
+        // 初始化默认角色和装备和材料
         InitializeDefaultCharacters();
         InitializeDefaultEquipment();
+        InitializeDefaultMaterial();
 
         // 初始化任务系统
         InitializeDefaultTasks();
@@ -987,6 +990,42 @@ public class PlayerData
 
         return totalStats;
     }
+
+    // ================== 材料相关方法 ==================
+
+    /// <summary>
+    /// 初始化默认材料
+    /// </summary>
+    private void InitializeDefaultMaterial()
+    {
+        // 添加一些初始材料
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_001",
+            name: "特级学习芯片",
+            stars: "4S",
+            description: "提供7500点角色或武装人偶经验值",
+            count: 1,
+            num: 7500
+        ));
+        // 添加一些初始材料
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_002",
+            name: "高级学习芯片",
+            stars: "3S",
+            description: "提供1500点角色或武装人偶经验值",
+            count: 10,
+            num: 1500
+        ));
+        // 添加一些初始材料
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_003",
+            name: "进阶学习芯片",
+            stars: "2S",
+            description: "提供300点角色或武装人偶经验值",
+            count: 100,
+            num: 300
+        ));
+    }
 }
 
 // ================== 角色数据类 ==================
@@ -1080,15 +1119,21 @@ public class MaterialData
 {
     public string Id;                                // 材料ID
     public string Name;                              // 材料名称
+    public string Stars;                             // 星级
     public int Count;                                // 材料数量
+    public string Description;                       // 介绍
+    public int Num;                                  // 数值
 
     public MaterialData() { }
 
-    public MaterialData(string id, string name, int count = 0)
+    public MaterialData(string id, string name, string stars, int count = 0, string description = null, int num = 0)
     {
         Id = id;
         Name = name;
+        Stars = stars;
         Count = count;
+        Description = description;
+        Num = num;
     }
 }
 

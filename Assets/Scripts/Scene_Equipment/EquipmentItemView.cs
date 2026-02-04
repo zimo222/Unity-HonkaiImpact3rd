@@ -81,12 +81,12 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
     {
         Debug.Log(stars);
         // 5星橙色，4星紫色，3星蓝色，其他灰色
-        if (stars == "5S")
+        if (stars == "5S" || stars == "4S")
             return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
-        else if (stars == "4S")
-            return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
-        else if (stars.Contains("3"))
-            return new Color(0f, 0.5f, 1f); // 蓝色
+        else if (stars == "3S" || stars == "2S")
+            return new Color(40 / 255.0f, 165 / 255.0f, 225 / 255.0f); // 蓝色
+        else if (stars == "1S")
+            return new Color(78 / 255.0f, 179 / 255.0f, 131 / 255.0f); // 绿色
         else
             return Color.gray; // 灰色
     }
