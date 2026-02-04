@@ -14,13 +14,15 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
 
     // 数据
     private EquipmentData equipmentData;
-    private System.Action<EquipmentData> onClickCallback;
+    private System.Action<int> onClickCallback;
+    private int index;
 
     // 初始化
-    public void Initialize(EquipmentData data, System.Action<EquipmentData> onClick)
+    public void Initialize(EquipmentData data, System.Action<int> onClick, int Index)
     {
         equipmentData = data;
         onClickCallback = onClick;
+        index = Index;
 
         UpdateUI();
     }
@@ -94,6 +96,6 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
     // 点击事件
     public void OnPointerClick(PointerEventData eventData)
     {
-        onClickCallback?.Invoke(equipmentData);
+        onClickCallback?.Invoke(index);
     }
 }

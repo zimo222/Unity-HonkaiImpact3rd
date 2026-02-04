@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class EquipmentUIController : MonoBehaviour
 {
@@ -27,8 +28,8 @@ public class EquipmentUIController : MonoBehaviour
     public GameObject equipmentItemPrefab;  // 装备项预制体
     public GameObject materialItemPrefab;   // 材料项预制体
 
-    [Header("详情面板")]
-    public GameObject detailPanel;          // 全屏详情面板
+    [Header("详情面板 - 用于材料显示")]
+    public GameObject detailPanel;          // 全屏详情面板（仅用于材料）
     public Text detailNameText;             // 详情-名称
     public Text detailTypeText;             // 详情-类型
     public Text detailLevelText;            // 详情-等级
@@ -37,12 +38,15 @@ public class EquipmentUIController : MonoBehaviour
 
     // ================== 数据 ==================
     private PlayerData playerData;
-    private List<EquipmentData> currentWeapons;
-    private List<EquipmentData> currentStigmatas;
-    private List<MaterialData> currentMaterials;
+    private static List<EquipmentData> currentWeapons;
+    private static List<EquipmentData> currentStigmatas;
+    private static List<MaterialData> currentMaterials;
 
-    private object selectedItem;  // 当前选中的项（可能是EquipmentData或MaterialData）
-    private ItemType currentTab = ItemType.Weapon;  // 当前标签
+    private object selectedItem;  // 当前选中的项（仅材料使用）
+    private static ItemType currentTab = ItemType.Weapon;  // 当前标签
+
+    // 静态变量用于场景间传递数据
+    private static int selectedEquipmentIndex;
 
     // 分类枚举
     private enum ItemType
@@ -63,7 +67,7 @@ public class EquipmentUIController : MonoBehaviour
         // 加载默认标签内容
         SwitchToTab(ItemType.Weapon);
     }
-
+    //加载玩家数据
     void LoadPlayerData()
     {
         if (PlayerDataManager.Instance != null)
@@ -79,8 +83,7 @@ public class EquipmentUIController : MonoBehaviour
         // 预分类装备数据
         CategorizeEquipments();
     }
-
-    // 预分类装备数据（优化性能）
+    //分离背包元素
     void CategorizeEquipments()
     {
         if (playerData == null) return;
@@ -92,7 +95,7 @@ public class EquipmentUIController : MonoBehaviour
 
         Debug.Log($"分类完成：武器 {currentWeapons.Count} 件，圣痕 {currentStigmatas.Count} 件，材料 {currentMaterials.Count} 件");
     }
-
+    //初始化UI
     void InitializeUI()
     {
         // 绑定标签按钮事件
@@ -105,7 +108,7 @@ public class EquipmentUIController : MonoBehaviour
         if (materialTabButton != null)
             materialTabButton.onClick.AddListener(() => SwitchToTab(ItemType.Material));
 
-        // 绑定详情面板关闭按钮
+        // 绑定详情面板关闭按钮（仅用于材料）
         if (closeDetailButton != null)
             closeDetailButton.onClick.AddListener(HideDetailPanel);
 
@@ -116,24 +119,21 @@ public class EquipmentUIController : MonoBehaviour
         // 更新资源显示
         UpdateResourceDisplay();
     }
-
     // 切换到指定标签
     void SwitchToTab(ItemType tabType)
     {
         currentTab = tabType;
 
-        // 更新标签按钮状态（这里可以添加选中效果）
+        // 更新标签按钮状态
         UpdateTabButtons(tabType);
 
         // 加载对应标签的内容
         LoadCurrentTabContent();
     }
-
-    // 更新标签按钮状态
+    //更新标签按钮交互状态
     void UpdateTabButtons(ItemType selectedTab)
     {
-        // 这里可以设置按钮的选中状态
-        // 例如：改变颜色、添加下划线等
+        // 更新按钮交互状态
         if (weaponTabButton != null)
             weaponTabButton.interactable = (selectedTab != ItemType.Weapon);
 
@@ -143,8 +143,7 @@ public class EquipmentUIController : MonoBehaviour
         if (materialTabButton != null)
             materialTabButton.interactable = (selectedTab != ItemType.Material);
     }
-
-    // 加载当前标签内容
+    //加载对应类项
     void LoadCurrentTabContent()
     {
         ClearItemList();
@@ -162,34 +161,33 @@ public class EquipmentUIController : MonoBehaviour
                 break;
         }
     }
-
-    // 加载武器列表
+    //加载武器
     void LoadWeapons()
     {
         if (currentWeapons == null) return;
 
-        foreach (var weapon in currentWeapons)
+        for (int i = 0; i < currentWeapons.Count; i++)
         {
-            CreateEquipmentItem(weapon);
+            var weapon = currentWeapons[i];
+            CreateEquipmentItem(weapon, i);
         }
 
         Debug.Log($"加载了 {currentWeapons.Count} 件武器");
     }
-
-    // 加载圣痕列表
+    //加载圣痕
     void LoadStigmatas()
     {
         if (currentStigmatas == null) return;
 
-        foreach (var stigmata in currentStigmatas)
+        for (int i = 0; i < currentStigmatas.Count; i++)
         {
-            CreateEquipmentItem(stigmata);
+            var stigmata = currentStigmatas[i];
+            CreateEquipmentItem(stigmata, i);
         }
 
         Debug.Log($"加载了 {currentStigmatas.Count} 件圣痕");
     }
-
-    // 加载材料列表
+    //加载材料
     void LoadMaterials()
     {
         if (currentMaterials == null) return;
@@ -201,20 +199,20 @@ public class EquipmentUIController : MonoBehaviour
 
         Debug.Log($"加载了 {currentMaterials.Count} 件材料");
     }
-
-    // 创建装备项
-    void CreateEquipmentItem(EquipmentData equipment)
+    // 创建装备项 - 添加索引参数
+    void CreateEquipmentItem(EquipmentData equipment, int index)
     {
         if (equipmentItemPrefab == null || equipmentListContent == null) return;
+
         GameObject itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
         EquipmentItemView itemView = itemObj.GetComponent<EquipmentItemView>();
 
         if (itemView != null)
         {
-            itemView.Initialize(equipment, OnEquipmentItemClicked);
+            // 传递索引给点击回调
+            itemView.Initialize(equipment, OnEquipmentItemClicked, index);
         }
     }
-
     // 创建材料项
     void CreateMaterialItem(MaterialData material)
     {
@@ -228,8 +226,7 @@ public class EquipmentUIController : MonoBehaviour
             itemView.Initialize(material, OnMaterialItemClicked);
         }
     }
-
-    // 清空列表
+    //清空容器
     void ClearItemList()
     {
         if (equipmentListContent == null) return;
@@ -242,52 +239,35 @@ public class EquipmentUIController : MonoBehaviour
 
     // ================== 事件处理 ==================
 
-    // 装备项点击
-    void OnEquipmentItemClicked(EquipmentData equipment)
+    // 装备项点击 - 修改为跳转场景
+    void OnEquipmentItemClicked(int Index)
     {
-        selectedItem = equipment;
-        ShowEquipmentDetail(equipment);
-    }
+        // 保存装备信息以便场景间传递
+        SaveEquipmentSelection(Index);
 
-    // 材料项点击
+        // 跳转到装备详情场景
+        PlayerPrefs.SetString("LastScene", "3EquipmentScene");
+        SceneManager.LoadScene("EquipmentDetailScene");
+    }
+    // 材料项点击 - 保持原有逻辑
     void OnMaterialItemClicked(MaterialData material)
     {
         selectedItem = material;
         ShowMaterialDetail(material);
     }
-
-    // 显示装备详情
-    void ShowEquipmentDetail(EquipmentData equipment)
+    // 保存装备选择信息
+    void SaveEquipmentSelection(int Index)
     {
-        if (detailPanel == null) return;
+        // 使用PlayerPrefs（如果需要持久化）
+        PlayerPrefs.SetInt("SelectedEquipmentIndex", Index);
+        selectedEquipmentIndex = Index;
+        PlayerPrefs.Save();
 
-        detailPanel.SetActive(true);
+        EquipmentData equipment = currentTab == ItemType.Weapon ? currentWeapons[Index] : currentStigmatas[Index] ;
 
-        if (detailNameText != null)
-            detailNameText.text = equipment.Name;
-
-        if (detailTypeText != null)
-        {
-            string typeName = equipment.Type == EquipmentType.Weapon ?
-                "武器" : $"圣痕({EquipmentHelper.GetStigmataPositionName(equipment.StigmataPosition)})";
-            detailTypeText.text = typeName;
-        }
-
-        if (detailLevelText != null)
-            detailLevelText.text = $"Lv.{equipment.Stats.Level}";
-
-        if (detailStatsText != null)
-        {
-            string stats = $"攻击: {equipment.Attack}\n";
-            if (equipment.Health > 0) stats += $"生命: {equipment.Health}\n";
-            if (equipment.CritRate > 0) stats += $"暴击: {equipment.CritRate:P0}\n";
-            if (equipment.CritDamage > 0) stats += $"爆伤: {equipment.CritDamage:P0}\n";
-            if (equipment.ElementBonus > 0) stats += $"元素: {equipment.ElementBonus:P0}";
-            detailStatsText.text = stats;
-        }
+        Debug.Log($"已选择装备: {equipment.Name}, ID: {equipment.Id}, Tab: {currentTab}");
     }
-
-    // 显示材料详情
+    // 显示材料详情（仅材料使用）
     void ShowMaterialDetail(MaterialData material)
     {
         if (detailPanel == null) return;
@@ -306,8 +286,7 @@ public class EquipmentUIController : MonoBehaviour
         if (detailStatsText != null)
             detailStatsText.text = $"数量: {material.Count}";
     }
-
-    // 隐藏详情面板
+    //隐藏详情面板
     void HideDetailPanel()
     {
         if (detailPanel != null)
@@ -315,8 +294,7 @@ public class EquipmentUIController : MonoBehaviour
 
         selectedItem = null;
     }
-
-    // 更新资源显示
+    //更新材料UI
     void UpdateResourceDisplay()
     {
         if (playerData == null) return;
@@ -329,5 +307,12 @@ public class EquipmentUIController : MonoBehaviour
 
         if (staminaText != null)
             staminaText.text = $"{playerData.Stamina}/{playerData.Level + 80}";
+    }
+
+    // ================== 静态方法供其他场景访问 ==================
+    // 获取选中的装备信息
+    public static EquipmentData GetSelectedEquipment()
+    {
+        return currentTab == ItemType.Weapon ? currentWeapons[selectedEquipmentIndex] : currentStigmatas[selectedEquipmentIndex];
     }
 }

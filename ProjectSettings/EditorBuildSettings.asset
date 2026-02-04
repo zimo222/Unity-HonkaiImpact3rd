@@ -47,4 +47,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HomeRight/5SupplyScene.unity
     guid: 3e9b2631b4412734eb58e019d8480886
+  - enabled: 1
+    path: Assets/Scenes/ThirdLevel/EquipmentDetailScene.unity
+    guid: 1ef9ec2b39fc084479ee6eda3071add1
   m_configObjects: {}
