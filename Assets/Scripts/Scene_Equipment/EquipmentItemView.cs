@@ -50,7 +50,7 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
 
         // 星级
         if (starsImage != null)
-            starsImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{equipmentData.Stats.Stars}");
+            starsImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{equipmentData.Stats.Stars}");
 
         // 加载图标
         LoadIcon();
@@ -83,11 +83,11 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
     {
         Debug.Log(stars);
         // 5星橙色，4星紫色，3星蓝色，其他灰色
-        if (stars == "5S" || stars == "4S")
+        if (stars == "5S" || stars == "4S" || stars == "4S1")
             return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
-        else if (stars == "3S" || stars == "2S")
+        else if (stars == "3S" || stars == "2S" || stars == "2S1")
             return new Color(40 / 255.0f, 165 / 255.0f, 225 / 255.0f); // 蓝色
-        else if (stars == "1S")
+        else if (stars == "1S" || stars == "1S1")
             return new Color(78 / 255.0f, 179 / 255.0f, 131 / 255.0f); // 绿色
         else
             return Color.gray; // 灰色

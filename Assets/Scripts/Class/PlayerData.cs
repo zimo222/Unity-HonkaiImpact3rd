@@ -594,7 +594,7 @@ public class PlayerData
             name: "焢煌之钥",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.DualPistols,
-            stars: "5S",
+            stars: "4S1",
             health: 0,
             attack: 150,
             critRate: 0.05f,
@@ -607,7 +607,7 @@ public class PlayerData
             name: "月神之守护",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.DualPistols,
-            stars: "5S",
+            stars: "4S1",
             health: 0,
             attack: 150,
             critRate: 0.05f,
@@ -620,7 +620,7 @@ public class PlayerData
             name: "青溟剑",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.SingleHandedSword,
-            stars: "5S",
+            stars: "4S1",
             health: 0,
             attack: 80,
             critRate: 0f,
@@ -633,7 +633,7 @@ public class PlayerData
             name: "萨姆召唤剑",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.SingleHandedSword,
-            stars: "4S",
+            stars: "4S1",
             health: 0,
             attack: 90,
             critRate: 0.02f,
@@ -646,7 +646,7 @@ public class PlayerData
             name: "护摩之剑(杖)",
             type: EquipmentType.Weapon,
             weaponType: WeaponType.SingleHandedSword,
-            stars: "4S",
+            stars: "4S1",
             health: 0,
             attack: 90,
             critRate: 0.02f,
@@ -1003,37 +1003,73 @@ public class PlayerData
             id: "MATE_001",
             name: "特级学习芯片",
             stars: "4S",
-            count: 1,
+            count: 3,
             num: 7500,
-            introduction: "提供7500点角色或武装人偶经验值",
+            introduction: "提供7500点角色或武装人偶经验值。",
             description: "全方位记录了真实崩坏战场的稀有芯片，对使用者的成长将有质的突破。但若是没有足够强大的内心，则可能被战场上残酷的血雨腥风所侵蚀。"
         ));
         MaterialBag.Add(new MaterialData(
             id: "MATE_002",
             name: "高级学习芯片",
             stars: "3S",
-            count: 10,
+            count: 30,
             num: 1500,
-            introduction: "提供1500点角色或武装人偶经验值",
+            introduction: "提供1500点角色或武装人偶经验值。",
             description: "能够将一些高级战略战术、实战经验、以及复杂机甲的操作方法置入使用者大脑的芯片，可大幅提高作战能力，但吸收程度依使用者资质而异。"
         ));
         MaterialBag.Add(new MaterialData(
             id: "MATE_003",
             name: "进阶学习芯片",
             stars: "2S",
-            count: 100,
+            count: 300,
             num: 300,
-            introduction: "提供300点角色或武装人偶经验值",
+            introduction: "提供300点角色或武装人偶经验值。",
             description: "能够将一些基本的格斗术和武器使用技巧直接置入使用者大脑的芯片，对实战格斗具有较好的指导作用。"
         ));
         MaterialBag.Add(new MaterialData(
             id: "MATE_004",
             name: "基础学习芯片",
             stars: "1S",
-            count: 1000,
+            count: 3000,
             num: 60,
-            introduction: "提供60点角色或武装人偶经验值",
+            introduction: "提供60点角色或武装人偶经验值。",
             description: "记录了一些关于世界的基本常识和历史的学习芯片，有助于使用者简单了解自己身处的环境。"
+        ));
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_005",
+            name: "双子灵魂结晶",
+            stars: "4S",
+            count: 3,
+            num: 15000,
+            introduction: "提供15000点装备经验值。",
+            description: "两块黄色结晶，上面刻着耀眼的橙色的纹路，可以大幅提升武器或圣痕的力量。"
+        ));
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_006",
+            name: "灵魂结晶",
+            stars: "3S",
+            count: 30,
+            num: 7500,
+            introduction: "提供7500点装备经验值。",
+            description: "一块黄色结晶，上面刻着耀眼的橙色的纹路，可以显著提升武器或圣痕的力量。"
+        ));
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_007",
+            name: "双子灵魂碎片",
+            stars: "2S",
+            count: 300,
+            num: 3750,
+            introduction: "提供3750点装备经验值。",
+            description: "两块黄色碎片，上面刻着橙色的纹路，可以有效强化武器或圣痕。"
+        ));
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_008",
+            name: "灵魂碎片",
+            stars: "1S",
+            count: 3000,
+            num: 1500,
+            introduction: "提供1500点装备经验值。",
+            description: "一块黄色碎片，上面刻着橙色的纹路，可以强化武器或圣痕。"
         ));
     }
 }
@@ -1108,6 +1144,7 @@ public class EquipmentData
 
         Stats = new CharacterStats()
         {
+            Level = 1,
             Stars = stars,
             Health = health,
             Attack = attack,

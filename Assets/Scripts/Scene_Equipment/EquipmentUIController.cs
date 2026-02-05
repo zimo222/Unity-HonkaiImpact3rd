@@ -46,6 +46,9 @@ public class EquipmentUIController : MonoBehaviour
     private static List<EquipmentData> currentStigmatas;
     private static List<MaterialData> currentMaterials;
 
+    // 新增：活动项列表
+    private List<GameObject> activeItems = new List<GameObject>();
+
     private object selectedItem;  // 当前选中的项（仅材料使用）
     private static ItemType currentTab = ItemType.Weapon;  // 当前标签
 
@@ -67,6 +70,10 @@ public class EquipmentUIController : MonoBehaviour
 
         // 初始化UI
         InitializeUI();
+
+        // 预创建对象池
+        EquipmentObjectPool.Instance.Prewarm(equipmentItemPrefab.name, equipmentItemPrefab, 20);
+        EquipmentObjectPool.Instance.Prewarm(materialItemPrefab.name, materialItemPrefab, 20);
 
         // 加载默认标签内容
         SwitchToTab(currentTab);
@@ -96,6 +103,35 @@ public class EquipmentUIController : MonoBehaviour
         currentWeapons = playerData.EquipmentBag.FindAll(e => e.Type == EquipmentType.Weapon);
         currentStigmatas = playerData.EquipmentBag.FindAll(e => e.Type == EquipmentType.Stigmata);
         currentMaterials = new List<MaterialData>(playerData.MaterialBag);
+
+        //按照稀有度从高到低排序
+        currentWeapons.Sort((a, b) =>
+        {
+            string statusOrderA = a.Stats.Stars;
+            string statusOrderB = b.Stats.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return 0;
+        });
+        currentStigmatas.Sort((a, b) =>
+        {
+            string statusOrderA = a.Stats.Stars;
+            string statusOrderB = b.Stats.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return 0;
+        });
+        currentMaterials.Sort((a, b) =>
+        {
+            string statusOrderA = a.Stars;
+            string statusOrderB = b.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return 0;
+        });
 
         Debug.Log($"分类完成：武器 {currentWeapons.Count} 件，圣痕 {currentStigmatas.Count} 件，材料 {currentMaterials.Count} 件");
     }
@@ -207,7 +243,7 @@ public class EquipmentUIController : MonoBehaviour
     void CreateEquipmentItem(EquipmentData equipment, int index)
     {
         if (equipmentItemPrefab == null || equipmentListContent == null) return;
-
+        /*
         GameObject itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
         EquipmentItemView itemView = itemObj.GetComponent<EquipmentItemView>();
 
@@ -216,12 +252,33 @@ public class EquipmentUIController : MonoBehaviour
             // 传递索引给点击回调
             itemView.Initialize(equipment, OnEquipmentItemClicked, index);
         }
+        */
+
+        GameObject itemObj = EquipmentObjectPool.Instance.GetObject(
+            equipmentItemPrefab.name,
+            equipmentListContent
+        );
+
+        if (itemObj == null)
+        {
+            // 对象池返回null，需要创建新对象
+            itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
+        }
+
+        EquipmentItemView itemView = itemObj.GetComponent<EquipmentItemView>();
+
+        if (itemView != null)
+        {
+            itemView.Initialize(equipment, OnEquipmentItemClicked, index);
+        }
+
+        activeItems.Add(itemObj);
     }
     // 创建材料项
     void CreateMaterialItem(MaterialData material)
     {
         if (materialItemPrefab == null || equipmentListContent == null) return;
-
+        /*
         GameObject itemObj = Instantiate(materialItemPrefab, equipmentListContent);
         MaterialItemView itemView = itemObj.GetComponent<MaterialItemView>();
 
@@ -229,16 +286,60 @@ public class EquipmentUIController : MonoBehaviour
         {
             itemView.Initialize(material, OnMaterialItemClicked);
         }
+        */
+
+        GameObject itemObj = EquipmentObjectPool.Instance.GetObject(
+            materialItemPrefab.name,
+            equipmentListContent
+        );
+
+        if (itemObj == null)
+        {
+            itemObj = Instantiate(materialItemPrefab, equipmentListContent);
+        }
+
+        MaterialItemView itemView = itemObj.GetComponent<MaterialItemView>();
+
+        if (itemView != null)
+        {
+            itemView.Initialize(material, OnMaterialItemClicked);
+        }
+
+        activeItems.Add(itemObj);
     }
     //清空容器
     void ClearItemList()
     {
         if (equipmentListContent == null) return;
-
+        /*
         for (int i = equipmentListContent.childCount - 1; i >= 0; i--)
         {
             Destroy(equipmentListContent.GetChild(i).gameObject);
         }
+        */
+
+        foreach (var item in activeItems)
+        {
+            if (item != null)
+            {
+                // 判断是哪种类型的项
+                if (item.GetComponent<EquipmentItemView>() != null)
+                {
+                    EquipmentObjectPool.Instance.ReturnObject(equipmentItemPrefab.name, item);
+                }
+                else if (item.GetComponent<MaterialItemView>() != null)
+                {
+                    EquipmentObjectPool.Instance.ReturnObject(materialItemPrefab.name, item);
+                }
+                else
+                {
+                    Destroy(item);
+                }
+            }
+        }
+
+        activeItems.Clear();
+
     }
 
     // ================== 事件处理 ==================
@@ -279,7 +380,7 @@ public class EquipmentUIController : MonoBehaviour
         detailPanel.SetActive(true);
 
         if (detailRarityImage != null)
-            detailRarityImage.color = GetRarityColor(material.Stars);
+            detailRarityImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Frame_{material.Stars}");
 
         if (detailIconImage != null)
             detailIconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Icon_{material.Id}");
@@ -299,20 +400,6 @@ public class EquipmentUIController : MonoBehaviour
         if (detailDescriptionText != null)
             detailDescriptionText.text = $"{material.textStats.Description}";
 
-    }
-    // 获取稀有度颜色
-    Color GetRarityColor(string stars)
-    {
-        Debug.Log(stars);
-        // 5星橙色，4星紫色，3星蓝色，其他灰色
-        if (stars == "5S" || stars == "4S")
-            return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
-        else if (stars == "3S" || stars == "2S")
-            return new Color(40 / 255.0f, 165 / 255.0f, 225 / 255.0f); // 蓝色
-        else if (stars == "1S")
-            return new Color(78 / 255.0f, 179 / 255.0f, 131 / 255.0f); // 绿色
-        else
-            return Color.gray; // 灰色
     }
 
     //隐藏详情面板
@@ -343,5 +430,11 @@ public class EquipmentUIController : MonoBehaviour
     public static EquipmentData GetSelectedEquipment()
     {
         return currentTab == ItemType.Weapon ? currentWeapons[selectedEquipmentIndex] : currentStigmatas[selectedEquipmentIndex];
+    }
+
+    // 新增：在销毁时清理对象池
+    void OnDestroy()
+    {
+        EquipmentObjectPool.Instance.ClearAllPools();
     }
 }
