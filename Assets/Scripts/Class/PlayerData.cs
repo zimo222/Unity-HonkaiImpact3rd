@@ -1003,27 +1003,37 @@ public class PlayerData
             id: "MATE_001",
             name: "特级学习芯片",
             stars: "4S",
-            description: "提供7500点角色或武装人偶经验值",
             count: 1,
-            num: 7500
+            num: 7500,
+            introduction: "提供7500点角色或武装人偶经验值",
+            description: "全方位记录了真实崩坏战场的稀有芯片，对使用者的成长将有质的突破。但若是没有足够强大的内心，则可能被战场上残酷的血雨腥风所侵蚀。"
         ));
-        // 添加一些初始材料
         MaterialBag.Add(new MaterialData(
             id: "MATE_002",
             name: "高级学习芯片",
             stars: "3S",
-            description: "提供1500点角色或武装人偶经验值",
             count: 10,
-            num: 1500
+            num: 1500,
+            introduction: "提供1500点角色或武装人偶经验值",
+            description: "能够将一些高级战略战术、实战经验、以及复杂机甲的操作方法置入使用者大脑的芯片，可大幅提高作战能力，但吸收程度依使用者资质而异。"
         ));
-        // 添加一些初始材料
         MaterialBag.Add(new MaterialData(
             id: "MATE_003",
             name: "进阶学习芯片",
             stars: "2S",
-            description: "提供300点角色或武装人偶经验值",
             count: 100,
-            num: 300
+            num: 300,
+            introduction: "提供300点角色或武装人偶经验值",
+            description: "能够将一些基本的格斗术和武器使用技巧直接置入使用者大脑的芯片，对实战格斗具有较好的指导作用。"
+        ));
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_004",
+            name: "基础学习芯片",
+            stars: "1S",
+            count: 1000,
+            num: 60,
+            introduction: "提供60点角色或武装人偶经验值",
+            description: "记录了一些关于世界的基本常识和历史的学习芯片，有助于使用者简单了解自己身处的环境。"
         ));
     }
 }
@@ -1121,19 +1131,24 @@ public class MaterialData
     public string Name;                              // 材料名称
     public string Stars;                             // 星级
     public int Count;                                // 材料数量
-    public string Description;                       // 介绍
     public int Num;                                  // 数值
+
+    public TextStats textStats;
 
     public MaterialData() { }
 
-    public MaterialData(string id, string name, string stars, int count = 0, string description = null, int num = 0)
+    public MaterialData(string id, string name, string stars, int count = 0, int num = 0, string introduction = null, string description = null)
     {
         Id = id;
         Name = name;
         Stars = stars;
         Count = count;
-        Description = description;
         Num = num;
+        textStats = new TextStats
+        {
+            Introduction = introduction,
+            Description = description
+        };
     }
 }
 
@@ -1156,6 +1171,12 @@ public struct CharacterStats
     {
         return $"生命: {Health}, 攻击: {Attack}, 暴击: {CritRate:P0}, 爆伤: {CritDamage:P0}, 元素: {ElementBonus:P0}";
     }
+}
+[System.Serializable]
+public struct TextStats
+{
+    public string Introduction;                          // 介绍
+    public string Description;                           // 描述
 }
 
 // ================== 枚举定义 ==================

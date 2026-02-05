@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EquipmentUIController : MonoBehaviour
 {
@@ -32,8 +33,10 @@ public class EquipmentUIController : MonoBehaviour
     public GameObject detailPanel;              // 详情面板（仅用于材料）
     public Image detailRarityImage;             // 详情-背景
     public Image detailIconImage;             // 详情-图标
+    public Image detailStarImage;             // 详情-星级
     public TMP_Text detailNameText;             // 详情-名称
-    public TMP_Text detailDescriptionText;      // 详情-简介
+    public TMP_Text detailIntroductionText;      // 详情-介绍
+    public TMP_Text detailDescriptionText;      // 详情-描述
     public TMP_Text detailCountText;            // 详情-数量
     public Button closeDetailButton;            // 关闭详情按钮
 
@@ -281,14 +284,20 @@ public class EquipmentUIController : MonoBehaviour
         if (detailIconImage != null)
             detailIconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Icon_{material.Id}");
 
+        if (detailStarImage != null)
+            detailStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{material.Stars}");
+
         if (detailNameText != null)
             detailNameText.text = material.Name;
 
         if (detailCountText != null)
             detailCountText.text = $"{material.Count}";
 
+        if (detailIntroductionText != null)
+            detailIntroductionText.text = $"{material.textStats.Introduction}";
+
         if (detailDescriptionText != null)
-            detailDescriptionText.text = $"{material.Description}";
+            detailDescriptionText.text = $"{material.textStats.Description}";
 
     }
     // 获取稀有度颜色

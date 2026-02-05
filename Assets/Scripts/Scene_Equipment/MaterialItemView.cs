@@ -39,7 +39,7 @@ public class MaterialItemView : MonoBehaviour, IPointerClickHandler
 
         // ÐÇ¼¶
         if (starsImage != null)
-            starsImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{materialData.Stars}");
+            starsImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Stars_{materialData.Stars}");
 
         // ÊýÁ¿
         if (countText != null)
