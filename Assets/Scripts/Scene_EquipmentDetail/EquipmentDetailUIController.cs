@@ -16,18 +16,21 @@ public class EquipmentDetailUIController : MonoBehaviour
     [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
+    // ================== UI引用 ==================
     [Header("UI组件")]
-    public Image rarityBackground;
-    public Image iconImage;
+    [Header("左上")]
     public TMP_Text nameText;
+    public Image typeImage;
     public TMP_Text typeText;
+    public Image starImage;
+    [Header("左中")]
+    public TMP_Text descriptionText;
+    [Header("左下")]
     public TMP_Text levelText;
-    public TMP_Text starsText;
-    public TMP_Text attackText;
-    public TMP_Text healthText;
-    public TMP_Text critRateText;
-    public TMP_Text critDamageText;
-    public TMP_Text elementBonusText;
+    public TMP_Text expText;
+    [Header("右上")]
+    public GameObject[] statPanel;
+    [Header("右中")]
 
     [Header("操作按钮")]
     public Button backButton;
@@ -45,9 +48,25 @@ public class EquipmentDetailUIController : MonoBehaviour
 
     void Start()
     {
+        // 获取玩家数据
+        LoadPlayerData();
+
         equipmentIndex = -1;
         InitializeUI();
         LoadSelectedEquipment();
+    }
+    //加载玩家数据
+    void LoadPlayerData()
+    {
+        if (PlayerDataManager.Instance != null)
+        {
+            playerData = PlayerDataManager.Instance.CurrentPlayerData;
+        }
+        else
+        {
+            // 创建测试数据
+            playerData = new PlayerData("测试玩家");
+        }
     }
 
     void InitializeUI()
@@ -90,43 +109,34 @@ public class EquipmentDetailUIController : MonoBehaviour
         // 基本信息
         if (nameText != null)
             nameText.text = currentEquipment.Name;
-
         if (typeText != null)
         {
-            string typeName = currentEquipment.Type == EquipmentType.Weapon ?
-                "武器" : $"圣痕({EquipmentHelper.GetStigmataPositionName(currentEquipment.StigmataPosition)})";
-            typeText.text = typeName;
+            switch(currentEquipment.WeaponType)
+            {
+                case WeaponType.DualPistols:
+                    typeText.text = "双枪";
+                    break;
+                case WeaponType.SingleHandedSword:
+                    typeText.text = "单手剑";
+                    break;
+                case WeaponType.Spear:
+                    typeText.text = "长枪";
+                    break;
+                default:
+                    typeText.text = "";
+                    break;
+            }
         }
 
+        if (starImage != null)
+            starImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{currentEquipment.Stats.Stars}"); ;
+
+
+        if (descriptionText != null)
+            descriptionText.text = currentEquipment.TextStats.Description;
+
         if (levelText != null)
-            levelText.text = $"等级: {currentEquipment.Stats.Level}";
-
-        if (starsText != null)
-            starsText.text = $"星级: {currentEquipment.Stats.Stars}";
-
-        // 属性信息
-        if (attackText != null)
-            attackText.text = $"攻击力: {currentEquipment.Attack}";
-
-        if (healthText != null && currentEquipment.Health > 0)
-            healthText.text = $"生命值: {currentEquipment.Health}";
-        else if (healthText != null)
-            healthText.text = "";
-
-        if (critRateText != null && currentEquipment.CritRate > 0)
-            critRateText.text = $"暴击率: {currentEquipment.CritRate:P0}";
-        else if (critRateText != null)
-            critRateText.text = "";
-
-        if (critDamageText != null && currentEquipment.CritDamage > 0)
-            critDamageText.text = $"暴击伤害: {currentEquipment.CritDamage:P0}";
-        else if (critDamageText != null)
-            critDamageText.text = "";
-
-        if (elementBonusText != null && currentEquipment.ElementBonus > 0)
-            elementBonusText.text = $"元素加成: {currentEquipment.ElementBonus:P0}";
-        else if (elementBonusText != null)
-            elementBonusText.text = "";
+            levelText.text = $"{currentEquipment.Stats.Level}/<color=#FEDF4C>30</color>";
 
         // 装备状态
         if (equippedBadge != null)
@@ -142,25 +152,6 @@ public class EquipmentDetailUIController : MonoBehaviour
             {
                 equippedCharacterText.text = "未装备";
             }
-        }
-
-        // 加载图标
-        LoadEquipmentIcon();
-    }
-
-    void LoadEquipmentIcon()
-    {
-        if (iconImage == null) return;
-
-        string iconPath = currentEquipment.Type == EquipmentType.Weapon ?
-            $"Picture/Scene_Equipment/Weapon/Icon_{currentEquipment.Id}" :
-            $"Picture/Scene_Equipment/Stigmata/Icon_{currentEquipment.Id}";
-
-        Sprite icon = Resources.Load<Sprite>(iconPath);
-
-        if (icon != null)
-        {
-            iconImage.sprite = icon;
         }
     }
 

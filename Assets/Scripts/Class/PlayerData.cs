@@ -599,7 +599,8 @@ public class PlayerData
             attack: 150,
             critRate: 0.05f,
             critDamage: 0f,
-            elementBonus: 0.15f
+            elementBonus: 0.15f,
+            description: "少女在炽焰中窥见的，是温柔而赞许的眼神。\n那眼神带来的温度，给予了她担起未来的勇气。\n身后伸来的手，为她的信念增添柴薪。\n这意志化为煌燃的剑，点亮黑夜。"
         ));
 
         EquipmentBag.Add(new EquipmentData(
@@ -1123,6 +1124,7 @@ public class EquipmentData
     public StigmataPosition StigmataPosition;        // 圣痕位置（如果是圣痕）
 
     public CharacterStats Stats;                     // 装备属性
+    public TextStats TextStats;                     // 文本属性
 
     // 装备状态
     public int EquippedToCharacterIndex = -1;        // 被哪个角色装备（-1表示未装备）
@@ -1134,7 +1136,7 @@ public class EquipmentData
                         StigmataPosition stigmataPosition = StigmataPosition.None, string stars = "4S",
                         int health = 0, int attack = 0,
                         float critRate = 0f, float critDamage = 0f,
-                        float elementBonus = 0f)
+                        float elementBonus = 0f, string introduction = "", string description = "")
     {
         Id = id;
         Name = name;
@@ -1152,6 +1154,13 @@ public class EquipmentData
             CritDamage = critDamage,
             ElementBonus = elementBonus
         };
+
+        TextStats = new TextStats()
+        {
+            Introduction = introduction,
+            Description = description
+        };
+
     }
 
     public int Health => Stats.Health;

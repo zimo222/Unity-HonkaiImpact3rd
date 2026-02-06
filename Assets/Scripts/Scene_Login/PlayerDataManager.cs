@@ -269,4 +269,173 @@ public class PlayerDataManager : MonoBehaviour
         Debug.Log($"账户 {username} 已被删除。");
         return true;
     }
+
+
+
+
+
+
+    // ================== 添加事件系统 ==================
+
+    // 定义委托和事件
+    public event Action<PlayerData> OnPlayerDataChanged;
+    public event Action<int> OnCoinsChanged;
+    public event Action<int> OnCrystalsChanged;
+    public event Action<int> OnStaminaChanged;
+    public event Action<EquipmentData> OnEquipmentChanged;
+    public event Action<CharacterData> OnCharacterChanged;
+
+    // 触发事件的方法
+    private void TriggerPlayerDataChanged()
+    {
+        OnPlayerDataChanged?.Invoke(CurrentPlayerData);
+        SaveCurrentPlayerData();
+    }
+
+    private void TriggerCoinsChanged(int newValue)
+    {
+        OnCoinsChanged?.Invoke(newValue);
+        TriggerPlayerDataChanged();
+    }
+
+    private void TriggerCrystalsChanged(int newValue)
+    {
+        OnCrystalsChanged?.Invoke(newValue);
+        TriggerPlayerDataChanged();
+    }
+
+    private void TriggerStaminaChanged(int newValue)
+    {
+        OnStaminaChanged?.Invoke(newValue);
+        TriggerPlayerDataChanged();
+    }
+
+    // ================== 添加装备操作方法 ==================
+
+    // 强化装备
+    public bool EnhanceEquipment(int equipmentIndex, int cost = 100)
+    {
+        if (CurrentPlayerData == null || equipmentIndex < 0 ||
+            equipmentIndex >= CurrentPlayerData.EquipmentBag.Count)
+            return false;
+
+        // 检查金币是否足够
+        if (CurrentPlayerData.Coins < cost)
+            return false;
+
+        // 扣除金币
+        CurrentPlayerData.Coins -= cost;
+
+        // 强化装备
+        var equipment = CurrentPlayerData.EquipmentBag[equipmentIndex];
+        equipment.Stats.Level++;
+        equipment.Stats.Attack += 10;
+        equipment.Stats.Health += 50;
+
+        // 触发事件
+        OnEquipmentChanged?.Invoke(equipment);
+        TriggerCoinsChanged(CurrentPlayerData.Coins);
+
+        return true;
+    }
+
+    // 出售装备
+    public bool SellEquipment(int equipmentIndex)
+    {
+        if (CurrentPlayerData == null || equipmentIndex < 0 ||
+            equipmentIndex >= CurrentPlayerData.EquipmentBag.Count)
+            return false;
+
+        var equipment = CurrentPlayerData.EquipmentBag[equipmentIndex];
+
+        // 检查是否已装备
+        if (equipment.EquippedToCharacterIndex >= 0)
+            return false;
+
+        // 计算售价
+        int sellPrice = CalculateSellPrice(equipment);
+        CurrentPlayerData.Coins += sellPrice;
+
+        // 移除装备
+        CurrentPlayerData.EquipmentBag.RemoveAt(equipmentIndex);
+
+        // 触发事件
+        OnEquipmentChanged?.Invoke(equipment);
+        TriggerCoinsChanged(CurrentPlayerData.Coins);
+
+        return true;
+    }
+
+    // 装备武器给角色
+    public bool EquipWeapon(int characterIndex, int equipmentIndex)
+    {
+        if (CurrentPlayerData == null) return false;
+
+        bool success = CurrentPlayerData.EquipWeaponToCharacter(characterIndex, equipmentIndex);
+
+        if (success)
+        {
+            var equipment = CurrentPlayerData.EquipmentBag[equipmentIndex];
+            OnEquipmentChanged?.Invoke(equipment);
+
+            var character = CurrentPlayerData.Characters[characterIndex];
+            OnCharacterChanged?.Invoke(character);
+        }
+
+        return success;
+    }
+
+    private int CalculateSellPrice(EquipmentData equipment)
+    {
+        int basePrice = 100;
+        int starMultiplier = equipment.Stats.Stars.Length;
+        int levelMultiplier = equipment.Stats.Level;
+
+        return basePrice * starMultiplier * levelMultiplier;
+    }
+
+    // ================== 添加便捷访问方法 ==================
+
+    // 获取当前选择的装备（跨场景传递）
+    private EquipmentData selectedEquipment;
+    private int selectedEquipmentIndex = -1;
+
+    public void SetSelectedEquipment(EquipmentData equipment, int index = -1)
+    {
+        selectedEquipment = equipment;
+        selectedEquipmentIndex = index;
+    }
+
+    public EquipmentData GetSelectedEquipment()
+    {
+        return selectedEquipment;
+    }
+
+    public int GetSelectedEquipmentIndex()
+    {
+        return selectedEquipmentIndex;
+    }
+
+    // 获取装备列表（支持过滤）
+    public List<EquipmentData> GetEquipmentByType(EquipmentType? type = null)
+    {
+        if (CurrentPlayerData == null) return new List<EquipmentData>();
+
+        if (type.HasValue)
+        {
+            return CurrentPlayerData.EquipmentBag.FindAll(e => e.Type == type.Value);
+        }
+
+        return CurrentPlayerData.EquipmentBag;
+    }
+
+    // 获取可用武器（未装备的）
+    public List<EquipmentData> GetAvailableWeapons()
+    {
+        if (CurrentPlayerData == null) return new List<EquipmentData>();
+
+        return CurrentPlayerData.EquipmentBag.FindAll(e =>
+            e.Type == EquipmentType.Weapon &&
+            e.EquippedToCharacterIndex < 0);
+    }
 }
