@@ -62,7 +62,7 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
         if (iconImage == null) return;
 
         // 构建图标路径
-        string iconPath = equipmentData.Type == EquipmentType.Weapon ? $"Picture/Scene_Equipment/Weapon/Icon_{equipmentData.Id}" : $"Picture/Scene_Equipment/Stigmata/Icon_{equipmentData.Id}";
+        string iconPath = equipmentData is WeaponData ? $"Picture/Scene_Equipment/Weapon/Icon_{equipmentData.Id}" : $"Picture/Scene_Equipment/Stigmata/Icon_{equipmentData.Id}";
         Sprite icon = Resources.Load<Sprite>(iconPath);
 
         if (icon != null)
@@ -72,7 +72,7 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
         else
         {
             // 加载失败，使用默认图标
-            string defaultIcon = equipmentData.Type == EquipmentType.Weapon ?
+            string defaultIcon = equipmentData is WeaponData ?
                 "Equipment/Icons/weapon_default" : "Equipment/Icons/stigmata_default";
             iconImage.sprite = Resources.Load<Sprite>(defaultIcon);
         }

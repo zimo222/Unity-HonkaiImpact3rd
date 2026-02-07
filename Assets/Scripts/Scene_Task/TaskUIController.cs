@@ -124,7 +124,7 @@ public class TaskUIController : MonoBehaviour
         Debug.Log($"成功加载玩家数据: {currentPlayerData.PlayerName}, 等级: {currentPlayerData.Level}, DailyEXP: {currentPlayerData.DailyEXP}");
 
         // 刷新玩家数据中的任务状态
-        currentPlayerData.RefreshTasks();
+        PlayerDataManager.Instance.RefreshTasks();
 
         UpdateAllUI();
     }
@@ -211,7 +211,7 @@ public class TaskUIController : MonoBehaviour
         // 刷新任务状态
         if (currentPlayerData != null)
         {
-            currentPlayerData.RefreshTasks();
+            PlayerDataManager.Instance.RefreshTasks();
 
             // 调试：输出任务数据
             DebugTaskData();
@@ -312,7 +312,7 @@ public class TaskUIController : MonoBehaviour
         ClearMissionList();
 
         // 获取所有任务（不筛选频率）
-        List<TaskData> allTasks = currentPlayerData.GetSortedTasks(null);
+        List<TaskData> allTasks = PlayerDataManager.Instance.GetSortedTasks(null);
 
         // 调试信息
         Debug.Log($"=== 加载所有任务 ===");
@@ -400,7 +400,7 @@ public class TaskUIController : MonoBehaviour
 
             case TaskStatus.Completed:
                 // 领取奖励
-                if (currentPlayerData.ClaimTaskReward(taskId))
+                if (PlayerDataManager.Instance.ClaimTaskReward(taskId))
                 {
                     // 刷新界面
                     LoadAllTasks();
@@ -731,7 +731,7 @@ public class TaskUIController : MonoBehaviour
                 return;
             }
             // 给予水晶奖励
-            currentPlayerData.ClaimDailyEXPReward(buttonIndex);
+            PlayerDataManager.Instance.ClaimDailyEXPReward(buttonIndex);
             // 显示奖励弹窗
             ShowRewardPopup(currentPlayerData.DailyEXPRewards[buttonIndex].Reward1, currentPlayerData.DailyEXPRewards[buttonIndex].Reward2);
 

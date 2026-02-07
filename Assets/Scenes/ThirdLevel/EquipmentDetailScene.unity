@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 36986605}
   - component: {fileID: 36986604}
   - component: {fileID: 36986608}
+  - component: {fileID: 36986609}
   m_Layer: 5
   m_Name: EquipmentDetailUI
   m_TagString: Untagged
@@ -236,7 +237,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 36986602}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 92ade84d13b928042a4007df2c911ca6, type: 3}
   m_Name: 
@@ -265,6 +266,34 @@ MonoBehaviour:
   sellButton: {fileID: 0}
   equippedBadge: {fileID: 0}
   equippedCharacterText: {fileID: 0}
+--- !u!114 &36986609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36986602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc86e42f33c8e764cba712cc59034874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  staminaText: {fileID: 41818336}
+  coinsText: {fileID: 427306011}
+  crystalsText: {fileID: 203849245}
+  nameText: {fileID: 766339698}
+  typeImage: {fileID: 269430846}
+  typeText: {fileID: 782941380}
+  starImage: {fileID: 516188367}
+  equippedBadge: {fileID: 0}
+  equippedCharacterText: {fileID: 0}
+  descriptionText: {fileID: 932300179}
+  levelText: {fileID: 425065729}
+  expText: {fileID: 2118307399}
+  statPanelsParent: {fileID: 0}
+  statPanelPrefab: {fileID: 0}
+  panelStartPosition: {x: 0, y: 0}
+  panelSpacing: 60
 --- !u!1 &41818334
 GameObject:
   m_ObjectHideFlags: 0
@@ -4892,8 +4921,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1797272105}
+  - component: {fileID: 1797272106}
   m_Layer: 0
-  m_Name: EquipmentDetail
+  m_Name: EquipmentDetailController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4914,6 +4944,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1797272106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797272104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e47b4003d1746b94db1737b5d9e44589, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  view: {fileID: 36986609}
+  referencedButtons:
+  - {fileID: 2001723009}
+  - {fileID: 1588794845}
+  backButton: {fileID: 0}
+  enhanceButton: {fileID: 0}
+  equipButton: {fileID: 0}
+  sellButton: {fileID: 0}
 --- !u!1 &1802993029
 GameObject:
   m_ObjectHideFlags: 0

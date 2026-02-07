@@ -42,8 +42,8 @@ public class EquipmentUIController : MonoBehaviour
 
     // ================== 数据 ==================
     private PlayerData playerData;
-    private static List<EquipmentData> currentWeapons;
-    private static List<EquipmentData> currentStigmatas;
+    private static List<WeaponData> currentWeapons;
+    private static List<StigmataData> currentStigmatas;
     private static List<MaterialData> currentMaterials;
 
     // 新增：活动项列表
@@ -100,8 +100,8 @@ public class EquipmentUIController : MonoBehaviour
         if (playerData == null) return;
 
         // 分离武器和圣痕
-        currentWeapons = playerData.EquipmentBag.FindAll(e => e.Type == EquipmentType.Weapon);
-        currentStigmatas = playerData.EquipmentBag.FindAll(e => e.Type == EquipmentType.Stigmata);
+        currentWeapons = new List<WeaponData>(playerData.WeaponBag);
+        currentStigmatas = new List<StigmataData>(playerData.StigmataBag);
         currentMaterials = new List<MaterialData>(playerData.MaterialBag);
 
         //按照稀有度从高到低排序

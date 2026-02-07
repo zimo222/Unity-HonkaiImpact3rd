@@ -90,7 +90,7 @@ public class EquipmentDetailUIController : MonoBehaviour
         // 使用静态变量获取装备
         currentEquipment = EquipmentUIController.GetSelectedEquipment();
 
-        Debug.Log($"已选择装备: {currentEquipment.Name}, ID: {currentEquipment.Id}, Tab: {currentEquipment.WeaponType}");
+        Debug.Log($"已选择装备: {currentEquipment.Name}, ID: {currentEquipment.Id}, Tab: {currentEquipment is WeaponData}");
 
         if (currentEquipment == null)
         {
@@ -109,9 +109,9 @@ public class EquipmentDetailUIController : MonoBehaviour
         // 基本信息
         if (nameText != null)
             nameText.text = currentEquipment.Name;
-        if (typeText != null)
+        if (typeText != null && currentEquipment is WeaponData currentWeapon)
         {
-            switch(currentEquipment.WeaponType)
+            switch(currentWeapon.Type)
             {
                 case WeaponType.DualPistols:
                     typeText.text = "双枪";

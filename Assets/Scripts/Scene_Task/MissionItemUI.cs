@@ -175,7 +175,7 @@ public class MissionItemUI : MonoBehaviour
         }
 
         // 使用PlayerData中已有的ClaimTaskReward方法
-        bool success = PlayerDataManager.Instance.CurrentPlayerData.ClaimTaskReward(taskId);
+        bool success = PlayerDataManager.Instance.ClaimTaskReward(taskId);
 
         if (success)
         {
