@@ -50,4 +50,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ThirdLevel/EquipmentDetailScene.unity
     guid: 1ef9ec2b39fc084479ee6eda3071add1
+  - enabled: 1
+    path: Assets/Scenes/FourthLevel/EnhanceScene.unity
+    guid: f6b8253448f7d2b42af501e02ad14688
+  - enabled: 1
+    path: Assets/Scenes/FourthLevel/EvolveScene.unity
+    guid: be7ef067388a16b4ca0bed55f687f9ed
   m_configObjects: {}

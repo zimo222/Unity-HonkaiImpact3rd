@@ -107,8 +107,8 @@ public class EquipmentUIController : MonoBehaviour
         //按照稀有度从高到低排序
         currentWeapons.Sort((a, b) =>
         {
-            string statusOrderA = a.Stats.Stars;
-            string statusOrderB = b.Stats.Stars;
+            int statusOrderA = a.Stats.Stars;
+            int statusOrderB = b.Stats.Stars;
 
             if (statusOrderA != statusOrderB)
                 return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
@@ -116,8 +116,8 @@ public class EquipmentUIController : MonoBehaviour
         });
         currentStigmatas.Sort((a, b) =>
         {
-            string statusOrderA = a.Stats.Stars;
-            string statusOrderB = b.Stats.Stars;
+            int statusOrderA = a.Stats.Stars;
+            int statusOrderB = b.Stats.Stars;
 
             if (statusOrderA != statusOrderB)
                 return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前

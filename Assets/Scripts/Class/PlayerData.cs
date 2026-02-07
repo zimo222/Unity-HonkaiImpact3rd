@@ -81,35 +81,35 @@ public class PlayerData
         // 琪亚娜·薪炎之律者
         Characters.Add(new CharacterData(
             id: "CHAR_001", name: "琪亚娜-薪炎之律者", isUnlocked: true,
-            element: "YN", stars: "S",
+            element: "YN", stars: 1, maxstars: 3,
             health: 2004, attack: 501, defence: 168,
             energy: 140, critRate: 0.1f, critDamage: 1.5f, elementBonus: 0.3f
         ));
         // 琪亚娜·白练
         Characters.Add(new CharacterData(
             id: "CHAR_002", name: "琪亚娜-领域装·白练", isUnlocked: true, 
-            element: "JX", stars: "S",
+            element: "JX", stars: 1, maxstars: 3,
             health: 1200, attack: 250, defence: 150,
             energy: 130, critRate: 0.08f, critDamage: 1.3f, elementBonus: 0f
         ));
         // 叶瞬光
         Characters.Add(new CharacterData(
             id: "CHAR_003", name: "叶瞬光-虚狩·青暝司命", isUnlocked: true,
-            element: "SW", stars: "S",
+            element: "SW", stars: 1, maxstars: 3,
             health: 1400, attack: 280, defence: 150,
             energy: 150, critRate: 0.12f, critDamage: 1.6f, elementBonus: 0.2f
         ));
         // 胡桃
         Characters.Add(new CharacterData(
             id: "CHAR_004", name: "胡桃-往生堂堂主", isUnlocked: false,
-            element: "SW", stars: "S",
+            element: "SW", stars: 1, maxstars: 3,
             health: 1100, attack: 320, defence: 130,
             energy: 130, critRate: 0.15f, critDamage: 1.8f, elementBonus: 0.4f
         ));
         // 流萤
         Characters.Add(new CharacterData(
             id: "CHAR_005", name: "流萤-神秘机甲女", isUnlocked: false,
-            element: "YN", stars: "S",
+            element: "YN", stars: 1, maxstars: 3,
             health: 1300, attack: 270, defence: 120,
             energy: 120, critRate: 0.09f, critDamage: 1.4f, elementBonus: 0.25f
         ));
@@ -128,32 +128,32 @@ public class PlayerData
         // 添加一些初始武器
         WeaponBag.Add(new WeaponData(
             id: "WEAP_001", name: "焢煌之钥", type: WeaponType.DualPistols,
-            stars: "4S1",
+            stars: 4, maxstars: 5,
             health: 0, attack: 298, defence: 0,
             energy: 0, critRate: 0.12f, critDamage: 0f, elementBonus: 0.15f,
             description: "少女在炽焰中窥见的，是温柔而赞许的眼神。\n那眼神带来的温度，给予了她担起未来的勇气。\n身后伸来的手，为她的信念增添柴薪。\n这意志化为煌燃的剑，点亮黑夜。"
         ));
         WeaponBag.Add(new WeaponData(
             id: "WEAP_002", name: "月神之守护", type: WeaponType.DualPistols,
-            stars: "4S1",
+            stars: 4, maxstars: 5,
             health: 0, attack: 150, defence: 0,
             energy: 0, critRate: 0.05f, critDamage: 0f, elementBonus: 0.15f
         ));
         WeaponBag.Add(new WeaponData(
             id: "WEAP_003", name: "青溟剑", type: WeaponType.SingleHandedSword,
-            stars: "4S1",
+            stars: 4, maxstars: 5,
             health: 0, attack: 80, defence: 0,
-            energy: 0, critRate: 0f, critDamage: 0f, elementBonus: 0f
+            energy: 0, critRate: 0.12f, critDamage: 0f, elementBonus: 0f
         ));
         WeaponBag.Add(new WeaponData(
             id: "WEAP_004", name: "萨姆召唤剑", type: WeaponType.SingleHandedSword,
-            stars: "4S1",
+            stars: 4, maxstars: 5,
             health: 0, attack: 90, defence: 0,
             energy: 0, critRate: 0.02f, critDamage: 0f, elementBonus: 0f
         ));
         WeaponBag.Add(new WeaponData(
             id: "WEAP_005", name: "护摩之剑(杖)", type: WeaponType.SingleHandedSword,
-            stars: "4S1",
+            stars: 4, maxstars: 5,
             health: 0, attack: 90, defence: 0,
             energy: 0, critRate: 0.02f, critDamage: 0f, elementBonus: 0f
         ));
@@ -161,21 +161,21 @@ public class PlayerData
         // 上位圣痕
         StigmataBag.Add(new StigmataData(
             id: "STIG_001_TOP", name: "无量塔姬子(上)", position: StigmataPosition.Top,
-            stars: "5S",
+            stars: 4, maxstars: 5,
             health: 200, attack: 50, defence: 10,
             energy: 0, critRate: 0f, critDamage: 0.1f, elementBonus: 0.08f
         ));
         // 中位圣痕
         StigmataBag.Add(new StigmataData(
             id: "STIG_001_MID", name: "无量塔姬子(中)", position: StigmataPosition.Middle,
-            stars: "5S",
+            stars: 4, maxstars: 5,
             health: 150, attack: 0, defence: 10,
             energy: 0, critRate: 0.02f, critDamage: 0.15f, elementBonus: 0.1f
         ));
         // 下位圣痕
         StigmataBag.Add(new StigmataData(
             id: "STIG_001_BOT", name: "无量塔姬子(下)", position: StigmataPosition.Bottom,
-            stars: "5S",
+            stars: 4, maxstars: 5,
             health: 180, attack: 40, defence: 10,
             energy: 0, critRate: 0.04f, critDamage: 0.08f, elementBonus: 0.06f
         ));
@@ -262,6 +262,15 @@ public class PlayerData
             num: 1500,
             introduction: "提供1500点装备经验值。",
             description: "一块黄色碎片，上面刻着橙色的纹路，可以强化武器或圣痕。"
+        ));
+        MaterialBag.Add(new MaterialData(
+            id: "MATE_009",
+            name: "相转移镜面",
+            stars: "4S",
+            count: 10,
+            num: 1500,
+            introduction: "帮助某些装备进化的通用进化材料，主线剧情关卡随机掉落。",
+            description: "利用相转移技术制作的镜面，能阻挡所有的实弹武器。"
         ));
     }
     #endregion
@@ -436,14 +445,14 @@ public class CharacterData
     public CharacterData() { }
 
     public CharacterData(string id, string name, bool isUnlocked, 
-                        string element, string stars,
+                        string element, int stars, int maxstars,
                         int health, int attack, int defence, 
                         int energy, float critRate, float critDamage, float elementBonus)
     {
         Id = id; Name = name; IsUnlocked = isUnlocked;
         BaseStats = new CharacterStats()
         {
-            Element = element, Level = 1, Stars = stars,
+            Element = element, Level = 1, Stars = stars, MaxStars = maxstars,
             Health = health, Attack = attack, Defence = defence,
             Energy = energy, CritRate = critRate,CritDamage = critDamage,ElementBonus = elementBonus
         };
@@ -465,7 +474,7 @@ public class EquipmentData
     public EquipmentData() { }
 
     public EquipmentData(string id, string name,
-                        string element = "", string stars = "",
+                        string element = "", int stars = 0, int maxstars = 0,
                         int health = 0, int attack = 0, int defence = 0,
                         int energy = 0, float critRate = 0f, float critDamage = 0f, float elementBonus = 0f,
                         string introduction = "", string description = "")
@@ -473,21 +482,13 @@ public class EquipmentData
         Id = id; Name = name;
         Stats = new CharacterStats()
         {
-            Element = element,
-            Level = 1,
-            Stars = stars,
-            Health = health,
-            Attack = attack,
-            Defence = defence,
-            Energy = energy,
-            CritRate = critRate,
-            CritDamage = critDamage,
-            ElementBonus = elementBonus
+            Element = element, Level = 1, Stars = stars, MaxStars = maxstars,
+            Health = health, Attack = attack, Defence = defence,
+            Energy = energy, CritRate = critRate, CritDamage = critDamage, ElementBonus = elementBonus
         };
         TextStats = new TextStats()
         {
-            Introduction = introduction,
-            Description = description
+            Introduction = introduction, Description = description
         };
     }
 
@@ -505,11 +506,11 @@ public class WeaponData : EquipmentData
     public WeaponData() { }
 
     public WeaponData(string id, string name, WeaponType type,
-                        string element = "", string stars = "",
+                        string element = "", int stars = 0, int maxstars = 0,
                         int health = 0, int attack = 0, int defence = 0,
                         int energy = 0, float critRate = 0f, float critDamage = 0f, float elementBonus = 0f,
                         string introduction = "", string description = "")
-        : base(id, name, element, stars, health, attack, defence, energy, critRate, critDamage, elementBonus, introduction, description)
+        : base(id, name, element, stars, maxstars, health, attack, defence, energy, critRate, critDamage, elementBonus, introduction, description)
     {
         Type = type;
     }
@@ -522,11 +523,11 @@ public class StigmataData : EquipmentData
     public StigmataData() { }
 
     public StigmataData(string id, string name, StigmataPosition position,
-                        string element = "", string stars = "",
+                        string element = "", int stars = 0, int maxstars = 0,
                         int health = 0, int attack = 0, int defence = 0,
                         int energy = 0, float critRate = 0f, float critDamage = 0f, float elementBonus = 0f,
                         string introduction = "", string description = "")
-        : base(id, name, element, stars, health, attack, defence, energy, critRate, critDamage, elementBonus, introduction, description)
+        : base(id, name, element, stars, maxstars, health, attack, defence, energy, critRate, critDamage, elementBonus, introduction, description)
     {
         Position = position;
     }
@@ -569,7 +570,9 @@ public struct CharacterStats
     public int Level;                                // 等级
     public int Exp;                                  // 经验
 
-    public string Stars;                             // 星级
+    public int Stars;                                // 星级
+    public int MaxStars;                             // 最大星级
+    public int sStars;                               // 小星级
     public int Fragments;                            // 碎片
 
     public int Health;                               // 生命值

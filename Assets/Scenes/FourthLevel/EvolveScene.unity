@@ -4820,8 +4820,8 @@ MonoBehaviour:
   referencedButtons:
   - {fileID: 2001723009}
   - {fileID: 1588794845}
-  enhanceButton: {fileID: 852202775}
-  evolveButton: {fileID: 1059515150}
+  enhanceButton: {fileID: 0}
+  evolveButton: {fileID: 0}
 --- !u!1 &1802993029
 GameObject:
   m_ObjectHideFlags: 0
