@@ -5434,7 +5434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9812062da8d10544b9f0cdda97907f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewWeapon: {fileID: 0}
+  viewWeapon: {fileID: 36986608}
   referencedButtons:
   - {fileID: 2001723009}
   - {fileID: 1588794845}

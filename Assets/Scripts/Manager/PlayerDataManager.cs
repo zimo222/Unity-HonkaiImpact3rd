@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
@@ -633,6 +634,41 @@ public class PlayerDataManager : MonoBehaviour
         }
         return totalStats;
     }
+
+    /// <summary>
+    /// 装备背包排序
+    /// </summary>
+    public void SortEquipment()
+    {
+        //按照稀有度从高到低排序
+        CurrentPlayerData.WeaponBag.Sort((a, b) =>
+        {
+            int statusOrderA = a.Stats.Stars;
+            int statusOrderB = b.Stats.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return b.Stats.Level.CompareTo(a.Stats.Level);
+        });
+        CurrentPlayerData.StigmataBag.Sort((a, b) =>
+        {
+            int statusOrderA = a.Stats.Stars;
+            int statusOrderB = b.Stats.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return 0;
+        });
+        CurrentPlayerData.MaterialBag.Sort((a, b) =>
+        {
+            string statusOrderA = a.Stars;
+            string statusOrderB = b.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return 0;
+        });
+    }
     #endregion
 
 
@@ -1013,6 +1049,14 @@ public class PlayerDataManager : MonoBehaviour
 
         // === 5. 触发事件和保存 ===
         OnEquipmentChanged?.Invoke(equipment);
+        SortEquipment();
+        if(equipment is WeaponData now1)
+        {
+            PlayerPrefs.SetInt("SelectedEquipmentIndex", CurrentPlayerData.WeaponBag.IndexOf(now1));
+        }else if (equipment is StigmataData now2)
+        {
+            PlayerPrefs.SetInt("SelectedEquipmentIndex", CurrentPlayerData.StigmataBag.IndexOf(now2));
+        }
         TriggerPlayerDataChanged();
 
         bool isNowMaxLevel = newLevel >= maxLevel;
@@ -1070,11 +1114,24 @@ public class PlayerDataManager : MonoBehaviour
         equipment.Stats.Exp = 0;
 
         // 属性成长（每进化一次，攻击+10%，生命+5%）
+        /*
         equipment.Stats.Attack = (int)(equipment.Stats.Attack * 1.10f);
         equipment.Stats.Health = (int)(equipment.Stats.Health * 1.05f);
+        */
+        equipment.Stats.Attack += 10;
+        equipment.Stats.CritRate += 2;
 
         // === 3. 触发事件和保存 ===
         OnEquipmentChanged?.Invoke(equipment);
+        SortEquipment();
+        if (equipment is WeaponData now1)
+        {
+            PlayerPrefs.SetInt("SelectedEquipmentIndex", CurrentPlayerData.WeaponBag.IndexOf(now1));
+        }
+        else if (equipment is StigmataData now2)
+        {
+            PlayerPrefs.SetInt("SelectedEquipmentIndex", CurrentPlayerData.StigmataBag.IndexOf(now2));
+        }
         TriggerPlayerDataChanged();
 
         return new EvolutionResult(true, $"进化成功！{oldStars}星→{equipment.Stats.Stars}星", equipment.Stats.Stars);
@@ -1132,17 +1189,15 @@ public class PlayerDataManager : MonoBehaviour
         // 直接根据星级返回材料
         if (stars <= 2)
         {
-            required.Add(new MaterialData("MATE_008", "灵魂碎片", "1S", 5, 1500));
+            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 1, 1500));
         }
         else if (stars == 3)
         {
-            required.Add(new MaterialData("MATE_007", "双子灵魂碎片", "2S", 3, 3750));
-            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 1, 1500));
+            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 2, 1500));
         }
         else if (stars >= 4)
         {
-            required.Add(new MaterialData("MATE_005", "双子灵魂结晶", "4S", 2, 15000));
-            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 2, 1500));
+            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 3, 1500));
         }
 
         return required;

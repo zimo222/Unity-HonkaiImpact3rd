@@ -4816,7 +4816,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e47b4003d1746b94db1737b5d9e44589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  view: {fileID: 36986609}
+  viewa: {fileID: 36986609}
   referencedButtons:
   - {fileID: 2001723009}
   - {fileID: 1588794845}

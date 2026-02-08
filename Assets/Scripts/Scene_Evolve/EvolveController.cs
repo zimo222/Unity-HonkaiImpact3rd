@@ -1,13 +1,16 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // Controller层：处理业务逻辑，连接Model和View
-public class EquipmentDetailController : MonoBehaviour
+public class EvolveController : MonoBehaviour
 {
     // ================== 依赖注入 ==================
     [Header("View引用")]
-    [SerializeField] private EquipmentDetailView viewa;
+    [SerializeField] private WeaponEvolveView viewWeapon;
 
     // =========================  按钮引用 (可选)   =========================
     [Header("按钮引用 (如果需要通过脚本访问它们)")]
@@ -15,13 +18,13 @@ public class EquipmentDetailController : MonoBehaviour
     public ModularUIButton[] referencedButtons;
 
     [Header("按钮引用")]
-    [SerializeField] private Button enhanceButton;
     [SerializeField] private Button evolveButton;
 
     // ================== 数据 ==================
     private bool isWeapon;
     private WeaponData currentWeapon;
     private StigmataData currentStigmata;
+    private List<MaterialData> costMaterial; 
     private PlayerData playerData;
 
     void Start()
@@ -34,10 +37,13 @@ public class EquipmentDetailController : MonoBehaviour
     {
         // 加载数据
         LoadData();
+
+        InitializeEnhance();
+
         // 初始化UI
         InitializeUI();
-        // 绑定事件
-        BindEvents();
+
+        evolveButton.onClick.AddListener(StartEvolve);
     }
 
     void LoadData()
@@ -52,7 +58,7 @@ public class EquipmentDetailController : MonoBehaviour
             // 测试数据
             playerData = new PlayerData("测试玩家");
         }
-        if(PlayerPrefs.GetInt("isWeapon") == 1)
+        if (PlayerPrefs.GetInt("isWeapon") == 1)
         {
             isWeapon = true;
             currentWeapon = playerData.WeaponBag[PlayerPrefs.GetInt("SelectedEquipmentIndex")];
@@ -76,46 +82,33 @@ public class EquipmentDetailController : MonoBehaviour
         }
     }
 
+    void InitializeEnhance()
+    {
+        costMaterial = PlayerDataManager.Instance.GetEvolutionMaterials(currentWeapon);
+    }
+
     void InitializeUI()
     {
-        // 更新View
-        if (viewa != null)
+        if (isWeapon)
         {
-            if (isWeapon)
-            {
-                // 处理武器
-                Debug.Log($"这是武器: {currentWeapon.Name}, 类型: {currentWeapon.Type}");
-                viewa.UpdateWeaponInfo(currentWeapon);
-                viewa.UpdatePlayerResources(playerData);
-            }
-            else
-            {
-                // 处理圣痕
-                Debug.Log($"这是圣痕: {currentStigmata.Name}, 位置: {currentStigmata.Position}");
-                //ProcessStigmata(stigmata);
-            }
+            // 处理武器
+            Debug.Log($"这是武器: {currentWeapon.Name}, 类型: {currentWeapon.Type}");
+            viewWeapon.UpdateWeaponInfo(currentWeapon, costMaterial);
         }
+        viewWeapon.UpdatePlayerResources(playerData);
     }
 
-    // ================== 按钮事件处理方法 ==================
-    void BindEvents()
+    void StartEvolve()
     {
-        // 绑定按钮事件
-        if (enhanceButton != null)
-            enhanceButton.onClick.AddListener(OnEnhanceClicked);
-        if (evolveButton != null)
-            evolveButton.onClick.AddListener(OnEvolveClicked);
-    }
-    // ================== 按钮事件处理方法 ==================
-    void OnEnhanceClicked()
-    {
-        SceneDataManager.Instance.PushCurrentScene();
-        SceneManager.LoadScene("EnhanceScene");
-    }
-
-    void OnEvolveClicked()
-    {
-        SceneDataManager.Instance.PushCurrentScene();
-        SceneManager.LoadScene("EvolveScene");
+        var result = PlayerDataManager.Instance.EvolveEquipment(currentWeapon, costMaterial, PlayerDataManager.Instance.CalculateEnhanceCoinCost(costMaterial));
+        Debug.Log(result);
+        //添加部分
+        if(isWeapon)
+        {
+            // 显示结果面板
+            viewWeapon.ShowResultPanel(result);
+            // 一秒后自动关闭面板
+            StartCoroutine(viewWeapon.HidePanelAfterDelay(1.5f));
+        }
     }
 }
