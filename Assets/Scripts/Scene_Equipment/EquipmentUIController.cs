@@ -67,10 +67,8 @@ public class EquipmentUIController : MonoBehaviour
     {
         // 获取玩家数据
         LoadPlayerData();
-
         // 初始化UI
         InitializeUI();
-
         // 预创建对象池
         EquipmentObjectPool.Instance.Prewarm(equipmentItemPrefab.name, equipmentItemPrefab, 20);
         EquipmentObjectPool.Instance.Prewarm(materialItemPrefab.name, materialItemPrefab, 20);
@@ -243,81 +241,45 @@ public class EquipmentUIController : MonoBehaviour
     void CreateEquipmentItem(EquipmentData equipment, int index)
     {
         if (equipmentItemPrefab == null || equipmentListContent == null) return;
-        /*
-        GameObject itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
-        EquipmentItemView itemView = itemObj.GetComponent<EquipmentItemView>();
-
-        if (itemView != null)
-        {
-            // 传递索引给点击回调
-            itemView.Initialize(equipment, OnEquipmentItemClicked, index);
-        }
-        */
-
         GameObject itemObj = EquipmentObjectPool.Instance.GetObject(
             equipmentItemPrefab.name,
             equipmentListContent
         );
-
         if (itemObj == null)
         {
             // 对象池返回null，需要创建新对象
             itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
         }
-
         EquipmentItemView itemView = itemObj.GetComponent<EquipmentItemView>();
-
         if (itemView != null)
         {
             itemView.Initialize(equipment, OnEquipmentItemClicked, index);
         }
-
         activeItems.Add(itemObj);
     }
     // 创建材料项
     void CreateMaterialItem(MaterialData material)
     {
         if (materialItemPrefab == null || equipmentListContent == null) return;
-        /*
-        GameObject itemObj = Instantiate(materialItemPrefab, equipmentListContent);
-        MaterialItemView itemView = itemObj.GetComponent<MaterialItemView>();
-
-        if (itemView != null)
-        {
-            itemView.Initialize(material, OnMaterialItemClicked);
-        }
-        */
-
         GameObject itemObj = EquipmentObjectPool.Instance.GetObject(
             materialItemPrefab.name,
             equipmentListContent
         );
-
         if (itemObj == null)
         {
             itemObj = Instantiate(materialItemPrefab, equipmentListContent);
         }
-
         MaterialItemView itemView = itemObj.GetComponent<MaterialItemView>();
-
         if (itemView != null)
         {
             itemView.Initialize(material, OnMaterialItemClicked);
         }
-
         activeItems.Add(itemObj);
     }
     //清空容器
     void ClearItemList()
     {
         if (equipmentListContent == null) return;
-        /*
-        for (int i = equipmentListContent.childCount - 1; i >= 0; i--)
-        {
-            Destroy(equipmentListContent.GetChild(i).gameObject);
-        }
-        */
-
         foreach (var item in activeItems)
         {
             if (item != null)
@@ -337,9 +299,7 @@ public class EquipmentUIController : MonoBehaviour
                 }
             }
         }
-
         activeItems.Clear();
-
     }
 
     // ================== 事件处理 ==================
@@ -367,9 +327,7 @@ public class EquipmentUIController : MonoBehaviour
         PlayerPrefs.SetInt("SelectedEquipmentIndex", Index);
         selectedEquipmentIndex = Index;
         PlayerPrefs.Save();
-
         EquipmentData equipment = currentTab == ItemType.Weapon ? currentWeapons[Index] : currentStigmatas[Index] ;
-
         Debug.Log($"已选择装备: {equipment.Name}, ID: {equipment.Id}, Tab: {currentTab}");
     }
     // 显示材料详情（仅材料使用）
@@ -410,6 +368,7 @@ public class EquipmentUIController : MonoBehaviour
 
         selectedItem = null;
     }
+
     //更新材料UI
     void UpdateResourceDisplay()
     {

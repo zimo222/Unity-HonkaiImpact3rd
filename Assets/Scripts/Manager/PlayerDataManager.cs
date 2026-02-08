@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -897,7 +898,7 @@ public class PlayerDataManager : MonoBehaviour
         var stats = equipment.Stats;
 
         // 直接计算最大等级：20*大星级+5*小星级-10
-        int maxLevel = 20 * stats.Stars + 5 * stats.sStars - 10;
+        int maxLevel = 20 * stats.Stars + 5 * stats.SStars - 10;
 
         // 未满级就可以强化
         return stats.Level < maxLevel;
@@ -912,7 +913,7 @@ public class PlayerDataManager : MonoBehaviour
         var stats = equipment.Stats;
 
         // 计算是否满级
-        int maxLevel = 20 * stats.Stars + 5 * stats.sStars - 10;
+        int maxLevel = 20 * stats.Stars + 5 * stats.SStars - 10;
         bool isMaxLevel = stats.Level >= maxLevel;
 
         // 计算是否满星
@@ -931,7 +932,7 @@ public class PlayerDataManager : MonoBehaviour
         var stats = equipment.Stats;
 
         // 计算是否满级
-        int maxLevel = 20 * stats.Stars + 5 * stats.sStars - 10;
+        int maxLevel = 20 * stats.Stars + 5 * stats.SStars - 10;
         bool isMaxLevel = stats.Level >= maxLevel;
 
         // 计算是否满星
@@ -950,7 +951,7 @@ public class PlayerDataManager : MonoBehaviour
             return new EnhancementResult(false, "数据为空");
 
         // 直接判断是否可以强化
-        int maxLevel = 20 * equipment.Stats.Stars + 5 * equipment.Stats.sStars - 10;
+        int maxLevel = 20 * equipment.Stats.Stars + 5 * equipment.Stats.SStars - 10;
         if (equipment.Stats.Level >= maxLevel)
             return new EnhancementResult(false, "装备已满级，无法强化");
 
@@ -1000,11 +1001,15 @@ public class PlayerDataManager : MonoBehaviour
         equipment.Stats.Exp = currentExp;
 
         // 升级带来的属性成长（每升一级，攻击+5%，生命+3%）
+        /*
         for (int i = 0; i < newLevel - initialLevel; i++)
         {
-            equipment.Stats.Attack = (int)(equipment.Stats.Attack * 1.05f);
+            equipment.Stats.Attack = (int)(equipment.Stats.Attack + 1);
             equipment.Stats.Health = (int)(equipment.Stats.Health * 1.03f);
         }
+        */
+        equipment.Stats.Attack += newLevel - initialLevel;
+        equipment.Stats.CritRate += (int)(newLevel / 5 - initialLevel / 5) * 0.01f;
 
         // === 5. 触发事件和保存 ===
         OnEquipmentChanged?.Invoke(equipment);
@@ -1024,7 +1029,7 @@ public class PlayerDataManager : MonoBehaviour
             return new EvolutionResult(false, "数据为空");
 
         // 直接判断是否可以进化
-        int maxLevel = 20 * equipment.Stats.Stars + 5 * equipment.Stats.sStars - 10;
+        int maxLevel = 20 * equipment.Stats.Stars + 5 * equipment.Stats.SStars - 10;
         if (equipment.Stats.Level < maxLevel)
             return new EvolutionResult(false, "装备未满级，无法进化");
 
@@ -1051,13 +1056,13 @@ public class PlayerDataManager : MonoBehaviour
         int oldStars = equipment.Stats.Stars;
 
         // 小星级+1
-        equipment.Stats.sStars++;
+        equipment.Stats.SStars++;
 
         // 如果小星级满3，进位到大星级
-        if (equipment.Stats.sStars >= 3)
+        if (equipment.Stats.SStars >= 3)
         {
             equipment.Stats.Stars++;
-            equipment.Stats.sStars = 0;
+            equipment.Stats.SStars = 0;
         }
 
         // 进化后等级重置为1，经验清零
@@ -1083,8 +1088,9 @@ public class PlayerDataManager : MonoBehaviour
         var result = new List<MaterialData>();
         if (equipment == null || CurrentPlayerData == null) return result;
 
+        int maxLevel = 20 * equipment.Stats.Stars + 5 * equipment.Stats.SStars - 10;
         // 计算到下一级还需要多少经验
-        int expNeeded = equipment.Stats.Level * 100 - equipment.Stats.Exp;
+        int expNeeded = equipment.Stats.Level * 100 - equipment.Stats.Exp + (maxLevel - 1 + equipment.Stats.Level + 1) * (maxLevel - 1 - equipment.Stats.Level) * 50;
         if (expNeeded <= 0) return result;
 
         // 按经验值从高到低排序材料
@@ -1102,7 +1108,6 @@ public class PlayerDataManager : MonoBehaviour
                 Mathf.CeilToInt((float)remainingExp / material.Num),
                 material.Count
             );
-
             if (neededCount > 0)
             {
                 result.Add(new MaterialData(material.Id, material.Name, material.Stars, neededCount, material.Num));
@@ -1111,7 +1116,6 @@ public class PlayerDataManager : MonoBehaviour
 
             if (remainingExp <= 0) break;
         }
-
         return result;
     }
 

@@ -56,8 +56,8 @@ public class PlayerData
         LastLoginTime = DateTime.Now;
 
         // 初始化默认资源
-        Crystals = 500;
-        Coins = 3000;
+        Crystals = 50000;
+        Coins = 300000000;
         Stamina = Level + 80;
 
         // 初始化默认角色和装备和材料
@@ -124,7 +124,6 @@ public class PlayerData
     /// </summary>
     private void InitializeDefaultEquipment()
     {
-        Debug.Log("111");
         // 添加一些初始武器
         WeaponBag.Add(new WeaponData(
             id: "WEAP_001", name: "焢煌之钥", type: WeaponType.DualPistols,
@@ -482,7 +481,7 @@ public class EquipmentData
         Id = id; Name = name;
         Stats = new CharacterStats()
         {
-            Element = element, Level = 1, Stars = stars, MaxStars = maxstars,
+            Element = element, Level = 1, Stars = stars, MaxStars = maxstars, SStars = 0, Fragments = 0,
             Health = health, Attack = attack, Defence = defence,
             Energy = energy, CritRate = critRate, CritDamage = critDamage, ElementBonus = elementBonus
         };
@@ -572,7 +571,7 @@ public struct CharacterStats
 
     public int Stars;                                // 星级
     public int MaxStars;                             // 最大星级
-    public int sStars;                               // 小星级
+    public int SStars;                               // 小星级
     public int Fragments;                            // 碎片
 
     public int Health;                               // 生命值
