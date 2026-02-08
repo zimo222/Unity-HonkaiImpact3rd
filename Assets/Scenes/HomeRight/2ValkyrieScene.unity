@@ -16191,7 +16191,7 @@ MonoBehaviour:
   panelToOpen: {fileID: 0}
   closeOtherPanelsOnOpen: 0
   fadeDuration: 0.3
-  targetSceneName: HomeScene
+  targetSceneName: LastScene
   sceneLoadMode: 0
   onCustomEvent:
     m_PersistentCalls:

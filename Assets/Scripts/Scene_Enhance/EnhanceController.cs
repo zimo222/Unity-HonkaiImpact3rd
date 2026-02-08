@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 // Controller层：处理业务逻辑，连接Model和View
-public class EquipmentDetailController : MonoBehaviour
+public class EnhanceController : MonoBehaviour
 {
     // ================== 依赖注入 ==================
     [Header("View引用")]
@@ -37,9 +37,6 @@ public class EquipmentDetailController : MonoBehaviour
 
         // 初始化UI
         InitializeUI();
-
-        // 绑定事件
-        BindEvents();
     }
 
     void LoadData()
@@ -86,27 +83,5 @@ public class EquipmentDetailController : MonoBehaviour
             }
             view.UpdatePlayerResources(playerData);
         }
-    }
-
-    // ================== 按钮事件处理方法 ==================
-    void BindEvents()
-    {
-        // 绑定按钮事件
-        if (enhanceButton != null)
-            enhanceButton.onClick.AddListener(OnEnhanceClicked);
-        if (evolveButton != null)
-            evolveButton.onClick.AddListener(OnEvolveClicked);
-    }
-    // ================== 按钮事件处理方法 ==================
-    void OnEnhanceClicked()
-    {
-        SceneDataManager.Instance.PushCurrentScene();
-        SceneManager.LoadScene("EnhanceScene");
-    }
-
-    void OnEvolveClicked()
-    {
-        SceneDataManager.Instance.PushCurrentScene();
-        SceneManager.LoadScene("EvolveScene");
     }
 }

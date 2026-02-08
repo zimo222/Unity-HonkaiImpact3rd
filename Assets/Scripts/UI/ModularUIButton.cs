@@ -218,11 +218,15 @@ public class ModularUIButton : MonoBehaviour
 
         // 在实际项目中，这里可能先保存游戏数据
         // SaveSystem.SaveGame();
-
-        if (targetSceneName == "LastScene")
-            targetSceneName = PlayerPrefs.GetString("LastScene");
-            Debug.Log(targetSceneName);
-
+        if(targetSceneName == "HomeScene")
+        {
+            SceneDataManager.Instance.ClearHistory();
+        }else if (targetSceneName == "LastScene")
+        {
+            targetSceneName = SceneDataManager.Instance.PopPreviousScene();
+        }else{
+            SceneDataManager.Instance.PushCurrentScene();
+        }
         SceneManager.LoadScene(targetSceneName, sceneLoadMode);
     }
 

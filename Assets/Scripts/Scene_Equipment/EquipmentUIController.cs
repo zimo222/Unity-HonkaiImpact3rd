@@ -351,7 +351,7 @@ public class EquipmentUIController : MonoBehaviour
         SaveEquipmentSelection(Index);
 
         // 跳转到装备详情场景
-        PlayerPrefs.SetString("LastScene", "3EquipmentScene");
+        SceneDataManager.Instance.PushCurrentScene();
         SceneManager.LoadScene("EquipmentDetailScene");
     }
     // 材料项点击 - 保持原有逻辑
