@@ -110,7 +110,7 @@ public class EquipmentUIController : MonoBehaviour
 
             if (statusOrderA != statusOrderB)
                 return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
-            return 0;
+            return b.Stats.Level.CompareTo(a.Stats.Level);
         });
         currentStigmatas.Sort((a, b) =>
         {
@@ -324,6 +324,7 @@ public class EquipmentUIController : MonoBehaviour
     void SaveEquipmentSelection(int Index)
     {
         // 使用PlayerPrefs（如果需要持久化）
+        PlayerPrefs.SetInt("isWeapon", (currentTab == ItemType.Weapon ? 1 : 0));
         PlayerPrefs.SetInt("SelectedEquipmentIndex", Index);
         selectedEquipmentIndex = Index;
         PlayerPrefs.Save();

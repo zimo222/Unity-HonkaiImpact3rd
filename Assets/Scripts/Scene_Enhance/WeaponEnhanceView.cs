@@ -1,11 +1,14 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static PlayerDataManager;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 
-public class EnhanceView : MonoBehaviour
+public class WeaponEnhanceView : MonoBehaviour
 {
     // ========================= 基础玩家信息UI引用 =========================
     [Header("资源信息")]
@@ -14,6 +17,7 @@ public class EnhanceView : MonoBehaviour
     public TMP_Text crystalsText;
 
     // ================== UI引用 ==================
+
     [Header("UI组件")]
     [Header("左上")]
     public Image typeImage;
@@ -31,6 +35,9 @@ public class EnhanceView : MonoBehaviour
     public TMP_Text addStat1Text;
     public TMP_Text stat2Text;
     public TMP_Text addStat2Text;
+    [Header("面板")]
+    [SerializeField] public GameObject EnhanceResultPanel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,13 +54,13 @@ public class EnhanceView : MonoBehaviour
     // 更新装备信息
     public void UpdateWeaponInfo(WeaponData weapon, List<MaterialData> costMaterial)
     {
+        EnhanceResultPanel.SetActive(false);
         if (weapon == null) return;
         // 基本信息
         if (typeImage != null) typeImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/Type_{weapon.Type}");
         if (nameText != null) nameText.text = weapon.Name;
         if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{weapon.Stats.Stars}S{weapon.Stats.MaxStars}");
         if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
-
 
         int expGain = 0, expg = 0;
         foreach (MaterialData mat in costMaterial)
@@ -81,23 +88,6 @@ public class EnhanceView : MonoBehaviour
         if (addStat1Text != null) addStat1Text.text = $"[+{(toLevel - weapon.Stats.Level)}]";
         if (stat2Text != null) stat2Text.text = ((int)(weapon.CritRate * 100)).ToString();
         if (addStat2Text != null) addStat2Text.text = $"[+{(toLevel / 5 - weapon.Stats.Level / 5)}]";
-        /*
-        if (typeText != null) typeText.text = GetWeaponTypeName(weapon.Type);
-
-        if (descriptionText != null) descriptionText.text = weapon.TextStats.Description;
-
-        Debug.Log(weapon.Stats.Stars);
-        Debug.Log(weapon.Stats.SStars);
-        // 装备状态
-        bool isEquipped = weapon.EquippedToCharacterIndex >= 0;
-        if (equippedBadge != null) equippedBadge.SetActive(isEquipped);
-        if (equippedCharacterText != null)
-        {
-            equippedCharacterText.text = isEquipped
-                ? $"已装备给: 角色{weapon.EquippedToCharacterIndex + 1}"
-                : "未装备";
-        }
-        */
     }
 
     // 更新玩家资源
@@ -107,5 +97,50 @@ public class EnhanceView : MonoBehaviour
         if (staminaText != null) staminaText.text = playerData.Stamina.ToString();
         if (coinsText != null) coinsText.text = playerData.Coins.ToString();
         if (crystalsText != null) crystalsText.text = playerData.Crystals.ToString();
+    }
+
+    // 显示结果面板的方法
+    // 修改方法签名，使用 object 而不是 dynamic
+    public void ShowResultPanel(EnhancementResult result)
+    {
+        if (EnhanceResultPanel != null)
+        {
+            EnhanceResultPanel.SetActive(true);
+            TMP_Text resultText = EnhanceResultPanel.GetComponentInChildren<TMP_Text>();
+            if (resultText != null)
+            {
+                // 使用反射获取 success 属性
+                try
+                {
+                    resultText.text = result.success == true ? "强化成功！" : result.message;
+                }
+                catch (Exception e)
+                {
+                    resultText.text = $"错误: {e.Message}";
+                    Debug.LogError($"反射获取结果属性失败: {e.Message}");
+                }
+            }
+
+            Button closeButton = EnhanceResultPanel.GetComponentInChildren<Button>();
+            if (closeButton != null)
+            {
+                closeButton.onClick.RemoveAllListeners();
+                closeButton.onClick.AddListener(() => {
+                    EnhanceResultPanel.SetActive(false);
+                    SceneManager.LoadScene(SceneDataManager.Instance.PopPreviousScene());
+                });
+            }
+        }
+    }
+
+    // 延迟隐藏面板的协程
+    public IEnumerator HidePanelAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (EnhanceResultPanel != null && EnhanceResultPanel.activeSelf)
+        {
+            EnhanceResultPanel.SetActive(false);
+            SceneManager.LoadScene(SceneDataManager.Instance.PopPreviousScene());
+        }
     }
 }

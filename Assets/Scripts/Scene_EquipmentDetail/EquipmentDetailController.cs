@@ -7,7 +7,7 @@ public class EquipmentDetailController : MonoBehaviour
 {
     // ================== 依赖注入 ==================
     [Header("View引用")]
-    [SerializeField] private EquipmentDetailView view;
+    [SerializeField] private EquipmentDetailView viewa;
 
     // =========================  按钮引用 (可选)   =========================
     [Header("按钮引用 (如果需要通过脚本访问它们)")]
@@ -19,7 +19,7 @@ public class EquipmentDetailController : MonoBehaviour
     [SerializeField] private Button evolveButton;
 
     // ================== 数据 ==================
-    private EquipmentData currentEquipment;
+    private bool isWeapon;
     private WeaponData currentWeapon;
     private StigmataData currentStigmata;
     private PlayerData playerData;
@@ -34,10 +34,8 @@ public class EquipmentDetailController : MonoBehaviour
     {
         // 加载数据
         LoadData();
-
         // 初始化UI
         InitializeUI();
-
         // 绑定事件
         BindEvents();
     }
@@ -54,37 +52,48 @@ public class EquipmentDetailController : MonoBehaviour
             // 测试数据
             playerData = new PlayerData("测试玩家");
         }
-
-        // 获取选中的装备
-        currentEquipment = EquipmentUIController.GetSelectedEquipment();
-
-        if (currentEquipment == null)
+        if(PlayerPrefs.GetInt("isWeapon") == 1)
         {
-            Debug.LogError("未找到选择的装备");
-            return;
+            isWeapon = true;
+            currentWeapon = playerData.WeaponBag[PlayerPrefs.GetInt("SelectedEquipmentIndex")];
+            if (currentWeapon == null)
+            {
+                Debug.LogError("未找到选择的装备");
+                return;
+            }
+            Debug.Log($"已选择装备: {currentWeapon.Name}");
         }
-
-        Debug.Log($"已选择装备: {currentEquipment.Name}");
+        else
+        {
+            isWeapon = false;
+            currentStigmata = playerData.StigmataBag[PlayerPrefs.GetInt("SelectedEquipmentIndex")];
+            if (currentStigmata == null)
+            {
+                Debug.LogError("未找到选择的装备");
+                return;
+            }
+            Debug.Log($"已选择装备: {currentStigmata.Name}");
+        }
     }
 
     void InitializeUI()
     {
         // 更新View
-        if (view != null)
+        if (viewa != null)
         {
-            if (currentEquipment is WeaponData weapon)
+            if (isWeapon)
             {
                 // 处理武器
-                Debug.Log($"这是武器: {weapon.Name}, 类型: {weapon.Type}");
-                view.UpdateWeaponInfo(weapon);
+                Debug.Log($"这是武器: {currentWeapon.Name}, 类型: {currentWeapon.Type}");
+                viewa.UpdateWeaponInfo(currentWeapon);
+                viewa.UpdatePlayerResources(playerData);
             }
-            else if (currentEquipment is StigmataData stigmata)
+            else
             {
                 // 处理圣痕
-                Debug.Log($"这是圣痕: {stigmata.Name}, 位置: {stigmata.Position}");
+                Debug.Log($"这是圣痕: {currentStigmata.Name}, 位置: {currentStigmata.Position}");
                 //ProcessStigmata(stigmata);
             }
-            view.UpdatePlayerResources(playerData);
         }
     }
 
@@ -107,6 +116,13 @@ public class EquipmentDetailController : MonoBehaviour
     void OnEvolveClicked()
     {
         SceneDataManager.Instance.PushCurrentScene();
-        SceneManager.LoadScene("EvolveScene");
+        if (isWeapon)
+        {
+            SceneManager.LoadScene("WeaponEvolveScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("StigmataEvolveScene");
+        }
     }
 }

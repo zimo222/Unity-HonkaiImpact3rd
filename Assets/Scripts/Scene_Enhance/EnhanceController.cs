@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +10,7 @@ public class EnhanceController : MonoBehaviour
 {
     // ================== 依赖注入 ==================
     [Header("View引用")]
-    [SerializeField] private EnhanceView view;
+    [SerializeField] private WeaponEnhanceView viewWeapon;
 
     // =========================  按钮引用 (可选)   =========================
     [Header("按钮引用 (如果需要通过脚本访问它们)")]
@@ -20,7 +21,9 @@ public class EnhanceController : MonoBehaviour
     [SerializeField] private Button enhanceButton;
 
     // ================== 数据 ==================
+    private bool isWeapon;
     private WeaponData currentWeapon;
+    private StigmataData currentStigmata;
     private List<MaterialData> costMaterial; 
     private PlayerData playerData;
 
@@ -55,17 +58,28 @@ public class EnhanceController : MonoBehaviour
             // 测试数据
             playerData = new PlayerData("测试玩家");
         }
-
-        // 获取选中的装备
-        currentWeapon = playerData.WeaponBag[PlayerPrefs.GetInt("SelectedEquipmentIndex")];
-
-        if (currentWeapon == null)
+        if (PlayerPrefs.GetInt("isWeapon") == 1)
         {
-            Debug.LogError("未找到选择的装备");
-            return;
+            isWeapon = true;
+            currentWeapon = playerData.WeaponBag[PlayerPrefs.GetInt("SelectedEquipmentIndex")];
+            if (currentWeapon == null)
+            {
+                Debug.LogError("未找到选择的装备");
+                return;
+            }
+            Debug.Log($"已选择装备: {currentWeapon.Name}");
         }
-
-        Debug.Log($"已选择装备: {currentWeapon.Name}");
+        else
+        {
+            isWeapon = false;
+            currentStigmata = playerData.StigmataBag[PlayerPrefs.GetInt("SelectedEquipmentIndex")];
+            if (currentStigmata == null)
+            {
+                Debug.LogError("未找到选择的装备");
+                return;
+            }
+            Debug.Log($"已选择装备: {currentStigmata.Name}");
+        }
     }
 
     void InitializeEnhance()
@@ -75,26 +89,26 @@ public class EnhanceController : MonoBehaviour
 
     void InitializeUI()
     {
-        // 更新View
-        if (view != null)
+        if (isWeapon)
         {
-            if (currentWeapon is WeaponData weapon)
-            {
-                // 处理武器
-                Debug.Log($"这是武器: {weapon.Name}, 类型: {weapon.Type}");
-                view.UpdateWeaponInfo(weapon, costMaterial);
-            }
-            view.UpdatePlayerResources(playerData);
+            // 处理武器
+            Debug.Log($"这是武器: {currentWeapon.Name}, 类型: {currentWeapon.Type}");
+            viewWeapon.UpdateWeaponInfo(currentWeapon, costMaterial);
         }
+        viewWeapon.UpdatePlayerResources(playerData);
     }
 
     void StartEnhance()
     {
         var result = PlayerDataManager.Instance.EnhanceEquipment(currentWeapon, costMaterial, PlayerDataManager.Instance.CalculateEnhanceCoinCost(costMaterial));
         Debug.Log(result);
-        if(result.success)
+        //添加部分
+        if(isWeapon)
         {
-            SceneManager.LoadScene(SceneDataManager.Instance.PopPreviousScene());
+            // 显示结果面板
+            viewWeapon.ShowResultPanel(result);
+            // 一秒后自动关闭面板
+            StartCoroutine(viewWeapon.HidePanelAfterDelay(1.5f));
         }
     }
 }
