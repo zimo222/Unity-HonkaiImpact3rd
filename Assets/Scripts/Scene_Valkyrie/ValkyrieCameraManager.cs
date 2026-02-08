@@ -112,6 +112,16 @@ public class ValkyrieCameraManager : MonoBehaviour
         }
     }
 
+    public void SetPlayerModelFromSpawned()
+    {
+        GameObject spawnedModel = GameObject.Find("Spawned_Model");
+        if (spawnedModel != null)
+        {
+            playerModelTransform = spawnedModel.transform;
+            Debug.Log($"已设置玩家模型: {spawnedModel.name}");
+        }
+    }
+
     /// <summary>
     /// 根据presetCount调整数组大小
     /// </summary>

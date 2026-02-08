@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -75,6 +76,13 @@ public class ValkyrieUIController : MonoBehaviour
     public TMP_Text StigmataBOTLevelText;
 
 
+
+    // 生成的位置和旋转
+    [SerializeField] private string modelPath = "Prefabs/Character/";
+    [SerializeField] private Vector3 spawnPosition = new Vector3(-40, 120, 500);
+    [SerializeField] private Quaternion spawnRotation = Quaternion.identity;
+    // 已生成的模型引用
+    private GameObject spawnedModel;
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
@@ -163,6 +171,8 @@ public class ValkyrieUIController : MonoBehaviour
             coinsText.text = currentPlayerData.Coins.ToString();
         if (crystalsText != null)
             crystalsText.text = currentPlayerData.Crystals.ToString();
+
+        SpawnModel(currentPlayerData.Characters[currentValkyrie].Id);
 
         string[] Name = currentPlayerData.Characters[currentValkyrie].Name.Split('-');
         //UI1
@@ -356,5 +366,43 @@ public class ValkyrieUIController : MonoBehaviour
 
         // 强制重建布局
         LayoutRebuilder.ForceRebuildLayoutImmediate(valkyrieListContent as RectTransform);
+    }
+
+    public void SpawnModel(string id)
+    {
+        // 如果已有模型存在，先销毁
+        if (spawnedModel != null)
+        {
+            Destroy(spawnedModel);
+        }
+
+        // 从Resources文件夹加载模型预设
+        GameObject modelPrefab = Resources.Load<GameObject>(modelPath + id);
+
+        if (modelPrefab != null)
+        {
+            // 实例化模型
+            spawnedModel = Instantiate(modelPrefab, spawnPosition, spawnRotation);
+            spawnedModel.name = "Spawned_Model";
+
+            // 可选：将模型设置为当前游戏对象的子物体
+            // spawnedModel.transform.parent = transform;
+
+            Debug.Log($"成功生成模型: {modelPath}");
+            ValkyrieCameraManager cameraManager = FindObjectOfType<ValkyrieCameraManager>();
+            if (cameraManager != null)
+            {
+                DOVirtual.DelayedCall(0.3f, () => {
+                    Debug.Log("1秒后执行");
+                    cameraManager.SetPlayerModelFromSpawned();
+                });
+                
+                Debug.Log("成了");
+            }
+        }
+        else
+        {
+            Debug.LogError($"无法从路径加载模型: {modelPath}");
+        }
     }
 }

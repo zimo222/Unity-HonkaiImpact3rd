@@ -3192,42 +3192,42 @@ MonoBehaviour:
   - presetName: 
     cameraPosition: {x: -37, y: 70, z: 0}
     cameraRotation: {x: 0, y: 0, z: 0}
-    playerRotation: {x: 0, y: 0, z: 0}
+    playerRotation: {x: 0, y: 180, z: 0}
     uiModuleStates: 010000000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
     cameraPosition: {x: -16, y: 122, z: 60}
     cameraRotation: {x: -0.5, y: 0, z: 0}
-    playerRotation: {x: 0, y: -17, z: 0}
+    playerRotation: {x: 0, y: 163, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
     cameraPosition: {x: -16, y: 122, z: 60}
     cameraRotation: {x: -0.5, y: 0, z: 0}
-    playerRotation: {x: 0, y: -17, z: 0}
+    playerRotation: {x: 0, y: 163, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
     cameraPosition: {x: -25, y: 40, z: 160}
     cameraRotation: {x: -0.5, y: 0, z: -2}
-    playerRotation: {x: 0, y: -40, z: 0}
+    playerRotation: {x: 0, y: 140, z: 0}
     uiModuleStates: 000100010000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: 36, y: 105, z: 200}
+    cameraPosition: {x: -30, y: 105, z: 200}
     cameraRotation: {x: -3, y: 0, z: 0}
-    playerRotation: {x: 0, y: -180, z: 0}
+    playerRotation: {x: 0, y: 0, z: 0}
     uiModuleStates: 000100000100
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
     cameraPosition: {x: -16, y: 122, z: 60}
     cameraRotation: {x: -0.5, y: 0, z: 0}
-    playerRotation: {x: 0, y: -17, z: 0}
+    playerRotation: {x: 0, y: 163, z: 0}
     uiModuleStates: 000100000001
     transitionTime: 0.5
     moveEase: 0
@@ -6562,7 +6562,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &812929337
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11232,6 +11232,9 @@ MonoBehaviour:
   StigmataBOTNameText: {fileID: 936831493}
   StigmataBOTStarImage: {fileID: 1759165571}
   StigmataBOTLevelText: {fileID: 44598739}
+  modelPath: Prefabs/Character/
+  spawnPosition: {x: -40, y: -220, z: 500}
+  spawnRotation: {x: 0, y: 180, z: 0, w: 1}
 --- !u!225 &1344939567
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -15404,7 +15407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1586442804
 Transform:
   m_ObjectHideFlags: 0
