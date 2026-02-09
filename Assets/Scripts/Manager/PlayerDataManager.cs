@@ -657,7 +657,7 @@ public class PlayerDataManager : MonoBehaviour
 
             if (statusOrderA != statusOrderB)
                 return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
-            return 0;
+            return b.Stats.Level.CompareTo(a.Stats.Level);
         });
         CurrentPlayerData.MaterialBag.Sort((a, b) =>
         {
@@ -1044,11 +1044,21 @@ public class PlayerDataManager : MonoBehaviour
             equipment.Stats.Health = (int)(equipment.Stats.Health * 1.03f);
         }
         */
-        equipment.Stats.Attack += newLevel - initialLevel;
-        equipment.Stats.CritRate += (int)(newLevel / 5 - initialLevel / 5) * 0.01f;
+        if(equipment is WeaponData)
+        {
+            equipment.Stats.Attack += newLevel - initialLevel;
+            equipment.Stats.CritRate += (int)(newLevel / 5 - initialLevel / 5) * 0.01f;
+        }
+        else
+        {
+            if (equipment.Stats.Health != 0) equipment.Stats.Health += (newLevel - initialLevel) * 2;
+            if (equipment.Stats.Attack != 0) equipment.Stats.Attack += newLevel - initialLevel;
+            if (equipment.Stats.Defence != 0) equipment.Stats.Defence += newLevel - initialLevel;
+            if (equipment.Stats.CritRate != 0) equipment.Stats.CritRate += (int)(newLevel / 5 - initialLevel / 5) * 0.01f;
+        }
 
-        // === 5. 触发事件和保存 ===
-        OnEquipmentChanged?.Invoke(equipment);
+            // === 5. 触发事件和保存 ===
+            OnEquipmentChanged?.Invoke(equipment);
         SortEquipment();
         if(equipment is WeaponData now1)
         {

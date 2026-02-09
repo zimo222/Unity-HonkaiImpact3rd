@@ -147,7 +147,7 @@ public class EquipmentDetailController : MonoBehaviour
     // ================== 按钮事件处理方法 ==================
     void OnEnhanceClicked()
     {
-        Debug.Log("强化");
+
         SceneDataManager.Instance.PushCurrentScene();
         SceneManager.LoadScene("EnhanceScene");
     }
