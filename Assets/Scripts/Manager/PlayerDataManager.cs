@@ -1134,11 +1134,22 @@ public class PlayerDataManager : MonoBehaviour
         equipment.Stats.Attack = (int)(equipment.Stats.Attack * 1.10f);
         equipment.Stats.Health = (int)(equipment.Stats.Health * 1.05f);
         */
-        equipment.Stats.Attack += 10;
-        equipment.Stats.CritRate += 2;
+        if(equipment is WeaponData)
+        {
+            equipment.Stats.Attack += 10;
+            equipment.Stats.CritRate += 0.02f;
+        }
+        else
+        {
+            if (equipment.Stats.Health != 0) equipment.Stats.Health += 20;
+            if (equipment.Stats.Attack != 0) equipment.Stats.Attack += 10;
+            if (equipment.Stats.Defence != 0) equipment.Stats.Defence += 10;
+            if (equipment.Stats.CritRate != 0) equipment.Stats.CritRate += 0.02f;
+        }
 
-        // === 3. 触发事件和保存 ===
-        OnEquipmentChanged?.Invoke(equipment);
+
+            // === 3. 触发事件和保存 ===
+            OnEquipmentChanged?.Invoke(equipment);
         SortEquipment();
         if (equipment is WeaponData now1)
         {

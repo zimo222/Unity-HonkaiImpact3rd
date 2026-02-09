@@ -11,6 +11,9 @@ public class EvolveController : MonoBehaviour
     // ================== 依赖注入 ==================
     [Header("View引用")]
     [SerializeField] private WeaponEvolveView viewWeapon;
+    [SerializeField] private StigmataEvolveView viewStigmata;
+    [SerializeField] private GameObject canvasWeapon;
+    [SerializeField] private GameObject canvasStigmata;
 
     // =========================  按钮引用 (可选)   =========================
     [Header("按钮引用 (如果需要通过脚本访问它们)")]
@@ -37,12 +40,9 @@ public class EvolveController : MonoBehaviour
     {
         // 加载数据
         LoadData();
-
         InitializeEnhance();
-
         // 初始化UI
         InitializeUI();
-
         evolveButton.onClick.AddListener(StartEvolve);
     }
 
@@ -84,7 +84,7 @@ public class EvolveController : MonoBehaviour
 
     void InitializeEnhance()
     {
-        costMaterial = PlayerDataManager.Instance.GetEvolutionMaterials(currentWeapon);
+        costMaterial = PlayerDataManager.Instance.GetEvolutionMaterials((isWeapon ? currentWeapon : currentStigmata));
     }
 
     void InitializeUI()
@@ -93,14 +93,25 @@ public class EvolveController : MonoBehaviour
         {
             // 处理武器
             Debug.Log($"这是武器: {currentWeapon.Name}, 类型: {currentWeapon.Type}");
+            canvasWeapon.SetActive(true);
+            canvasStigmata.SetActive(false);
             viewWeapon.UpdateWeaponInfo(currentWeapon, costMaterial);
+            viewWeapon.UpdatePlayerResources(playerData);
         }
-        viewWeapon.UpdatePlayerResources(playerData);
+        else
+        {
+            // 处理武器
+            Debug.Log($"这是圣痕: {currentStigmata.Name}, 类型: {currentStigmata.Position}");
+            canvasWeapon.SetActive(false);
+            canvasStigmata.SetActive(true);
+            viewStigmata.UpdateStigmataInfo(currentStigmata, costMaterial);
+            viewStigmata.UpdatePlayerResources(playerData);
+        }
     }
 
     void StartEvolve()
     {
-        var result = PlayerDataManager.Instance.EvolveEquipment(currentWeapon, costMaterial, PlayerDataManager.Instance.CalculateEnhanceCoinCost(costMaterial));
+        var result = PlayerDataManager.Instance.EvolveEquipment((isWeapon ? currentWeapon : currentStigmata), costMaterial, PlayerDataManager.Instance.CalculateEnhanceCoinCost(costMaterial));
         Debug.Log(result);
         //添加部分
         if(isWeapon)
@@ -109,6 +120,13 @@ public class EvolveController : MonoBehaviour
             viewWeapon.ShowResultPanel(result);
             // 一秒后自动关闭面板
             StartCoroutine(viewWeapon.HidePanelAfterDelay(1.5f));
+        }
+        else
+        {
+            // 显示结果面板
+            viewStigmata.ShowResultPanel(result);
+            // 一秒后自动关闭面板
+            StartCoroutine(viewStigmata.HidePanelAfterDelay(1.5f));
         }
     }
 }
