@@ -8,7 +8,11 @@ public class EquipmentDetailController : MonoBehaviour
 {
     // ================== 依赖注入 ==================
     [Header("View引用")]
-    [SerializeField] private EquipmentDetailView viewa;
+    [SerializeField] private WeaponDetailView viewa;
+    [SerializeField] private StigmataDetailView viewb;
+    [Header("Canvas引用")]
+    [SerializeField] private GameObject canvasa;
+    [SerializeField] private GameObject canvasb;
 
     // =========================  按钮引用 (可选)   =========================
     [Header("按钮引用 (如果需要通过脚本访问它们)")]
@@ -86,14 +90,19 @@ public class EquipmentDetailController : MonoBehaviour
             {
                 // 处理武器
                 Debug.Log($"这是武器: {currentWeapon.Name}, 类型: {currentWeapon.Type}");
+                canvasa.SetActive(true);
+                canvasb.SetActive(false);
                 viewa.UpdateWeaponInfo(currentWeapon);
                 viewa.UpdatePlayerResources(playerData);
             }
             else
             {
                 // 处理圣痕
-                Debug.Log($"这是圣痕: {currentStigmata.Name}, 位置: {currentStigmata.Position}");
-                //ProcessStigmata(stigmata);
+                Debug.Log($"这是圣s痕: {currentStigmata.Name}, 位置: {currentStigmata.Position}");
+                canvasa.SetActive(false);
+                canvasb.SetActive(true);
+                viewb.UpdateStigmataInfo(currentStigmata);
+                viewb.UpdatePlayerResources(playerData);
             }
         }
     }
@@ -138,6 +147,7 @@ public class EquipmentDetailController : MonoBehaviour
     // ================== 按钮事件处理方法 ==================
     void OnEnhanceClicked()
     {
+        Debug.Log("强化");
         SceneDataManager.Instance.PushCurrentScene();
         SceneManager.LoadScene("EnhanceScene");
     }

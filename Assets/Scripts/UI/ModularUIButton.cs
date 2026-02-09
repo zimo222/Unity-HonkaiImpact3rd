@@ -223,6 +223,8 @@ public class ModularUIButton : MonoBehaviour
             SceneDataManager.Instance.ClearHistory();
         }else if (targetSceneName == "LastScene")
         {
+            if(SceneManager.GetActiveScene().name == "3EquipmentScene")
+                EquipmentObjectPool.Instance.ClearAllPools();
             targetSceneName = SceneDataManager.Instance.PopPreviousScene();
         }else{
             SceneDataManager.Instance.PushCurrentScene();

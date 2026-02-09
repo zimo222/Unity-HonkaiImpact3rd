@@ -64,7 +64,7 @@ public class SceneDataManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
 
             // 初始化时记录当前场景
-            RecordCurrentScene();
+            //RecordCurrentScene();
 
             Debug.Log("SceneDataManager 初始化完成");
         }

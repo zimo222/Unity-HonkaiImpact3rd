@@ -312,6 +312,7 @@ public class EquipmentUIController : MonoBehaviour
         SaveEquipmentSelection(Index);
 
         // 跳转到装备详情场景
+        EquipmentObjectPool.Instance.ClearAllPools();
         SceneDataManager.Instance.PushCurrentScene();
         SceneManager.LoadScene("EquipmentDetailScene");
     }
@@ -391,11 +392,5 @@ public class EquipmentUIController : MonoBehaviour
     public static EquipmentData GetSelectedEquipment()
     {
         return currentTab == ItemType.Weapon ? currentWeapons[selectedEquipmentIndex] : currentStigmatas[selectedEquipmentIndex];
-    }
-
-    // 新增：在销毁时清理对象池
-    void OnDestroy()
-    {
-        EquipmentObjectPool.Instance.ClearAllPools();
     }
 }

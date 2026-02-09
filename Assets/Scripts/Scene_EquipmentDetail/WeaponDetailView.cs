@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class EquipmentDetailView : MonoBehaviour
+public class WeaponDetailView : MonoBehaviour
 {
     // ========================= 基础玩家信息UI引用 =========================
     [Header("资源信息")]
@@ -115,7 +115,7 @@ public class EquipmentDetailView : MonoBehaviour
         }
         else
         {
-            Debug.LogError($"无法从路径加载模型: {modelPath}");
+            Debug.Log($"无法从路径加载模型: {modelPath}");
         }
     }
 }
