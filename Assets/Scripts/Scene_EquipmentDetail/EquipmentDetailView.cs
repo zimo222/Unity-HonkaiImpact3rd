@@ -32,7 +32,7 @@ public class EquipmentDetailView : MonoBehaviour
     public TMP_Text stat2Text;
 
     // 生成的位置和旋转
-    [SerializeField] private string modelPath = "Prefabs/";
+    [SerializeField] private string modelPath = "Prefabs/Weapon/";
     [SerializeField] private Vector3 spawnPosition = new Vector3(0, 0, 500);
     [SerializeField] private Quaternion spawnRotation = Quaternion.identity;
     // 已生成的模型引用
@@ -100,7 +100,7 @@ public class EquipmentDetailView : MonoBehaviour
         }
 
         // 从Resources文件夹加载模型预设
-        GameObject modelPrefab = Resources.Load<GameObject>(modelPath + Weapon.Id);
+        GameObject modelPrefab = Resources.Load<GameObject>(modelPath + Weapon.Id + Weapon.Stats.SStars.ToString());
 
         if (modelPrefab != null)
         {

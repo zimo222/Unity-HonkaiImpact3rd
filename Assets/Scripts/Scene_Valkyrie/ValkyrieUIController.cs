@@ -79,7 +79,7 @@ public class ValkyrieUIController : MonoBehaviour
 
     // 生成的位置和旋转
     [SerializeField] private string modelPath = "Prefabs/Character/";
-    [SerializeField] private Vector3 spawnPosition = new Vector3(-40, 120, 500);
+    [SerializeField] private Vector3 spawnPosition = new Vector3(-37, 67, 5);
     [SerializeField] private Quaternion spawnRotation = Quaternion.identity;
     // 已生成的模型引用
     private GameObject spawnedModel;

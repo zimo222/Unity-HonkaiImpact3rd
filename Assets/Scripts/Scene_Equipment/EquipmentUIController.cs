@@ -260,6 +260,7 @@ public class EquipmentUIController : MonoBehaviour
     // 创建材料项
     void CreateMaterialItem(MaterialData material)
     {
+        if (material.Count <= 0) return;
         if (materialItemPrefab == null || equipmentListContent == null) return;
         GameObject itemObj = EquipmentObjectPool.Instance.GetObject(
             materialItemPrefab.name,

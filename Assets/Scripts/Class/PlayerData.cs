@@ -267,7 +267,7 @@ public class PlayerData
             name: "相转移镜面",
             stars: "4S",
             count: 10,
-            num: 1500,
+            num: 100000,
             introduction: "帮助某些装备进化的通用进化材料，主线剧情关卡随机掉落。",
             description: "利用相转移技术制作的镜面，能阻挡所有的实弹武器。"
         ));

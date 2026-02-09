@@ -1084,7 +1084,13 @@ public class PlayerDataManager : MonoBehaviour
         if (CurrentPlayerData.Coins < coinsSpent)
             return new EvolutionResult(false, $"金币不足，需要{coinsSpent}金币");
 
-        // ... 材料检查代码同上 ...
+        // 检查材料是否足够
+        foreach (var material in materials)
+        {
+            var playerMaterial = CurrentPlayerData.MaterialBag.Find(m => m.Id == material.Id);
+            if (playerMaterial == null || playerMaterial.Count < material.Count)
+                return new EvolutionResult(false, $"材料 {material.Name} 不足");
+        }
 
         // === 1. 消耗资源 ===
         CurrentPlayerData.Coins -= coinsSpent;
@@ -1158,6 +1164,8 @@ public class PlayerDataManager : MonoBehaviour
 
         foreach (var material in sortedMaterials)
         {
+            if (!new List<string> { "MATE_005", "MATE_006", "MATE_007", "MATE_008" }.Contains(material.Id))
+                continue;
             if (material.Count <= 0 || remainingExp <= 0) continue;
 
             // 需要多少个这种材料

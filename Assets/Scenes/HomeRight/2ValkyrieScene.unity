@@ -3190,42 +3190,42 @@ MonoBehaviour:
   - {fileID: 2080684992}
   cameraPresets:
   - presetName: 
-    cameraPosition: {x: -37, y: 70, z: 0}
+    cameraPosition: {x: 0, y: 0, z: 0}
     cameraRotation: {x: 0, y: 0, z: 0}
     playerRotation: {x: 0, y: 180, z: 0}
     uiModuleStates: 010000000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -16, y: 122, z: 60}
+    cameraPosition: {x: -0.2, y: 0.5, z: 1}
     cameraRotation: {x: -0.5, y: 0, z: 0}
     playerRotation: {x: 0, y: 163, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -16, y: 122, z: 60}
+    cameraPosition: {x: -0.2, y: 0.5, z: 1}
     cameraRotation: {x: -0.5, y: 0, z: 0}
     playerRotation: {x: 0, y: 163, z: 0}
     uiModuleStates: 000101000000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -25, y: 40, z: 160}
+    cameraPosition: {x: -0.2, y: -0.5, z: 2}
     cameraRotation: {x: -0.5, y: 0, z: -2}
     playerRotation: {x: 0, y: 140, z: 0}
     uiModuleStates: 000100010000
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -30, y: 105, z: 200}
+    cameraPosition: {x: 0, y: 0, z: 2}
     cameraRotation: {x: -3, y: 0, z: 0}
     playerRotation: {x: 0, y: 0, z: 0}
     uiModuleStates: 000100000100
     transitionTime: 0.5
     moveEase: 0
   - presetName: 
-    cameraPosition: {x: -16, y: 122, z: 60}
+    cameraPosition: {x: -0.2, y: 0.5, z: 1}
     cameraRotation: {x: -0.5, y: 0, z: 0}
     playerRotation: {x: 0, y: 163, z: 0}
     uiModuleStates: 000100000001
@@ -9085,7 +9085,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 100
+  near clip plane: 0.01
   far clip plane: 5000
   field of view: 60
   orthographic: 0
@@ -11233,7 +11233,7 @@ MonoBehaviour:
   StigmataBOTStarImage: {fileID: 1759165571}
   StigmataBOTLevelText: {fileID: 44598739}
   modelPath: Prefabs/Character/
-  spawnPosition: {x: -40, y: -220, z: 500}
+  spawnPosition: {x: 0, y: -3, z: 5}
   spawnRotation: {x: 0, y: 180, z: 0, w: 1}
 --- !u!225 &1344939567
 CanvasGroup:

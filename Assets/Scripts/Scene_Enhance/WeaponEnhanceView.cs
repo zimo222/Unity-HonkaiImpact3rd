@@ -35,6 +35,10 @@ public class WeaponEnhanceView : MonoBehaviour
     public TMP_Text addStat1Text;
     public TMP_Text stat2Text;
     public TMP_Text addStat2Text;
+    [Header("右中")]
+    public Transform materialListContent;  // 材料列表容器
+    public GameObject materialItemPrefab;   // 材料项预制体
+
     [Header("面板")]
     [SerializeField] public GameObject EnhanceResultPanel;
 
@@ -88,6 +92,16 @@ public class WeaponEnhanceView : MonoBehaviour
         if (addStat1Text != null) addStat1Text.text = $"[+{(toLevel - weapon.Stats.Level)}]";
         if (stat2Text != null) stat2Text.text = ((int)(weapon.CritRate * 100)).ToString();
         if (addStat2Text != null) addStat2Text.text = $"[+{(toLevel / 5 - weapon.Stats.Level / 5)}]";
+
+        foreach(MaterialData mat in costMaterial)
+        {
+            GameObject itemObj = Instantiate(materialItemPrefab, materialListContent);
+            MaterialItemView itemView = itemObj.GetComponent<MaterialItemView>();
+            if (itemView != null)
+            {
+                itemView.Initialize(mat, null);
+            }
+        }
     }
 
     // 更新玩家资源
