@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 // Controller层：处理业务逻辑，连接Model和View
 public class EquipmentDetailController : MonoBehaviour
@@ -15,8 +16,8 @@ public class EquipmentDetailController : MonoBehaviour
     public ModularUIButton[] referencedButtons;
 
     [Header("按钮引用")]
-    [SerializeField] private Button enhanceButton;
-    [SerializeField] private Button evolveButton;
+    [SerializeField] private UnityEngine.UI.Button enhanceButton;
+    [SerializeField] private UnityEngine.UI.Button evolveButton;
 
     // ================== 数据 ==================
     private bool isWeapon;
@@ -102,9 +103,37 @@ public class EquipmentDetailController : MonoBehaviour
     {
         // 绑定按钮事件
         if (enhanceButton != null)
-            enhanceButton.onClick.AddListener(OnEnhanceClicked);
+        {
+            if ((currentWeapon != null && PlayerDataManager.Instance.CanEnhanceEquipment(currentWeapon)) || (currentStigmata != null && PlayerDataManager.Instance.CanEnhanceEquipment(currentStigmata)))
+            {
+                enhanceButton.onClick.AddListener(OnEnhanceClicked);
+            }
+            else
+            {
+                UnityEngine.UI.Image buttonImage = enhanceButton.GetComponent<UnityEngine.UI.Image >();
+                if (buttonImage != null)
+                {
+                    buttonImage.color = new Color(106 / 255.0f, 108 / 255.0f, 120 / 255.0f, 1.0f);
+                }
+                enhanceButton.interactable = false;
+            } 
+        }
         if (evolveButton != null)
-            evolveButton.onClick.AddListener(OnEvolveClicked);
+        {
+            if ((currentWeapon != null && PlayerDataManager.Instance.CanEvolveEquipment(currentWeapon)) || (currentStigmata != null && PlayerDataManager.Instance.CanEvolveEquipment(currentStigmata)))
+            {
+                evolveButton.onClick.AddListener(OnEvolveClicked);
+            }
+            else
+            {
+                UnityEngine.UI.Image buttonImage = evolveButton.GetComponent<UnityEngine.UI.Image>();
+                if (buttonImage != null)
+                {
+                    buttonImage.color = new Color(106 / 255.0f, 108 / 255.0f, 120 / 255.0f, 1.0f);
+                }
+                evolveButton.interactable = false;
+            }
+        }
     }
     // ================== 按钮事件处理方法 ==================
     void OnEnhanceClicked()
