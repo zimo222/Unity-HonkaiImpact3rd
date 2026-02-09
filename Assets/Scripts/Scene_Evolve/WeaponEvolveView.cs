@@ -35,6 +35,9 @@ public class WeaponEvolveView : MonoBehaviour
     public TMP_Text addStat2Text;
     public Image star2Image;
     public Image sstar2Image;
+    [Header("右中")]
+    public Transform materialListContent;  // 材料列表容器
+    public GameObject materialItemPrefab;   // 材料项预制体
     [Header("左下")]
     public TMP_Text coinCostText;
     [Header("面板")]
@@ -68,21 +71,15 @@ public class WeaponEvolveView : MonoBehaviour
         if (sstar1Image != null) sstar1Image.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
         if (sstar2Image != null) sstar2Image.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{(weapon.Stats.SStars + 1) % 4}");
 
-        int expGain = 0, expg = 0;
         foreach (MaterialData mat in costMaterial)
         {
-            expGain += mat.Num * mat.Count;
-            Debug.Log(mat.Num.ToString() + mat.Count.ToString());
+            GameObject itemObj = Instantiate(materialItemPrefab, materialListContent);
+            MaterialItemView itemView = itemObj.GetComponent<MaterialItemView>();
+            if (itemView != null)
+            {
+                itemView.Initialize(mat, null);
+            }
         }
-        expg = expGain;
-        int toLevel = weapon.Stats.Level, toExp = weapon.Stats.Exp;
-        while(expg >= toLevel * 100 - toExp && toLevel < (20 * weapon.Stats.Stars + 5 * weapon.Stats.SStars - 10))
-        {
-            expg -= toLevel * 100 - toExp;
-            toLevel++;
-            toExp = 0;
-        }
-        toExp = expg;
 
         if (coinCostText != null) coinCostText.text = PlayerDataManager.Instance.CalculateEnhanceCoinCost(costMaterial).ToString();
 
