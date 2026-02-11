@@ -31,6 +31,8 @@ public class WeaponEvolveView : MonoBehaviour
     public Image type2Image;
     public TMP_Text name2Text;
     public TMP_Text level2Text;
+    public TMP_Text Stat1Text;
+    public TMP_Text Stat2Text;
     public TMP_Text addStat1Text;
     public TMP_Text addStat2Text;
     public Image star2Image;
@@ -83,9 +85,9 @@ public class WeaponEvolveView : MonoBehaviour
 
         if (coinCostText != null) coinCostText.text = PlayerDataManager.Instance.CalculateEnhanceCoinCost(costMaterial).ToString();
 
-        if (stat1Text != null) stat1Text.text = weapon.Attack.ToString();
+        if (stat1Text != null && Stat1Text != null) stat1Text.text = Stat1Text.text = weapon.Attack.ToString();
         if (addStat1Text != null) addStat1Text.text = $"[+10]";
-        if (stat2Text != null) stat2Text.text = ((int)(weapon.CritRate * 100)).ToString();
+        if (stat2Text != null && Stat2Text != null) stat2Text.text = Stat2Text.text = ((int)(weapon.CritRate * 100)).ToString();
         if (addStat2Text != null) addStat2Text.text = $"[+2]";
     }
 
