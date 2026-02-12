@@ -12,6 +12,16 @@ public class GameDataManager : MonoBehaviour
 
     void Awake()
     {
+        // 实现简单的单例
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
         CharacterDefineSO[] chars = Resources.LoadAll<CharacterDefineSO>("GameData/Characters");
         CharacterDict = chars.ToDictionary(c => c.id, c => c);
 

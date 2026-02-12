@@ -78,41 +78,25 @@ public class PlayerData
     /// </summary>
     private void InitializeDefaultCharacters()
     {
-        // 琪亚娜·薪炎之律者
-        Characters.Add(new CharacterData(
-            id: "CHAR_001", name: "琪亚娜-薪炎之律者", isUnlocked: true,
-            element: "YN", stars: 1, maxstars: 3,
-            health: 2004, attack: 501, defence: 168,
-            energy: 140, critRate: 0.1f, critDamage: 1.5f, elementBonus: 0.3f
-        ));
-        // 琪亚娜·白练
-        Characters.Add(new CharacterData(
-            id: "CHAR_002", name: "琪亚娜-领域装·白练", isUnlocked: true, 
-            element: "JX", stars: 1, maxstars: 3,
-            health: 1200, attack: 250, defence: 150,
-            energy: 130, critRate: 0.08f, critDamage: 1.3f, elementBonus: 0f
-        ));
-        // 叶瞬光
-        Characters.Add(new CharacterData(
-            id: "CHAR_003", name: "叶瞬光-虚狩·青暝司命", isUnlocked: true,
-            element: "SW", stars: 1, maxstars: 3,
-            health: 1400, attack: 280, defence: 150,
-            energy: 150, critRate: 0.12f, critDamage: 1.6f, elementBonus: 0.2f
-        ));
-        // 胡桃
-        Characters.Add(new CharacterData(
-            id: "CHAR_004", name: "胡桃-往生堂堂主", isUnlocked: false,
-            element: "SW", stars: 1, maxstars: 3,
-            health: 1100, attack: 320, defence: 130,
-            energy: 130, critRate: 0.15f, critDamage: 1.8f, elementBonus: 0.4f
-        ));
-        // 流萤
-        Characters.Add(new CharacterData(
-            id: "CHAR_005", name: "流萤-神秘机甲女", isUnlocked: false,
-            element: "YN", stars: 1, maxstars: 3,
-            health: 1300, attack: 270, defence: 120,
-            energy: 120, critRate: 0.09f, critDamage: 1.4f, elementBonus: 0.25f
-        ));
+        AddDefaultCharacter("CHAR_001", true);
+        AddDefaultCharacter("CHAR_002", true);
+        AddDefaultCharacter("CHAR_003", true);
+        AddDefaultCharacter("CHAR_004", false);
+        AddDefaultCharacter("CHAR_005", false);
+    }
+
+    private void AddDefaultCharacter(string defineId, bool isUnlocked)
+    {
+        var def = GameDataManager.Instance.CharacterDict[defineId];
+        var character = new CharacterData(
+            id: def.id, name: def.characterName,
+            isUnlocked: isUnlocked,
+            element: def.element,
+            stars: def.baseStars, maxstars: def.maxStars,
+            health: def.baseHealth, attack: def.baseAttack, defence: def.baseDefence,
+            energy: def.baseEnergy, critRate: def.baseCritRate, critDamage: def.baseCritDamage, elementBonus: def.baseElementBonus
+        );
+        Characters.Add(character);
     }
     #endregion
 
@@ -124,60 +108,45 @@ public class PlayerData
     /// </summary>
     private void InitializeDefaultEquipment()
     {
-        // 添加一些初始武器
-        WeaponBag.Add(new WeaponData(
-            id: "WEAP_001", name: "焢煌之钥", type: WeaponType.DualPistols,
-            stars: 4, maxstars: 5,
-            health: 0, attack: 298, defence: 0,
-            energy: 0, critRate: 0.12f, critDamage: 0f, elementBonus: 0.15f,
-            description: "少女在炽焰中窥见的，是温柔而赞许的眼神。\n那眼神带来的温度，给予了她担起未来的勇气。\n身后伸来的手，为她的信念增添柴薪。\n这意志化为煌燃的剑，点亮黑夜。"
-        ));
-        WeaponBag.Add(new WeaponData(
-            id: "WEAP_002", name: "月神之守护", type: WeaponType.DualPistols,
-            stars: 4, maxstars: 5,
-            health: 0, attack: 150, defence: 0,
-            energy: 0, critRate: 0.05f, critDamage: 0f, elementBonus: 0.15f
-        ));
-        WeaponBag.Add(new WeaponData(
-            id: "WEAP_003", name: "青溟剑", type: WeaponType.SingleHandedSword,
-            stars: 4, maxstars: 5,
-            health: 0, attack: 80, defence: 0,
-            energy: 0, critRate: 0.12f, critDamage: 0f, elementBonus: 0f
-        ));
-        WeaponBag.Add(new WeaponData(
-            id: "WEAP_004", name: "萨姆召唤剑", type: WeaponType.SingleHandedSword,
-            stars: 4, maxstars: 5,
-            health: 0, attack: 90, defence: 0,
-            energy: 0, critRate: 0.02f, critDamage: 0f, elementBonus: 0f
-        ));
-        WeaponBag.Add(new WeaponData(
-            id: "WEAP_005", name: "护摩之剑(杖)", type: WeaponType.SingleHandedSword,
-            stars: 4, maxstars: 5,
-            health: 0, attack: 90, defence: 0,
-            energy: 0, critRate: 0.02f, critDamage: 0f, elementBonus: 0f
-        ));
-        // 添加一些圣痕
-        // 上位圣痕
-        StigmataBag.Add(new StigmataData(
-            id: "STIG_001_TOP", name: "无量塔姬子(上)", position: StigmataPosition.Top,
-            stars: 4, maxstars: 5,
-            health: 200, attack: 50, defence: 10,
-            energy: 0, critRate: 0f, critDamage: 0.1f, elementBonus: 0.08f
-        ));
-        // 中位圣痕
-        StigmataBag.Add(new StigmataData(
-            id: "STIG_001_MID", name: "无量塔姬子(中)", position: StigmataPosition.Middle,
-            stars: 4, maxstars: 5,
-            health: 150, attack: 0, defence: 10,
-            energy: 0, critRate: 0.02f, critDamage: 0.15f, elementBonus: 0.1f
-        ));
-        // 下位圣痕
-        StigmataBag.Add(new StigmataData(
-            id: "STIG_001_BOT", name: "无量塔姬子(下)", position: StigmataPosition.Bottom,
-            stars: 4, maxstars: 5,
-            health: 180, attack: 40, defence: 10,
-            energy: 0, critRate: 0.04f, critDamage: 0.08f, elementBonus: 0.06f
-        ));
+        AddDefaultWeapon("WEAP_001");
+        AddDefaultWeapon("WEAP_002");
+        AddDefaultWeapon("WEAP_003");
+        AddDefaultWeapon("WEAP_004");
+        AddDefaultWeapon("WEAP_005");
+
+        AddDefaultStigmata("STIG_001_TOP");
+        AddDefaultStigmata("STIG_001_MID");
+        AddDefaultStigmata("STIG_001_BOT");
+    }
+
+    private void AddDefaultWeapon(string defineId)
+    {
+        var def = GameDataManager.Instance.WeaponDict[defineId];
+        var weapon = new WeaponData(
+            id: def.id, name: def.weaponName,
+            type: def.type,
+            element: def.element,
+            stars: def.baseStars, maxstars: def.maxStars,
+            health: def.baseHealth, attack: def.baseAttack, defence: def.baseDefence,
+            energy: def.baseEnergy, critRate: def.baseCritRate, critDamage: def.baseCritDamage, elementBonus: def.baseElementBonus,
+            introduction: def.introduction, description: def.description
+        );
+        WeaponBag.Add(weapon);
+    }
+
+    private void AddDefaultStigmata(string defineId)
+    {
+        var def = GameDataManager.Instance.StigmataDict[defineId];
+        var stigmata = new StigmataData(
+            id: def.id, name: def.stigmataName,
+            position: def.Position,
+            element: def.element,
+            stars: def.baseStars, maxstars: def.maxStars,
+            health: def.baseHealth, attack: def.baseAttack, defence: def.baseDefence,
+            energy: def.baseEnergy, critRate: def.baseCritRate, critDamage: def.baseCritDamage, elementBonus: def.baseElementBonus,
+            introduction: def.introduction, description: def.description
+        );
+        StigmataBag.Add(stigmata);
     }
     #endregion
 
