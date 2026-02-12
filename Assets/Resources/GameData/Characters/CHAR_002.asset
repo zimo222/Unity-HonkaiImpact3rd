@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6493a0374b67c9444832f91152758a61, type: 3}
+  m_Name: CHAR_002
+  m_EditorClassIdentifier: 
+  id: CHAR_002
+  characterName: "\u742A\u4E9A\u5A1C-\u9886\u57DF\u88C5\xB7\u767D\u7EC3"
+  element: JX
+  baseStars: 1
+  maxStars: 3
+  baseHealth: 1200
+  baseAttack: 250
+  baseDefence: 150
+  baseEnergy: 130
+  baseCritRate: 0.08
+  baseCritDamage: 1.3
+  baseElementBonus: 0
+  introduction: 
+  description: 

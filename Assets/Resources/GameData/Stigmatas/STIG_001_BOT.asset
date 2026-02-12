@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c89dca24fdcf640bc5cc415aaafc98, type: 3}
+  m_Name: STIG_001_BOT
+  m_EditorClassIdentifier: 
+  id: STIG_001_BOT
+  stigmataName: "\u65E0\u91CF\u5854\u59EC\u5B50(\u4E0B)"
+  Position: 3
+  element: 
+  baseStars: 4
+  maxStars: 5
+  baseHealth: 180
+  baseAttack: 40
+  baseDefence: 10
+  baseEnergy: 0
+  baseCritRate: 0.04
+  baseCritDamage: 0.08
+  baseElementBonus: 0.06
+  introduction: 
+  description: 

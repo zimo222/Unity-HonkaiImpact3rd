@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6493a0374b67c9444832f91152758a61, type: 3}
+  m_Name: CHAR_003
+  m_EditorClassIdentifier: 
+  id: CHAR_003
+  characterName: "\u53F6\u77AC\u5149-\u865A\u72E9\xB7\u9752\u669D\u53F8\u547D"
+  element: SW
+  baseStars: 1
+  maxStars: 3
+  baseHealth: 1400
+  baseAttack: 280
+  baseDefence: 150
+  baseEnergy: 150
+  baseCritRate: 0.12
+  baseCritDamage: 1.6
+  baseElementBonus: 0.2
+  introduction: 
+  description: 
