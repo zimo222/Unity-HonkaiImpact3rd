@@ -3304,18 +3304,27 @@ MonoBehaviour:
     smallButtons:
     - {fileID: 1246495152}
     - {fileID: 1404021077}
+    smallButtonPools:
+    - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
+    - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
   - largeButton: {fileID: 788794086}
     panel: {fileID: 0}
     smallButtons:
     - {fileID: 923412511}
     - {fileID: 1293235299}
+    smallButtonPools:
+    - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
+    - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
   - largeButton: {fileID: 1009138488}
     panel: {fileID: 0}
     smallButtons: []
+    smallButtonPools: []
   largeSelectedColor: {r: 0.43529412, g: 0.7254902, b: 1, a: 1}
   largeNormalColor: {r: 0.45490196, g: 0.6039216, b: 1, a: 1}
   smallSelectedColor: {r: 0.9254902, g: 0.9372549, b: 0.96862745, a: 1}
   smallNormalColor: {r: 0.627451, g: 0.627451, b: 0.627451, a: 0.78431374}
+  gachaButton: {fileID: 1580150809}
+  gachaTenButton: {fileID: 555992981}
 --- !u!1 &1057011061
 GameObject:
   m_ObjectHideFlags: 0
@@ -6073,8 +6082,13 @@ MonoBehaviour:
   staminaText: {fileID: 0}
   coinsText: {fileID: 0}
   crystalsText: {fileID: 0}
+  fourStarPityText: {fileID: 0}
+  fiveStarPityText: {fileID: 0}
+  currentPoolNameText: {fileID: 0}
   contentPanel: {fileID: 0}
   contentVideoPlayer: {fileID: 0}
+  gachaResultText: {fileID: 0}
+  gachaTenResultText: {fileID: 0}
 --- !u!1 &1988212757
 GameObject:
   m_ObjectHideFlags: 0
@@ -6209,6 +6223,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1988212757}
   m_CullTransparentMesh: 1
+--- !u!1 &2047566009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2047566011}
+  - component: {fileID: 2047566010}
+  m_Layer: 0
+  m_Name: GachaManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2047566010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047566009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce8c57c055853c49bcc7196d1ca260e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  threeStarProbability: 80
+  fourStarProbability: 15
+  fiveStarProbability: 5
+--- !u!4 &2047566011
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2047566009}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1170.5052, y: 875.673, z: 5.203739}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2082122024
 GameObject:
   m_ObjectHideFlags: 0
@@ -6463,3 +6524,4 @@ SceneRoots:
   - {fileID: 1362526870}
   - {fileID: 963546550}
   - {fileID: 1382454423}
+  - {fileID: 2047566011}

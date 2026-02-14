@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32a561bfdc0a9804483e5e6804a6799e, type: 3}
+  m_Name: CharacterA
+  m_EditorClassIdentifier: 
+  poolName: CharacterA
+  items:
+  - itemId: CHAR_001
+    itemType: 0
+    starLevel: 5
+    weight: 1
+    isUp: 1
+  - itemId: CHAR_002
+    itemType: 0
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_004
+    itemType: 0
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_005
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
