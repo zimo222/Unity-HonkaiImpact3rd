@@ -3313,7 +3313,7 @@ MonoBehaviour:
     - {fileID: 923412511}
     - {fileID: 1293235299}
     smallButtonPools:
-    - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
+    - {fileID: 11400000, guid: 2fc519b4ecd0532448b0f730613c49e9, type: 2}
     - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
   - largeButton: {fileID: 1009138488}
     panel: {fileID: 0}
@@ -6252,9 +6252,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce8c57c055853c49bcc7196d1ca260e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  threeStarProbability: 80
-  fourStarProbability: 15
-  fiveStarProbability: 5
+  threeStarProbability: 85
+  fourStarProbability: 14.4
+  fiveStarProbability: 0.6
 --- !u!4 &2047566011
 Transform:
   m_ObjectHideFlags: 0

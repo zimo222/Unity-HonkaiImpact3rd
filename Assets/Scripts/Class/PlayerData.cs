@@ -64,9 +64,43 @@ public class PlayerData
         InitializeDefaultCharacters();
         InitializeDefaultEquipment();
         InitializeDefaultMaterial();
+        SortedBag();
         // 初始化任务系统
         InitializeDefaultTasks();
         InitializeDailyEXPRewards();
+    }
+
+    private void SortedBag()
+    {
+
+        WeaponBag.Sort((a, b) =>
+        {
+            int statusOrderA = a.Stats.Stars;
+            int statusOrderB = b.Stats.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return b.Stats.Level.CompareTo(a.Stats.Level);
+        });
+        StigmataBag.Sort((a, b) =>
+        {
+            int statusOrderA = a.Stats.Stars;
+            int statusOrderB = b.Stats.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return 0;
+        });
+        MaterialBag.Sort((a, b) =>
+        {
+            string statusOrderA = a.Stars;
+            string statusOrderB = b.Stars;
+
+            if (statusOrderA != statusOrderB)
+                return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
+            return 0;
+        });
+
     }
     #endregion
 
@@ -78,11 +112,20 @@ public class PlayerData
     /// </summary>
     private void InitializeDefaultCharacters()
     {
+        for(int i = 1; i <= 16; i++)
+        {
+            AddDefaultCharacter("CHAR_0" + (i >= 10 ? "" : "0") + i.ToString(), true);
+        }
+        /*
         AddDefaultCharacter("CHAR_001", true);
         AddDefaultCharacter("CHAR_002", true);
         AddDefaultCharacter("CHAR_003", true);
         AddDefaultCharacter("CHAR_004", false);
         AddDefaultCharacter("CHAR_005", false);
+        AddDefaultCharacter("CHAR_006", false);
+        AddDefaultCharacter("CHAR_007", false);
+        AddDefaultCharacter("CHAR_008", false);
+        */
     }
 
     private void AddDefaultCharacter(string defineId, bool isUnlocked)
@@ -108,11 +151,17 @@ public class PlayerData
     /// </summary>
     private void InitializeDefaultEquipment()
     {
+        for (int i = 1; i <= 30; i++)
+        {
+            AddDefaultWeapon("WEAP_0" + (i >= 10 ? "" : "0") + i.ToString());
+        }
+        /*
         AddDefaultWeapon("WEAP_001");
         AddDefaultWeapon("WEAP_002");
         AddDefaultWeapon("WEAP_003");
         AddDefaultWeapon("WEAP_004");
         AddDefaultWeapon("WEAP_005");
+        */
 
         AddDefaultStigmata("STIG_001_TOP");
         AddDefaultStigmata("STIG_001_MID");
@@ -570,6 +619,9 @@ public enum WeaponType
     None,                                            // 无（圣痕使用）
     DualPistols,                                     // 双枪
     SingleHandedSword,                               // 单手剑
+    HeavyArtillery,                                  // 重炮
+    Claymore,                                        // 大剑
+    Cross,                                           // 十字架
     Spear                                            // 长枪
 }
 

@@ -1,0 +1,167 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32a561bfdc0a9804483e5e6804a6799e, type: 3}
+  m_Name: WeaponA
+  m_EditorClassIdentifier: 
+  poolName: CharacterA
+  items:
+  - itemId: WEAP_001
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_002
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_003
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_004
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_005
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_006
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_007
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_008
+    itemType: 1
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_009
+    itemType: 1
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_010
+    itemType: 1
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_011
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_012
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_013
+    itemType: 1
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_014
+    itemType: 1
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_015
+    itemType: 1
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_016
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_017
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_018
+    itemType: 1
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_019
+    itemType: 1
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_020
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_021
+    itemType: 1
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_022
+    itemType: 1
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_023
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_024
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_025
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_026
+    itemType: 1
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_027
+    itemType: 1
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_028
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_029
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: WEAP_030
+    itemType: 1
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  upFiveStarIds: []

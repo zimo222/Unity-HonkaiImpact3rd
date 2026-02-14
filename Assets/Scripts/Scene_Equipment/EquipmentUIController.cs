@@ -70,8 +70,8 @@ public class EquipmentUIController : MonoBehaviour
         // 初始化UI
         InitializeUI();
         // 预创建对象池
-        EquipmentObjectPool.Instance.Prewarm(equipmentItemPrefab.name, equipmentItemPrefab, 20);
-        EquipmentObjectPool.Instance.Prewarm(materialItemPrefab.name, materialItemPrefab, 20);
+        EquipmentObjectPool.Instance.Prewarm(equipmentItemPrefab.name, equipmentItemPrefab, 30);
+        EquipmentObjectPool.Instance.Prewarm(materialItemPrefab.name, materialItemPrefab, 30);
 
         // 加载默认标签内容
         SwitchToTab(currentTab);
@@ -101,7 +101,7 @@ public class EquipmentUIController : MonoBehaviour
         currentWeapons = new List<WeaponData>(playerData.WeaponBag);
         currentStigmatas = new List<StigmataData>(playerData.StigmataBag);
         currentMaterials = new List<MaterialData>(playerData.MaterialBag);
-
+        /*
         //按照稀有度从高到低排序
         currentWeapons.Sort((a, b) =>
         {
@@ -130,7 +130,7 @@ public class EquipmentUIController : MonoBehaviour
                 return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
             return 0;
         });
-
+        */
         Debug.Log($"分类完成：武器 {currentWeapons.Count} 件，圣痕 {currentStigmatas.Count} 件，材料 {currentMaterials.Count} 件");
     }
     //初始化UI

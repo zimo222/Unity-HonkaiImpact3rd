@@ -37,7 +37,7 @@ public class GachaView : MonoBehaviour
     // 显示单抽结果
     public void ShowGachaResult(string itemName, int star)
     {
-        Debug.Log($"获得：{itemName} (★{star})");
+        Debug.Log($"获得：{itemName} (★{star + 4})");
         if (gachaResultText != null)
             gachaResultText.text = $"获得：{itemName} (★{star})";
     }
@@ -49,7 +49,7 @@ public class GachaView : MonoBehaviour
         string result = "";
         for (int i = 0; i < itemNames.Length; i++)
         {
-            result += $"{itemNames[i]} (★{stars[i]})\n";
+            result += $"{itemNames[i]} (★{stars[i] + 4})\n";
         }
         Debug.Log(result);
         if(gachaTenResultText != null)

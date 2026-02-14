@@ -24,13 +24,79 @@ MonoBehaviour:
     starLevel: 5
     weight: 1
     isUp: 0
+  - itemId: CHAR_003
+    itemType: 0
+    starLevel: 5
+    weight: 1
+    isUp: 0
   - itemId: CHAR_004
     itemType: 0
-    starLevel: 4
+    starLevel: 5
     weight: 1
     isUp: 0
   - itemId: CHAR_005
     itemType: 0
+    starLevel: 5
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_006
+    itemType: 0
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_007
+    itemType: 0
     starLevel: 3
     weight: 1
     isUp: 0
+  - itemId: CHAR_008
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_009
+    itemType: 0
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_010
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_011
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_012
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_013
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_014
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_015
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_016
+    itemType: 0
+    starLevel: 3
+    weight: 1
+    isUp: 0
+  - itemId: CHAR_017
+    itemType: 0
+    starLevel: 4
+    weight: 1
+    isUp: 0
+  upFiveStarIds: []

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6e4ae76b7f7c714398abf8655814f07, type: 3}
+  m_Name: WEAP_008
+  m_EditorClassIdentifier: 
+  id: WEAP_008
+  weaponName: M1911
+  type: 1
+  element: 
+  baseStars: 2
+  maxStars: 3
+  baseHealth: 0
+  baseAttack: 59
+  baseDefence: 0
+  baseEnergy: 0
+  baseCritRate: 0.01
+  baseCritDamage: 0
+  baseElementBonus: 0.15
+  introduction: 
+  description: "\u5C11\u5973\u5728\u70BD\u7130\u4E2D\u7AA5\u89C1\u7684\uFF0C\u662F\u6E29\u67D4\u800C\u8D5E\u8BB8\u7684\u773C\u795E\u3002\\n\u90A3\u773C\u795E\u5E26\u6765\u7684\u6E29\u5EA6\uFF0C\u7ED9\u4E88\u4E86\u5979\u62C5\u8D77\u672A\u6765\u7684\u52C7\u6C14\u3002\\n\u8EAB\u540E\u4F38\u6765\u7684\u624B\uFF0C\u4E3A\u5979\u7684\u4FE1\u5FF5\u589E\u6DFB\u67F4\u85AA\u3002\\n\u8FD9\u610F\u5FD7\u5316\u4E3A\u714C\u71C3\u7684\u5251\uFF0C\u70B9\u4EAE\u9ED1\u591C\u3002"
