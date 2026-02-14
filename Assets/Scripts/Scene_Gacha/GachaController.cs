@@ -138,6 +138,9 @@ public class GachaController : MonoBehaviour
 
     private void OnSmallButtonClick(int largeIdx, int smallIdx)
     {
+        if (smallIndex == smallIdx) return;
+        smallIndex = smallIdx;
+        viewGacha.PlayVideoFromResources(largeIndex, smallIndex);
         SetSmallButtonHighlight(largeIdx, smallIdx);
 
         // === 更新卡池信息 ===

@@ -18,7 +18,7 @@ MonoBehaviour:
     itemType: 1
     starLevel: 5
     weight: 1
-    isUp: 0
+    isUp: 1
   - itemId: WEAP_002
     itemType: 1
     starLevel: 5
@@ -164,4 +164,5 @@ MonoBehaviour:
     starLevel: 5
     weight: 1
     isUp: 0
-  upFiveStarIds: []
+  upFiveStarIds:
+  - 0

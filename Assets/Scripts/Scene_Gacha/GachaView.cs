@@ -73,4 +73,20 @@ public class GachaView : MonoBehaviour
         if (currentPoolNameText != null)
             currentPoolNameText.text = poolName;
     }
+
+    public void PlayVideoFromResources(int largeIdx, int smallIdx)
+    {
+        // 加载Resources/Video下的VideoClip资源
+        VideoClip clip = Resources.Load<VideoClip>("Video/" + largeIdx.ToString() + "_" + smallIdx.ToString());
+
+        if (clip != null)
+        {
+            contentVideoPlayer.clip = clip;
+            contentVideoPlayer.Play(); // 可选，立即播放
+        }
+        else
+        {
+            Debug.LogError("未找到视频资源: ");
+        }
+    }
 }

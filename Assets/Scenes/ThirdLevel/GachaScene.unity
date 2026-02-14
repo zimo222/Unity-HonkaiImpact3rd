@@ -3306,7 +3306,7 @@ MonoBehaviour:
     - {fileID: 1404021077}
     smallButtonPools:
     - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
-    - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
+    - {fileID: 11400000, guid: 84c0d9704d310e64d878a54fe4b02b63, type: 2}
   - largeButton: {fileID: 788794086}
     panel: {fileID: 0}
     smallButtons:
@@ -3314,7 +3314,7 @@ MonoBehaviour:
     - {fileID: 1293235299}
     smallButtonPools:
     - {fileID: 11400000, guid: 2fc519b4ecd0532448b0f730613c49e9, type: 2}
-    - {fileID: 11400000, guid: 881dabeea335e76478a7c8a3d1954ff2, type: 2}
+    - {fileID: 11400000, guid: 997e1fae471fabd4b8e59cec0e3cddf4, type: 2}
   - largeButton: {fileID: 1009138488}
     panel: {fileID: 0}
     smallButtons: []
@@ -6079,14 +6079,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cd448d9c16cf914e94c8ce5b3082d3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  staminaText: {fileID: 0}
-  coinsText: {fileID: 0}
-  crystalsText: {fileID: 0}
+  staminaText: {fileID: 73527181}
+  coinsText: {fileID: 1850530586}
+  crystalsText: {fileID: 732490731}
   fourStarPityText: {fileID: 0}
   fiveStarPityText: {fileID: 0}
   currentPoolNameText: {fileID: 0}
-  contentPanel: {fileID: 0}
-  contentVideoPlayer: {fileID: 0}
+  contentPanel: {fileID: 1448917559}
+  contentVideoPlayer: {fileID: 95499824}
   gachaResultText: {fileID: 0}
   gachaTenResultText: {fileID: 0}
 --- !u!1 &1988212757

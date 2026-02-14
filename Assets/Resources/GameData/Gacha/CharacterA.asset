@@ -99,4 +99,5 @@ MonoBehaviour:
     starLevel: 4
     weight: 1
     isUp: 0
-  upFiveStarIds: []
+  upFiveStarIds:
+  - 0
