@@ -168,11 +168,12 @@ public class GachaController : MonoBehaviour
     }
 
     // 修改 GetItemInfo 增加 icon 参数
-    private void GetItemInfo(string id, out string name, out int star, out Sprite icon)
+    private void GetItemInfo(string id, out string name, out int star, out Sprite icon, out Sprite illustration)
     {
         name = "未知";
         star = 0;
         icon = null;
+        illustration = null;
         if (string.IsNullOrEmpty(id)) return;
 
         GameDataManager dataManager = GameDataManager.Instance;
@@ -181,6 +182,7 @@ public class GachaController : MonoBehaviour
             name = character.characterName;
             star = character.baseStars + 4;
             icon = character.icon; // 假设 SO 中有 icon 字段
+            illustration = character.Illustration;
             return;
         }
         if (dataManager.WeaponDict.TryGetValue(id, out WeaponDefineSO weapon))
@@ -188,6 +190,7 @@ public class GachaController : MonoBehaviour
             name = weapon.weaponName;
             star = weapon.baseStars + 1;
             icon = weapon.icon;
+            illustration = null;
             return;
         }
         if (dataManager.StigmataDict.TryGetValue(id, out StigmataDefineSO stigmata))
@@ -195,6 +198,7 @@ public class GachaController : MonoBehaviour
             name = stigmata.stigmataName;
             star = stigmata.baseStars;
             icon = stigmata.icon;
+            illustration = null;
             return;
         }
     }
@@ -239,13 +243,14 @@ public class GachaController : MonoBehaviour
         currentResults.Clear();
         foreach (string id in itemIds)
         {
-            GetItemInfo(id, out string name, out int star, out Sprite icon);
+            GetItemInfo(id, out string name, out int star, out Sprite icon, out Sprite illustration);
             currentResults.Add(new GachaResultItem
             {
                 itemId = id,
                 itemName = name,
                 star = star,
-                icon = icon
+                icon = icon,
+                illustration = illustration
             });
         }
 
@@ -283,12 +288,21 @@ public class GachaController : MonoBehaviour
         if (currentShowIndex < currentResults.Count)
         {
             var item = currentResults[currentShowIndex];
-            viewGacha.UpdateSingleItemDisplay(item.icon, item.itemName, item.star);
+            if(item.illustration != null)
+            {
+                   viewGacha.UpdateSuperItemDisplay(item.illustration, item.itemName, item.star);
+            }
+            else
+            {
+                viewGacha.UpdateSingleItemDisplay(item.icon, item.itemName, item.star);
+            }
+
+                // 播放缩放动画
+                viewGacha.PlayItemScaleAnimation();
             viewGacha.ShowSingleItemPanel(true);
         }
         else
         {
-            // 所有道具展示完毕，跳转到结果场景
             GoToResultScene();
         }
     }
@@ -445,6 +459,7 @@ public class GachaResultItem
     public string itemName;
     public int star;
     public Sprite icon;
+    public Sprite illustration;
 }
 
 public enum GachaState

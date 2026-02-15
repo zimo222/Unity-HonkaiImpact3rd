@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,6 +30,12 @@ public class GachaView : MonoBehaviour
     public TMP_Text itemNameText;                // 道具名称
     public TMP_Text itemStarText;                // 道具星级（如 "★5"）
     public Button clickArea;                     // 用于点击切换的全屏透明按钮
+
+    [Header("动画设置")]
+    public AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f); // 缩放曲线
+    public float scaleDuration = 0.2f; // 缩放持续时间
+
+    private Coroutine scaleCoroutine;
 
     // ========================= 公共方法 =========================
     private void Start()
@@ -73,7 +80,14 @@ public class GachaView : MonoBehaviour
 
     public void UpdateSingleItemDisplay(Sprite icon, string name, int star)
     {
-        if (itemIconImage != null) itemIconImage.sprite = icon;
+        if (itemIconImage != null) itemIconImage.sprite = icon; itemIconImage.rectTransform.sizeDelta = new Vector2(500, 500);
+        if (itemNameText != null) itemNameText.text = name;
+        if (itemStarText != null) itemStarText.text = "★" + star;
+    }
+
+    public void UpdateSuperItemDisplay(Sprite icon, string name, int star)
+    {
+        if (itemIconImage != null) itemIconImage.sprite = icon; itemIconImage.rectTransform.sizeDelta = new Vector2(1800, 1800);
         if (itemNameText != null) itemNameText.text = name;
         if (itemStarText != null) itemStarText.text = "★" + star;
     }
@@ -91,5 +105,32 @@ public class GachaView : MonoBehaviour
         {
             Debug.LogError("未找到视频资源: " + largeIdx + "_" + smallIdx);
         }
+    }
+
+    /// <summary>
+    /// 播放图标缩放动画（从0放大到正常大小）
+    /// </summary>
+    public void PlayItemScaleAnimation()
+    {
+        if (itemIconImage == null) return;
+        if (scaleCoroutine != null)
+            StopCoroutine(scaleCoroutine);
+        scaleCoroutine = StartCoroutine(ScaleItemCoroutine());
+    }
+
+    private IEnumerator ScaleItemCoroutine()
+    {
+        itemIconImage.transform.localScale = Vector3.zero;
+        float elapsed = 0f;
+        while (elapsed < scaleDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / scaleDuration;
+            float curveValue = scaleCurve.Evaluate(t);
+            itemIconImage.transform.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, curveValue);
+            yield return null;
+        }
+        itemIconImage.transform.localScale = Vector3.one;
+        scaleCoroutine = null;
     }
 }

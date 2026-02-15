@@ -15,7 +15,7 @@ MonoBehaviour:
   id: CHAR_016
   characterName: "\u5E03\u6D1B\u59AE\u5A05-\u9A71\u52A8\u88C5\xB7\u5C71\u5439"
   element: SW
-  baseStars: -1
+  baseStars: 1
   maxStars: 3
   baseHealth: 1300
   baseAttack: 270
@@ -25,5 +25,6 @@ MonoBehaviour:
   baseCritDamage: 1.4
   baseElementBonus: 0.25
   icon: {fileID: 21300000, guid: a24e0f200d895294a9a45efd78e05077, type: 3}
+  Illustration: {fileID: 0}
   introduction: 
   description: 

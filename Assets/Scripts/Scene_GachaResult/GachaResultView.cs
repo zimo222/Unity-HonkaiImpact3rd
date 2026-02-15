@@ -39,14 +39,39 @@ public class GachaResultView : MonoBehaviour
                     img.rectTransform.sizeDelta *= 1.4f; // 再缩放 1.4 倍
                 }
             }
-                // 可选：显示星级文本，可在预制体中包含 TMP_Text 并赋值
-                TMP_Text starText = iconObj.GetComponentInChildren<TMP_Text>();
+            Transform backTransform = iconObj.transform.Find("RarityImage");
+            if (backTransform != null)
+            {
+                Image img = backTransform.GetComponent<Image>();
+                if (img != null && item.icon != null)
+                {
+                    img.color = GetColor(item.star);
+                }
+            }
+            // 可选：显示星级文本，可在预制体中包含 TMP_Text 并赋值
+            TMP_Text starText = iconObj.GetComponentInChildren<TMP_Text>();
             if (starText != null)
                 starText.text = item.star + "星";
         }
 
         if (confirmButton != null)
             confirmButton.onClick.AddListener(ReturnToGachaScene);
+    }
+
+    Color GetColor(int stars)
+    {
+        Debug.Log(stars);
+        // 5星橙色，4星紫色，3星蓝色，其他灰色
+        if (stars == 5)
+            return new Color(255 / 255.0f, 163 / 255.0f, 32 / 255.0f);
+        else if (stars == 4)
+            return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
+        else if (stars == 3 || stars == 2)
+            return new Color(40 / 255.0f, 165 / 255.0f, 225 / 255.0f); // 蓝色
+        else if (stars == 1)
+            return new Color(78 / 255.0f, 179 / 255.0f, 131 / 255.0f); // 绿色
+        else
+            return Color.gray; // 灰色
     }
 
     private void ReturnToGachaScene()

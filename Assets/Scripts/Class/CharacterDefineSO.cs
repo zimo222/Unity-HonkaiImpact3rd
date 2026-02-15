@@ -24,6 +24,7 @@ public class CharacterDefineSO : ScriptableObject
     public float baseElementBonus;
 
     public Sprite icon;
+    public Sprite Illustration;
 
     [TextArea] public string introduction;
     [TextArea] public string description;

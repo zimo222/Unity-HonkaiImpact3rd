@@ -6883,6 +6883,31 @@ MonoBehaviour:
   itemNameText: {fileID: 1012469528}
   itemStarText: {fileID: 138509789}
   clickArea: {fileID: 1889430266}
+  scaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  scaleDuration: 0.2
 --- !u!1 &1988212757
 GameObject:
   m_ObjectHideFlags: 0
@@ -7049,6 +7074,7 @@ MonoBehaviour:
   threeStarProbability: 50
   fourStarProbability: 30
   fiveStarProbability: 20
+  buwai: 0.2
 --- !u!4 &2047566011
 Transform:
   m_ObjectHideFlags: 0
