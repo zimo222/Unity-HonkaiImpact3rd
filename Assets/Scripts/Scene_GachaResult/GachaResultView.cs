@@ -60,7 +60,6 @@ public class GachaResultView : MonoBehaviour
 
     Color GetColor(int stars)
     {
-        Debug.Log(stars);
         // 5星橙色，4星紫色，3星蓝色，其他灰色
         if (stars == 5)
             return new Color(255 / 255.0f, 163 / 255.0f, 32 / 255.0f);

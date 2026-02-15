@@ -112,9 +112,13 @@ public class PlayerData
     /// </summary>
     private void InitializeDefaultCharacters()
     {
-        for(int i = 1; i <= 16; i++)
+        for (int i = 1; i <= 3; i++)
         {
             AddDefaultCharacter("CHAR_0" + (i >= 10 ? "" : "0") + i.ToString(), true);
+        }
+        for (int i = 4; i <= 17; i++)
+        {
+            AddDefaultCharacter("CHAR_0" + (i >= 10 ? "" : "0") + i.ToString(), false);
         }
         /*
         AddDefaultCharacter("CHAR_001", true);

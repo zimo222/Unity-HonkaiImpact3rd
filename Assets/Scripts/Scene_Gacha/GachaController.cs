@@ -205,7 +205,8 @@ public class GachaController : MonoBehaviour
 
     private void OnGachaButtonClick()
     {
-        if (gachaManager == null) return;
+        if (gachaManager == null || playerData.Crystals < 280) return;
+        playerData.Crystals -= 280;
         if (!EnsurePoolLoaded()) // 如果无法加载卡池，直接返回
         {
             Debug.LogError("卡池加载失败，无法抽卡");
@@ -225,7 +226,8 @@ public class GachaController : MonoBehaviour
 
     private void OnGachaTenButtonClick()
     {
-        if (gachaManager == null) return;
+        if (gachaManager == null || playerData.Crystals < 2800) return;
+        playerData.Crystals -= 2800;
         if (!EnsurePoolLoaded())
         {
             Debug.LogError("卡池加载失败，无法抽卡");
@@ -303,6 +305,8 @@ public class GachaController : MonoBehaviour
         }
         else
         {
+            // 所有道具展示完毕，先处理玩家数据
+            ProcessGachaResults();
             GoToResultScene();
         }
     }
@@ -449,6 +453,136 @@ public class GachaController : MonoBehaviour
 
         Debug.LogError("所有尝试均失败，没有任何小栏位配置了有效的卡池！");
         return false;
+    }
+
+    private void ProcessGachaResults()
+    {
+        if (currentResults == null || currentResults.Count == 0) return;
+
+        var dataManager = GameDataManager.Instance;
+        var playerDataManager = PlayerDataManager.Instance;
+        if (dataManager == null || playerDataManager == null || playerDataManager.CurrentPlayerData == null) return;
+
+        var playerData = playerDataManager.CurrentPlayerData;
+
+        foreach (var result in currentResults)
+        {
+            string id = result.itemId;
+
+            // 1. 检查是否为角色
+            if (dataManager.CharacterDict.TryGetValue(id, out CharacterDefineSO charDef))
+            {
+                // 查找是否已有该角色
+                var existingChar = playerData.Characters.Find(c => c.Id == id);
+                if (existingChar != null && existingChar.IsUnlocked == true)
+                {
+                    // 已有：碎片 +10
+                    Debug.Log(id + "+10");
+                    existingChar.BaseStats.Fragments += 10;
+                }
+                else
+                {
+                    Debug.Log(id + "Unlock");
+                    /*
+                    // 没有：解锁角色
+                    var newChar = new CharacterData(
+                        id: charDef.id,
+                        name: charDef.characterName,
+                        isUnlocked: true,
+                        element: charDef.element,
+                        stars: charDef.baseStars,
+                        maxstars: charDef.maxStars,
+                        health: charDef.baseHealth,
+                        attack: charDef.baseAttack,
+                        defence: charDef.baseDefence,
+                        energy: charDef.baseEnergy,
+                        critRate: charDef.baseCritRate,
+                        critDamage: charDef.baseCritDamage,
+                        elementBonus: charDef.baseElementBonus
+                    );
+                    playerData.Characters.Add(newChar);
+                    */
+                    existingChar.IsUnlocked = true;
+                }
+            }
+            // 2. 检查是否为武器
+            else if (dataManager.WeaponDict.TryGetValue(id, out WeaponDefineSO weaponDef))
+            {
+                var newWeapon = new WeaponData(
+                    id: weaponDef.id,
+                    name: weaponDef.weaponName,
+                    type: weaponDef.type,
+                    element: weaponDef.element,
+                    stars: weaponDef.baseStars,
+                    maxstars: weaponDef.maxStars,
+                    health: weaponDef.baseHealth,
+                    attack: weaponDef.baseAttack,
+                    defence: weaponDef.baseDefence,
+                    energy: weaponDef.baseEnergy,
+                    critRate: weaponDef.baseCritRate,
+                    critDamage: weaponDef.baseCritDamage,
+                    elementBonus: weaponDef.baseElementBonus,
+                    introduction: weaponDef.introduction,
+                    description: weaponDef.description
+                );
+                playerData.WeaponBag.Add(newWeapon);
+            }
+            // 3. 检查是否为圣痕
+            else if (dataManager.StigmataDict.TryGetValue(id, out StigmataDefineSO stigmataDef))
+            {
+                var newStigmata = new StigmataData(
+                    id: stigmataDef.id,
+                    name: stigmataDef.stigmataName,
+                    position: stigmataDef.Position,
+                    element: stigmataDef.element,
+                    stars: stigmataDef.baseStars,
+                    maxstars: stigmataDef.maxStars,
+                    health: stigmataDef.baseHealth,
+                    attack: stigmataDef.baseAttack,
+                    defence: stigmataDef.baseDefence,
+                    energy: stigmataDef.baseEnergy,
+                    critRate: stigmataDef.baseCritRate,
+                    critDamage: stigmataDef.baseCritDamage,
+                    elementBonus: stigmataDef.baseElementBonus,
+                    introduction: stigmataDef.introduction,
+                    description: stigmataDef.description
+                );
+                playerData.StigmataBag.Add(newStigmata);
+            }
+            // 4. 检查是否为材料
+            else if (dataManager.MaterialDict.TryGetValue(id, out MaterialDefineSO materialDef))
+            {
+                // 查找是否已有该材料
+                var existingMaterial = playerData.MaterialBag.Find(m => m.Id == id);
+                if (existingMaterial != null)
+                {
+                    existingMaterial.Count += 1;
+                }
+                else
+                {
+                    var newMaterial = new MaterialData(
+                        id: materialDef.id,
+                        name: materialDef.materialName,
+                        stars: materialDef.baseStars.ToString() + "S",
+                        count: 1,
+                        num: materialDef.num,
+                        introduction: materialDef.introduction,
+                        description: materialDef.description
+                    );
+                    playerData.MaterialBag.Add(newMaterial);
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"未知物品ID: {id}，无法处理");
+            }
+        }
+
+        // 可选：对背包进行排序（例如按稀有度）
+        playerDataManager.SortEquipment();
+
+        // 保存数据
+        playerDataManager.SaveCurrentPlayerData();
     }
 }
 
