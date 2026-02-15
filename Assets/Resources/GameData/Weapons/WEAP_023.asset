@@ -25,5 +25,6 @@ MonoBehaviour:
   baseCritRate: 0.08
   baseCritDamage: 0
   baseElementBonus: 0.15
+  icon: {fileID: 21300000, guid: 86a432d7cb896b441b75584d348c0a13, type: 3}
   introduction: 
   description: 

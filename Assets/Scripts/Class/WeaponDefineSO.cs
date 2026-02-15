@@ -25,6 +25,8 @@ public class WeaponDefineSO : ScriptableObject
     public float baseCritDamage;
     public float baseElementBonus;
 
+    public Sprite icon;
+
     [TextArea] public string introduction;
     [TextArea] public string description;
     /*

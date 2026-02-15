@@ -65,4 +65,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ThirdLevel/RechargeScene.unity
     guid: e7d869bd5e4a86041b92969ae9f121f2
+  - enabled: 1
+    path: Assets/Scenes/FourthLevel/GachaResultScene.unity
+    guid: 5ee695b0e27442c4891d379aeff2c805
   m_configObjects: {}

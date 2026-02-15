@@ -1,27 +1,27 @@
-using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
+using UnityEngine.Video;
 
-// 重新定义 MenuSection，增加 smallButtonPools 数组
 [System.Serializable]
 public class MenuSection
 {
-    public Button largeButton;                 // 大栏位按钮
-    public GameObject panel;                    // 大栏位对应的右侧面板（如果有）
-    public Button[] smallButtons;               // 小栏位按钮数组
-    public GachaPoolSO[] smallButtonPools;      // 与小按钮一一对应的卡池数据（长度应与 smallButtons 一致）
+    public Button largeButton;
+    public GameObject panel;
+    public Button[] smallButtons;
+    public GachaPoolSO[] smallButtonPools;
 }
 
 public class GachaController : MonoBehaviour
 {
-    // ================== 依赖注入 ==================
     [Header("View引用")]
     [SerializeField] private GachaView viewGacha;
 
     // =========================  按钮引用 (可选)   =========================
     [Header("按钮引用 (如果需要通过脚本访问它们)")]
+    [Tooltip("在这里拖拽那些已经附加了ModularUIButton组件的按钮对象，方便通过脚本获取。")]
     public ModularUIButton[] referencedButtons;
 
     [Header("菜单栏")]
@@ -29,17 +29,20 @@ public class GachaController : MonoBehaviour
     private int largeIndex = -1, smallIndex = -1;
 
     [Header("颜色方案")]
-    [SerializeField] private Color largeSelectedColor = Color.white;   // 选中大按钮颜色 A
-    [SerializeField] private Color largeNormalColor = Color.gray;      // 未选中大按钮颜色 B
-    [SerializeField] private Color smallSelectedColor = Color.yellow;  // 选中小按钮颜色 C
-    [SerializeField] private Color smallNormalColor = Color.white;     // 未选中小按钮颜色 D
+    [SerializeField] private Color largeSelectedColor = Color.white;
+    [SerializeField] private Color largeNormalColor = Color.gray;
+    [SerializeField] private Color smallSelectedColor = Color.yellow;
+    [SerializeField] private Color smallNormalColor = Color.white;
 
     [Header("抽卡设置")]
-    [SerializeField] private Button gachaButton;          // 抽卡按钮（需在Inspector中拖拽）
-    [SerializeField] private Button gachaTenButton;       // 新增：十连按钮
-    private GachaManager gachaManager;                     // 引用单例，无需手动赋值
+    [SerializeField] private Button gachaButton;
+    [SerializeField] private Button gachaTenButton;
+    private GachaManager gachaManager;
 
-    // ================== 数据 ==================
+    private List<GachaResultItem> currentResults = new List<GachaResultItem>();
+    private int currentShowIndex = 0;
+    private GachaState currentState = GachaState.Idle;
+
     private PlayerData playerData;
 
     void Start()
@@ -56,30 +59,22 @@ public class GachaController : MonoBehaviour
     void LoadData()
     {
         if (PlayerDataManager.Instance != null)
-        {
             playerData = PlayerDataManager.Instance.CurrentPlayerData;
-        }
         else
-        {
             playerData = new PlayerData("测试玩家");
-        }
     }
 
     void InitializeUI()
     {
-        // 1. 先获取 GachaManager 单例
         gachaManager = GachaManager.Instance;
         if (gachaManager == null)
             Debug.LogError("场景中缺少GachaManager，请挂载GachaManager脚本");
 
-        // 2. 绑定按钮事件
         for (int i = 0; i < menuSections.Length; i++)
         {
             int largeIdx = i;
             MenuSection section = menuSections[i];
-
             section.largeButton.onClick.AddListener(() => OnLargeButtonClick(largeIdx));
-
             for (int j = 0; j < section.smallButtons.Length; j++)
             {
                 int smallIdx = j;
@@ -87,19 +82,14 @@ public class GachaController : MonoBehaviour
             }
         }
 
-        // 3. 绑定抽卡按钮
         if (gachaButton != null)
             gachaButton.onClick.AddListener(OnGachaButtonClick);
-
-        // 绑定十连按钮
         if (gachaTenButton != null)
             gachaTenButton.onClick.AddListener(OnGachaTenButtonClick);
 
-        // 4. 初始化默认选中第一个大栏位
         if (menuSections.Length > 0)
         {
-            OnLargeButtonClick(0); // 内部会调用 OnSmallButtonClick，此时 gachaManager 已就绪
-                                   // 更新卡池名称显示
+            OnLargeButtonClick(0);
             if (menuSections[0].smallButtonPools != null && menuSections[0].smallButtonPools.Length > 0)
             {
                 var firstPool = menuSections[0].smallButtonPools[0];
@@ -108,19 +98,19 @@ public class GachaController : MonoBehaviour
             }
         }
 
-        // 5. 更新玩家资源
         viewGacha.UpdatePlayerResources(playerData);
+        if (viewGacha.clickArea != null)
+            viewGacha.clickArea.onClick.RemoveAllListeners();
+        viewGacha.ShowAnimationPanel(false);
+        viewGacha.ShowSingleItemPanel(false);
     }
 
     private void OnLargeButtonClick(int LargeIndex)
     {
-        if (largeIndex == LargeIndex)
-            return;
-
+        if (largeIndex == LargeIndex) return;
         largeIndex = LargeIndex;
-        smallIndex = 0;
+        smallIndex = -1;
 
-        // 1. 更新所有大栏位颜色 + 控制小栏位显隐
         for (int i = 0; i < menuSections.Length; i++)
         {
             bool isCurrent = (i == largeIndex);
@@ -128,12 +118,8 @@ public class GachaController : MonoBehaviour
             SetSmallButtonsActive(i, isCurrent);
         }
 
-        // 2. 自动选中当前大栏位的第一个小按钮
         if (menuSections[largeIndex].smallButtons.Length > 0)
-        {
-            // 手动触发小栏位点击事件，加载卡池并高亮
             OnSmallButtonClick(largeIndex, 0);
-        }
     }
 
     private void OnSmallButtonClick(int largeIdx, int smallIdx)
@@ -143,110 +129,192 @@ public class GachaController : MonoBehaviour
         viewGacha.PlayVideoFromResources(largeIndex, smallIndex);
         SetSmallButtonHighlight(largeIdx, smallIdx);
 
-        // === 更新卡池信息 ===
-        if (menuSections[largeIdx].smallButtonPools != null && menuSections[largeIdx].smallButtonPools.Length > smallIdx)
+        // 检查数组和元素
+        if (menuSections[largeIdx].smallButtonPools == null)
         {
-            Debug.Log(largeIdx.ToString() + "," + smallIdx.ToString());
-            var pool = menuSections[largeIdx].smallButtonPools[smallIdx];
-            if (pool != null && gachaManager != null)
-            {
-                gachaManager.LoadPool(pool);
-                viewGacha.UpdateCurrentPoolName(pool.poolName);
-            }
+            Debug.LogError($"smallButtonPools 数组为 null，largeIdx={largeIdx}");
+            return;
+        }
+        if (menuSections[largeIdx].smallButtonPools.Length <= smallIdx)
+        {
+            Debug.LogError($"smallButtonPools 数组长度不足：长度={menuSections[largeIdx].smallButtonPools.Length}，索引={smallIdx}");
+            return;
         }
 
-        // 可选：切换右侧面板
-        // menuSections[largeIdx].panel.SetActive(true);
+        var pool = menuSections[largeIdx].smallButtonPools[smallIdx];
+        Debug.Log($"准备加载卡池：pool={(pool != null ? pool.poolName : "null")}, gachaManager={gachaManager}");
+
+        if (pool != null && gachaManager != null)
+        {
+            // 加载前打印 currentPool
+            var beforePool = gachaManager.GetCurrentPool();
+            Debug.Log($"加载前 currentPool = {(beforePool != null ? beforePool.poolName : "null")}");
+
+            gachaManager.LoadPool(pool);
+
+            // 加载后检查
+            var afterPool = gachaManager.GetCurrentPool();
+            Debug.Log($"加载后 currentPool = {(afterPool != null ? afterPool.poolName : "null")}");
+
+            if (afterPool != null)
+                viewGacha.UpdateCurrentPoolName(pool.poolName);
+            else
+                Debug.LogError("LoadPool 后 currentPool 仍然为 null！");
+        }
+        else
+        {
+            Debug.LogError($"pool 或 gachaManager 为 null: pool={pool}, gachaManager={gachaManager}");
+        }
     }
 
-    // 辅助方法：根据物品ID获取名称和星级
-    private void GetItemInfo(string id, out string name, out int star)
+    // 修改 GetItemInfo 增加 icon 参数
+    private void GetItemInfo(string id, out string name, out int star, out Sprite icon)
     {
         name = "未知";
         star = 0;
+        icon = null;
         if (string.IsNullOrEmpty(id)) return;
 
         GameDataManager dataManager = GameDataManager.Instance;
-        dataManager.CharacterDict.TryGetValue(id, out CharacterDefineSO character);
-        if (character != null)
+        if (dataManager.CharacterDict.TryGetValue(id, out CharacterDefineSO character))
         {
             name = character.characterName;
-            star = character.baseStars;
+            star = character.baseStars + 4;
+            icon = character.icon; // 假设 SO 中有 icon 字段
             return;
         }
-        dataManager.WeaponDict.TryGetValue(id, out WeaponDefineSO weapon);
-        if (weapon != null)
+        if (dataManager.WeaponDict.TryGetValue(id, out WeaponDefineSO weapon))
         {
             name = weapon.weaponName;
-            star = weapon.baseStars;
+            star = weapon.baseStars + 1;
+            icon = weapon.icon;
             return;
         }
-        dataManager.StigmataDict.TryGetValue(id, out StigmataDefineSO stigmata);
-        if (stigmata != null)
+        if (dataManager.StigmataDict.TryGetValue(id, out StigmataDefineSO stigmata))
         {
             name = stigmata.stigmataName;
             star = stigmata.baseStars;
+            icon = stigmata.icon;
             return;
         }
     }
 
-    // 修改单抽方法，使用辅助方法
     private void OnGachaButtonClick()
     {
         if (gachaManager == null) return;
-
-        // 确保卡池已加载
-        if (gachaManager.GetCurrentPool() == null && largeIndex >= 0 && smallIndex >= 0)
+        if (!EnsurePoolLoaded()) // 如果无法加载卡池，直接返回
         {
-            var pool = menuSections[largeIndex].smallButtonPools[smallIndex];
-            if (pool != null)
-                gachaManager.LoadPool(pool);
+            Debug.LogError("卡池加载失败，无法抽卡");
+            return;
         }
 
         string itemId = gachaManager.PerformGacha();
         if (string.IsNullOrEmpty(itemId))
         {
-            Debug.LogWarning("抽卡失败，可能未加载卡池");
+            Debug.LogWarning("抽卡返回空");
             return;
         }
 
-        GetItemInfo(itemId, out string itemName, out int star);
-        viewGacha.ShowGachaResult(itemName, star);
-        UpdatePityDisplay();
+        List<string> ids = new List<string> { itemId };
+        StartGachaSequence(ids);
     }
-    // 新增：十连抽方法
+
     private void OnGachaTenButtonClick()
     {
         if (gachaManager == null) return;
-
-        // 确保卡池已加载
-        if (gachaManager.GetCurrentPool() == null && largeIndex >= 0 && smallIndex >= 0)
+        if (!EnsurePoolLoaded())
         {
-            var pool = menuSections[largeIndex].smallButtonPools[smallIndex];
-            if (pool != null)
-                gachaManager.LoadPool(pool);
+            Debug.LogError("卡池加载失败，无法抽卡");
+            return;
         }
 
-        // 执行十连抽，存储结果
-        string[] itemIds = new string[10];
+        List<string> ids = new List<string>();
         for (int i = 0; i < 10; i++)
+            ids.Add(gachaManager.PerformGacha());
+        StartGachaSequence(ids);
+    }
+
+    private void StartGachaSequence(List<string> itemIds)
+    {
+        currentResults.Clear();
+        foreach (string id in itemIds)
         {
-            itemIds[i] = gachaManager.PerformGacha();
+            GetItemInfo(id, out string name, out int star, out Sprite icon);
+            currentResults.Add(new GachaResultItem
+            {
+                itemId = id,
+                itemName = name,
+                star = star,
+                icon = icon
+            });
         }
 
-        // 转换为显示信息
-        string[] itemNames = new string[10];
-        int[] stars = new int[10];
-        for (int i = 0; i < 10; i++)
+        currentState = GachaState.PlayingAnimation;
+        viewGacha.ShowAnimationPanel(true);
+        viewGacha.ShowSingleItemPanel(false);
+
+        if (viewGacha.gachaAnimationVideoPlayer != null)
         {
-            GetItemInfo(itemIds[i], out itemNames[i], out stars[i]);
+            viewGacha.gachaAnimationVideoPlayer.loopPointReached += OnAnimationEnd;
+            viewGacha.gachaAnimationVideoPlayer.Play();
         }
+        else
+        {
+            OnAnimationEnd(null);
+        }
+    }
 
-        // 更新保底显示
-        UpdatePityDisplay();
+    private void OnAnimationEnd(VideoPlayer vp)
+    {
+        if (vp != null)
+            vp.loopPointReached -= OnAnimationEnd;
 
-        // 显示十连结果
-        viewGacha.ShowGachaTenResult(itemNames, stars);
+        currentShowIndex = 0;
+        currentState = GachaState.ShowingItems;
+        viewGacha.ShowAnimationPanel(false);
+        ShowCurrentItem();
+
+        if (viewGacha.clickArea != null)
+            viewGacha.clickArea.onClick.AddListener(OnClickNext);
+    }
+
+    private void ShowCurrentItem()
+    {
+        if (currentShowIndex < currentResults.Count)
+        {
+            var item = currentResults[currentShowIndex];
+            viewGacha.UpdateSingleItemDisplay(item.icon, item.itemName, item.star);
+            viewGacha.ShowSingleItemPanel(true);
+        }
+        else
+        {
+            // 所有道具展示完毕，跳转到结果场景
+            GoToResultScene();
+        }
+    }
+
+    private void OnClickNext()
+    {
+        if (currentState != GachaState.ShowingItems) return;
+        currentShowIndex++;
+        ShowCurrentItem();
+    }
+
+    private void GoToResultScene()
+    {
+        // 保存结果到静态数据
+        GachaResultData.CurrentResults = new List<GachaResultItem>(currentResults);
+
+        // 移除点击监听
+        if (viewGacha.clickArea != null)
+            viewGacha.clickArea.onClick.RemoveListener(OnClickNext);
+
+        // 隐藏所有面板
+        viewGacha.ShowAnimationPanel(false);
+        viewGacha.ShowSingleItemPanel(false);
+
+        // 加载结果场景
+        SceneManager.LoadScene("GachaResultScene");
     }
 
     private void UpdatePityDisplay()
@@ -260,14 +328,12 @@ public class GachaController : MonoBehaviour
         );
     }
 
-    // 公开接口：修改抽卡概率（可由设置面板调用）
     public void SetGachaProbability(float threeStar, float fourStar, float fiveStar)
     {
         if (gachaManager == null) return;
         gachaManager.SetStarProbability(threeStar, fourStar, fiveStar);
     }
 
-    // ---------- 辅助函数 ----------
     private void SetLargeButtonAppearance(int largeIdx, bool isSelected)
     {
         Button btn = menuSections[largeIdx].largeButton;
@@ -291,4 +357,99 @@ public class GachaController : MonoBehaviour
                 btn.targetGraphic.color = (i == smallIdx) ? smallSelectedColor : smallNormalColor;
         }
     }
+
+    private bool EnsurePoolLoaded()
+    {
+        if (gachaManager == null)
+        {
+            Debug.LogError("gachaManager 为 null");
+            return false;
+        }
+
+        if (gachaManager.GetCurrentPool() != null)
+        {
+            Debug.Log("卡池已加载，无需重新加载");
+            return true;
+        }
+
+        Debug.LogWarning("当前卡池为 null，尝试重新加载...");
+
+        // 如果当前索引无效，尝试重置为第一个大栏位的第一个有效小栏位
+        if (largeIndex < 0 || largeIndex >= menuSections.Length)
+        {
+            Debug.Log("largeIndex 无效，尝试全局查找");
+            for (int i = 0; i < menuSections.Length; i++)
+            {
+                var section = menuSections[i];
+                for (int j = 0; j < section.smallButtons.Length; j++)
+                {
+                    if (section.smallButtonPools != null && j < section.smallButtonPools.Length && section.smallButtonPools[j] != null)
+                    {
+                        Debug.Log($"找到有效小栏位：大栏位 {i}，小栏位 {j}，准备加载");
+                        OnSmallButtonClick(i, j);
+                        return gachaManager.GetCurrentPool() != null;
+                    }
+                }
+            }
+            Debug.LogError("没有任何小栏位配置了有效的卡池！");
+            return false;
+        }
+
+        // 尝试用当前索引加载卡池
+        var currentSection = menuSections[largeIndex];
+        if (currentSection.smallButtonPools != null && smallIndex >= 0 && smallIndex < currentSection.smallButtonPools.Length &&
+            currentSection.smallButtonPools[smallIndex] != null)
+        {
+            Debug.Log($"使用当前索引 {largeIndex}-{smallIndex} 加载卡池");
+            OnSmallButtonClick(largeIndex, smallIndex);
+            return gachaManager.GetCurrentPool() != null;
+        }
+
+        // 如果当前小栏位无效，在当前大栏位中寻找第一个有效小栏位
+        Debug.Log($"当前小栏位 {smallIndex} 无效，在当前大栏位 {largeIndex} 中查找");
+        for (int j = 0; j < currentSection.smallButtons.Length; j++)
+        {
+            if (currentSection.smallButtonPools != null && j < currentSection.smallButtonPools.Length && currentSection.smallButtonPools[j] != null)
+            {
+                Debug.Log($"在当前大栏位中找到有效小栏位 {j}");
+                OnSmallButtonClick(largeIndex, j);
+                return gachaManager.GetCurrentPool() != null;
+            }
+        }
+
+        // 如果当前大栏位也没有有效卡池，全局寻找
+        Debug.Log("当前大栏位无有效卡池，全局查找");
+        for (int i = 0; i < menuSections.Length; i++)
+        {
+            var section = menuSections[i];
+            for (int j = 0; j < section.smallButtons.Length; j++)
+            {
+                if (section.smallButtonPools != null && j < section.smallButtonPools.Length && section.smallButtonPools[j] != null)
+                {
+                    Debug.Log($"在全局中找到有效小栏位：大栏位 {i}，小栏位 {j}");
+                    OnSmallButtonClick(i, j);
+                    return gachaManager.GetCurrentPool() != null;
+                }
+            }
+        }
+
+        Debug.LogError("所有尝试均失败，没有任何小栏位配置了有效的卡池！");
+        return false;
+    }
+}
+
+[System.Serializable]
+public class GachaResultItem
+{
+    public string itemId;
+    public string itemName;
+    public int star;
+    public Sprite icon;
+}
+
+public enum GachaState
+{
+    Idle,
+    PlayingAnimation,
+    ShowingItems
 }

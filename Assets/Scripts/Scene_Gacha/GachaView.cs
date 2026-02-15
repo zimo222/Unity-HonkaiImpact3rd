@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Video;
 
 public class GachaView : MonoBehaviour
@@ -10,7 +11,6 @@ public class GachaView : MonoBehaviour
     public TMP_Text coinsText;
     public TMP_Text crystalsText;
 
-    // 注意：需要添加保底文本和卡池名称文本的字段，如果尚未添加请自行补充
     [Header("保底信息")]
     public TMP_Text fourStarPityText;
     public TMP_Text fiveStarPityText;
@@ -20,12 +20,23 @@ public class GachaView : MonoBehaviour
     [SerializeField] private GameObject contentPanel;      // 唯一的 Panel 对象
     [SerializeField] private VideoPlayer contentVideoPlayer; // Panel 内的 VideoPlayer
 
-    // ========================= 抽卡结果展示UI =========================
-    [Header("抽卡结果")]
-    public TMP_Text gachaResultText;          // 单抽结果
-    public TMP_Text gachaTenResultText;       // 十连结果（显示多行文本）
+    // ========================= 抽卡结果展示UI（单个物品展示） =========================
+    [Header("抽卡展示流程")]
+    public GameObject animationPanel;           // 播放抽卡动画的面板（包含VideoPlayer）
+    public VideoPlayer gachaAnimationVideoPlayer; // 抽卡动画视频播放器
+    public GameObject singleItemPanel;          // 单个道具展示面板
+    public Image itemIconImage;                 // 道具图标
+    public TMP_Text itemNameText;                // 道具名称
+    public TMP_Text itemStarText;                // 道具星级（如 "★5"）
+    public Button clickArea;                     // 用于点击切换的全屏透明按钮
 
-    // 更新玩家资源
+    // ========================= 公共方法 =========================
+    private void Start()
+    {
+        ShowAnimationPanel(false);
+        ShowSingleItemPanel(false);
+    }
+
     public void UpdatePlayerResources(PlayerData playerData)
     {
         if (playerData == null) return;
@@ -34,29 +45,6 @@ public class GachaView : MonoBehaviour
         if (crystalsText != null) crystalsText.text = playerData.Crystals.ToString();
     }
 
-    // 显示单抽结果
-    public void ShowGachaResult(string itemName, int star)
-    {
-        Debug.Log($"获得：{itemName} (★{star + 4})");
-        if (gachaResultText != null)
-            gachaResultText.text = $"获得：{itemName} (★{star})";
-    }
-
-    // 显示十连结果
-    public void ShowGachaTenResult(string[] itemNames, int[] stars)
-    {
-        //if (gachaTenResultText == null) return;
-        string result = "";
-        for (int i = 0; i < itemNames.Length; i++)
-        {
-            result += $"{itemNames[i]} (★{stars[i] + 4})\n";
-        }
-        Debug.Log(result);
-        if(gachaTenResultText != null)
-            gachaTenResultText.text = result;
-    }
-
-    // 更新保底显示
     public void UpdatePityDisplay(int fourStarPity, int fiveStarPity, bool fourStarGuaranteed, bool fiveStarGuaranteed)
     {
         Debug.Log($"四星保底：{fourStarPity}/10 {(fourStarGuaranteed ? "【保底中】" : "")}");
@@ -67,26 +55,41 @@ public class GachaView : MonoBehaviour
             fiveStarPityText.text = $"五星保底：{fiveStarPity}/100 {(fiveStarGuaranteed ? "【保底中】" : "")}";
     }
 
-    // 更新当前卡池名称
     public void UpdateCurrentPoolName(string poolName)
     {
         if (currentPoolNameText != null)
             currentPoolNameText.text = poolName;
     }
 
+    public void ShowAnimationPanel(bool show)
+    {
+        if (animationPanel != null) animationPanel.SetActive(show);
+    }
+
+    public void ShowSingleItemPanel(bool show)
+    {
+        if (singleItemPanel != null) singleItemPanel.SetActive(show);
+    }
+
+    public void UpdateSingleItemDisplay(Sprite icon, string name, int star)
+    {
+        if (itemIconImage != null) itemIconImage.sprite = icon;
+        if (itemNameText != null) itemNameText.text = name;
+        if (itemStarText != null) itemStarText.text = "★" + star;
+    }
+
     public void PlayVideoFromResources(int largeIdx, int smallIdx)
     {
         // 加载Resources/Video下的VideoClip资源
         VideoClip clip = Resources.Load<VideoClip>("Video/" + largeIdx.ToString() + "_" + smallIdx.ToString());
-
         if (clip != null)
         {
             contentVideoPlayer.clip = clip;
-            contentVideoPlayer.Play(); // 可选，立即播放
+            contentVideoPlayer.Play();
         }
         else
         {
-            Debug.LogError("未找到视频资源: ");
+            Debug.LogError("未找到视频资源: " + largeIdx + "_" + smallIdx);
         }
     }
 }

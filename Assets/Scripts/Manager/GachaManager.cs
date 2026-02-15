@@ -6,9 +6,10 @@ public class GachaManager : MonoBehaviour
     public static GachaManager Instance { get; private set; }
 
     [Header("星级概率（总和应为100）")]
-    [SerializeField] private float threeStarProbability = 80f;
-    [SerializeField] private float fourStarProbability = 15f;
-    [SerializeField] private float fiveStarProbability = 5f;
+    [SerializeField] private float threeStarProbability = 50f;
+    [SerializeField] private float fourStarProbability = 30f;
+    [SerializeField] private float fiveStarProbability = 20f;
+    [SerializeField] private float buwai = 0.2f;
 
     // 当前卡池数据（按星级分类）
     private GachaPoolSO currentPool;
@@ -47,13 +48,16 @@ public class GachaManager : MonoBehaviour
     /// </summary>
     public void LoadPool(GachaPoolSO newPool)
     {
+        Debug.Log($"LoadPool 被调用，传入卡池：{(newPool != null ? newPool.poolName : "null")}");
         if (newPool == null)
         {
             Debug.LogError("卡池为空！");
             return;
         }
 
+        // 关键赋值
         currentPool = newPool;
+        Debug.Log($"currentPool 已设置为：{currentPool.poolName}");
 
         // 按星级分类
         threeStarItems = new List<PoolItem>();
@@ -71,8 +75,7 @@ public class GachaManager : MonoBehaviour
             }
         }
 
-        // 切换卡池时重置保底计数器（可根据游戏需求决定是否重置）
-        ResetPityCounters();
+        Debug.Log($"卡池 {newPool.poolName} 加载完成，三星{threeStarItems.Count} 四星{fourStarItems.Count} 五星{fiveStarItems.Count}");
     }
 
     private void ResetPityCounters()
@@ -182,7 +185,7 @@ public class GachaManager : MonoBehaviour
             // 正常情况：50%概率出UP（可根据权重细化）
             if (upItems.Count > 0)
             {
-                bool wantUp = Random.Range(0f, 1f) < 0.5f;
+                bool wantUp = Random.Range(0f, 1f) < buwai;
                 if (wantUp)
                 {
                     return WeightedRandom(upItems);
