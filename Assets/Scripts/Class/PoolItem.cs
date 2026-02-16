@@ -13,11 +13,20 @@ public enum ItemType
 }
 
 [Serializable]
-public class PoolItem
+public class GachaPoolItem
 {
     public string itemId;           // 物品ID，与 GameDataManager 字典中的键对应
     public ItemType itemType;        // 物品类型
     public int starLevel;            // 星级：3、4、5
     public float weight;             // 同星级内随机权重（越大越容易抽到）
     public bool isUp;                // 是否为 UP 物品（影响五星保底）
+}
+[Serializable]
+public class ShopPoolItem
+{
+    public string itemId;           // 物品ID，与 GameDataManager 字典中的键对应
+    public int starLevel;
+    public int count;
+    public string resourceId;
+    public int num;
 }

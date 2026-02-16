@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4197404f18226b94e9feec2cad2d2248, type: 3}
+  m_Name: CoinStore
+  m_EditorClassIdentifier: 
+  poolName: CoinStore
+  items:
+  - itemId: MATE_005
+    count: 1
+    resourceId: Coin
+    num: 28000
+  - itemId: MATE_006
+    count: 1
+    resourceId: Coin
+    num: 14000
+  - itemId: MATE_007
+    count: 1
+    resourceId: Coin
+    num: 7000
+  - itemId: MATE_008
+    count: 1
+    resourceId: Coin
+    num: 2800
+  - itemId: MATE_001
+    count: 1
+    resourceId: Coin
+    num: 15000
+  - itemId: MATE_002
+    count: 1
+    resourceId: Coin
+    num: 3000
+  - itemId: MATE_003
+    count: 1
+    resourceId: Coin
+    num: 600

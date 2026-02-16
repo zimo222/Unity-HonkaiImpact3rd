@@ -563,7 +563,7 @@ public class GachaController : MonoBehaviour
                     var newMaterial = new MaterialData(
                         id: materialDef.id,
                         name: materialDef.materialName,
-                        stars: materialDef.baseStars.ToString() + "S",
+                        stars: materialDef.baseStars,
                         count: 1,
                         num: materialDef.num,
                         introduction: materialDef.introduction,

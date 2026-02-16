@@ -33,13 +33,13 @@ public class MaterialItemView : MonoBehaviour, IPointerClickHandler
         if (rarityImage != null)
         {
             // 根据星级设置颜色
-            string stars = materialData.Stars;
+            int stars = materialData.Stars;
             rarityImage.color = GetRarityColor(stars);
         }
 
         // 星级
         if (starsImage != null)
-            starsImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Stars_{materialData.Stars}");
+            starsImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Stars_{materialData.Stars}S");
 
         // 数量
         if (countText != null)
@@ -70,15 +70,15 @@ public class MaterialItemView : MonoBehaviour, IPointerClickHandler
     }
 
     // 获取稀有度颜色
-    Color GetRarityColor(string stars)
+    Color GetRarityColor(int stars)
     {
         Debug.Log(stars);
         // 5星橙色，4星紫色，3星蓝色，其他灰色
-        if (stars == "5S" || stars == "4S")
+        if (stars == 5 || stars == 4)
             return new Color(160 / 255.0f, 79 / 255.0f, 189 / 255.0f); // 紫色
-        else if (stars == "3S" || stars == "2S")
+        else if (stars == 3 || stars == 2)
             return new Color(40 / 255.0f, 165 / 255.0f, 225 / 255.0f); // 蓝色
-        else if (stars == "1S")
+        else if (stars == 1)
             return new Color(78 / 255.0f, 179 / 255.0f, 131 / 255.0f); // 绿色
         else
             return Color.gray; // 灰色

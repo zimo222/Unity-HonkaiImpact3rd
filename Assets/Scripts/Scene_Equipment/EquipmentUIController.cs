@@ -341,13 +341,13 @@ public class EquipmentUIController : MonoBehaviour
         detailPanel.SetActive(true);
 
         if (detailRarityImage != null)
-            detailRarityImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Frame_{material.Stars}");
+            detailRarityImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Frame_{material.Stars}S");
 
         if (detailIconImage != null)
             detailIconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Icon_{material.Id}");
 
         if (detailStarImage != null)
-            detailStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{material.Stars}");
+            detailStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{material.Stars}S");
 
         if (detailNameText != null)
             detailNameText.text = material.Name;

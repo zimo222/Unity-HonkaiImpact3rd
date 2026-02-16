@@ -661,8 +661,8 @@ public class PlayerDataManager : MonoBehaviour
         });
         CurrentPlayerData.MaterialBag.Sort((a, b) =>
         {
-            string statusOrderA = a.Stars;
-            string statusOrderB = b.Stars;
+            int statusOrderA = a.Stars;
+            int statusOrderB = b.Stars;
 
             if (statusOrderA != statusOrderB)
                 return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前
@@ -1218,15 +1218,15 @@ public class PlayerDataManager : MonoBehaviour
         // 直接根据星级返回材料
         if (stars <= 2)
         {
-            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 1, 1500));
+            required.Add(new MaterialData("MATE_009", "相转移镜面", 4, 1, 1500));
         }
         else if (stars == 3)
         {
-            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 2, 1500));
+            required.Add(new MaterialData("MATE_009", "相转移镜面", 4, 2, 1500));
         }
         else if (stars >= 4)
         {
-            required.Add(new MaterialData("MATE_009", "相转移镜面", "4S", 3, 1500));
+            required.Add(new MaterialData("MATE_009", "相转移镜面", 4, 3, 1500));
         }
 
         return required;

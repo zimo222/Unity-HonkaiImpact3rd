@@ -13,9 +13,9 @@ public class GachaManager : MonoBehaviour
 
     // 当前卡池数据（按星级分类）
     private GachaPoolSO currentPool;
-    private List<PoolItem> threeStarItems;
-    private List<PoolItem> fourStarItems;
-    private List<PoolItem> fiveStarItems;
+    private List<GachaPoolItem> threeStarItems;
+    private List<GachaPoolItem> fourStarItems;
+    private List<GachaPoolItem> fiveStarItems;
 
     // 保底计数器
     private int pullsSinceLastFourStar = 0;
@@ -60,9 +60,9 @@ public class GachaManager : MonoBehaviour
         Debug.Log($"currentPool 已设置为：{currentPool.poolName}");
 
         // 按星级分类
-        threeStarItems = new List<PoolItem>();
-        fourStarItems = new List<PoolItem>();
-        fiveStarItems = new List<PoolItem>();
+        threeStarItems = new List<GachaPoolItem>();
+        fourStarItems = new List<GachaPoolItem>();
+        fiveStarItems = new List<GachaPoolItem>();
 
         foreach (var item in newPool.items)
         {
@@ -121,7 +121,7 @@ public class GachaManager : MonoBehaviour
         int star = DetermineStar();
 
         // 2. 从对应星级列表中按权重随机选择一个物品
-        PoolItem selected = SelectItemByStar(star);
+        GachaPoolItem selected = SelectItemByStar(star);
 
         // 3. 更新保底计数器
         UpdatePity(star);
@@ -158,9 +158,9 @@ public class GachaManager : MonoBehaviour
     }
 
     // 从指定星级的列表中随机选择一个物品（考虑UP与大保底）
-    private PoolItem SelectItemByStar(int star)
+    private GachaPoolItem SelectItemByStar(int star)
     {
-        List<PoolItem> list = star == 3 ? threeStarItems :
+        List<GachaPoolItem> list = star == 3 ? threeStarItems :
                                star == 4 ? fourStarItems : fiveStarItems;
 
         if (list == null || list.Count == 0)
@@ -212,7 +212,7 @@ public class GachaManager : MonoBehaviour
     }
 
     // 权重随机工具
-    private PoolItem WeightedRandom(List<PoolItem> items)
+    private GachaPoolItem WeightedRandom(List<GachaPoolItem> items)
     {
         float totalWeight = 0f;
         foreach (var item in items)

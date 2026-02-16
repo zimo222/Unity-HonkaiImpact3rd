@@ -5,7 +5,7 @@ using UnityEngine;
 public class GachaPoolSO : ScriptableObject
 {
     public string poolName;          // 卡池名称（用于显示）
-    public List<PoolItem> items;     // 卡池包含的所有物品
+    public List<GachaPoolItem> items;     // 卡池包含的所有物品
 
     [Header("填充设置（仅在编辑器中使用）")]
     public string[] upFiveStarIds;   // 在 Inspector 中填写要设为 UP 的五星 ID
@@ -24,7 +24,7 @@ public class GachaPoolSO : ScriptableObject
             return;
         }
 
-        items = new List<PoolItem>();
+        items = new List<GachaPoolItem>();
 
         foreach (var character in characters)
         {
@@ -41,7 +41,7 @@ public class GachaPoolSO : ScriptableObject
                 continue;
             }
 
-            PoolItem item = new PoolItem
+            GachaPoolItem item = new GachaPoolItem
             {
                 itemId = character.id,
                 itemType = ItemType.Character,
@@ -69,7 +69,7 @@ public class GachaPoolSO : ScriptableObject
             return;
         }
 
-        items = new List<PoolItem>();
+        items = new List<GachaPoolItem>();
 
         foreach (var weapon in weapons)
         {
@@ -85,7 +85,7 @@ public class GachaPoolSO : ScriptableObject
                 continue;
             }
 
-            PoolItem item = new PoolItem
+            GachaPoolItem item = new GachaPoolItem
             {
                 itemId = weapon.id,
                 itemType = ItemType.Weapon,
