@@ -48,9 +48,10 @@ This is an ARPG (Action Role-Playing Game) project developed with Unity 2022.3.3
 | **登录与主页**<br>Login & Home | -2026.01.21 | ✅ 完成<br>Completed | 场景切换、基础UI交互<br>Scene switching, basic UI interaction |
 | **任务界面**<br>Task UI | 2026.01.22-25 | ✅ 完成<br>Completed | 列表展示、数据管理<br>List display, data management |
 | **女武神界面**<br>Valkyrie UI | 2026.01.26-02.01 | ✅ 完成<br>Completed | 角色数据管理、装备系统<br>Character data management, equipment system |
-| **装备界面**<br>Equipment UI | 2026.02.02-05 | ✅ 完成<br>Completed | 装备管理、属性计算、对象池管理<br>Equipment management, attribute calculation, object pooling |
-| **装备详情界面**<br>EquipmentDetail UI | 2026.02.06-09 | ✅ 完成<br>Completed | 装备进化、装备强化、特效系统<br>Equipment evolution, equipment enhancement, VFX system |
-| **补给界面**<br>Supply UI | 2026.02.10-至今<br>Present | 🔄 开发中<br>In Progress | 抽卡逻辑、概率系统<br>Gacha logic, probability system |
+| **装备界面**<br>Equipment UI | 2026.02.02-02.05 | ✅ 完成<br>Completed | 装备管理、属性计算、对象池管理<br>Equipment management, attribute calculation, object pooling |
+| **装备详情界面**<br>EquipmentDetail UI | 2026.02.06-02.09 | ✅ 完成<br>Completed | 装备进化、装备强化、特效系统<br>Equipment evolution, equipment enhancement, VFX system |
+| **补给界面**<br>Supply UI | 2026.02.10-02.17 | ✅ 完成<br>Completed | 抽卡逻辑、概率系统<br>Gacha logic, probability system |
+| **模块优化完善**<br>Module Optimization | 2026.02.17-至今<br>Present | 🔄 开发中<br>In Progress |  |
 
 ## 🏗️ 架构设计 | Architecture Design
 
