@@ -41,6 +41,10 @@ public class ShopController : MonoBehaviour
     [Header("商店设置")]
     private ShopManager shopManager;
 
+    [Header("Prefab & Parent")]
+    [SerializeField] private GameObject itemPrefab;       // 商品预制体（挂载 ItemView 组件）
+    [SerializeField] private Transform contentParent;     // 预制体放置的父对象（如 ScrollView Conten
+
     private PlayerData playerData;
 
     void Start()
@@ -145,7 +149,10 @@ public class ShopController : MonoBehaviour
             Debug.Log($"加载后 currentPool = {(afterPool != null ? afterPool.poolName : "null")}");
 
             if (afterPool != null)
+            {
                 Debug.Log("LoadPool成了");
+                GenerateShopItems();
+            }
             else
                 Debug.LogError("LoadPool 后 currentPool 仍然为 null！");
         }
@@ -155,13 +162,11 @@ public class ShopController : MonoBehaviour
         }
     }
 
-    // 修改 GetItemInfo 增加 icon 参数
-    private void GetItemInfo(string id, out string name, out int star, out Sprite icon, out Sprite illustration)
+    private void GetItemInfo(string id, out string name, out int star, out Sprite icon)
     {
         name = "未知";
         star = 0;
         icon = null;
-        illustration = null;
         if (string.IsNullOrEmpty(id)) return;
 
         GameDataManager dataManager = GameDataManager.Instance;
@@ -170,7 +175,6 @@ public class ShopController : MonoBehaviour
             name = character.characterName;
             star = character.baseStars + 4;
             icon = character.icon; // 假设 SO 中有 icon 字段
-            illustration = character.Illustration;
             return;
         }
         if (dataManager.WeaponDict.TryGetValue(id, out WeaponDefineSO weapon))
@@ -178,7 +182,6 @@ public class ShopController : MonoBehaviour
             name = weapon.weaponName;
             star = weapon.baseStars + 1;
             icon = weapon.icon;
-            illustration = null;
             return;
         }
         if (dataManager.StigmataDict.TryGetValue(id, out StigmataDefineSO stigmata))
@@ -186,7 +189,6 @@ public class ShopController : MonoBehaviour
             name = stigmata.stigmataName;
             star = stigmata.baseStars;
             icon = stigmata.icon;
-            illustration = null;
             return;
         }
     }
@@ -221,6 +223,32 @@ public class ShopController : MonoBehaviour
                 TMP_Text text = btn.GetComponentInChildren<TMP_Text>();
                 text.color = (i == smallIdx) ? smallSelectedTextColor : normalTextColor;
             }
+        }
+    }
+
+    /// <summary>
+    /// 生成并初始化所有商品（由打开面板或切换卡池时调用）
+    /// </summary>
+    public void GenerateShopItems()
+    {
+        // 1. 获取当前商品池
+        ShopPoolSO currentPool = ShopManager.Instance.GetCurrentPool();
+        if (currentPool == null)
+        {
+            Debug.LogWarning("当前商品池为空，无法生成商品");
+            return;
+        }
+        // 2. 遍历池中所有物品数据
+        foreach (ShopPoolItem itemData in currentPool.items)
+        {
+            // 2.1 创建预制体实例
+            GameObject itemGO = Instantiate(itemPrefab, contentParent);
+
+            // 2.2 刷新 UI（将数据和预制体传给专门负责 UI 更新的函数）
+            viewShop.RefreshItemUI(itemGO, itemData);
+
+            // 2.3 绑定点击事件（将数据和预制体传给绑定函数）
+            //BindItemEvents(itemGO, itemData);
         }
     }
 }

@@ -15,30 +15,44 @@ MonoBehaviour:
   poolName: CoinStore
   items:
   - itemId: MATE_005
+    starLevel: 4
     count: 1
     resourceId: Coin
     num: 28000
+    icon: {fileID: 21300000, guid: 916a98db9bc1fa74885c232c5882910e, type: 3}
   - itemId: MATE_006
+    starLevel: 3
     count: 1
     resourceId: Coin
     num: 14000
+    icon: {fileID: 21300000, guid: 909383e21673c2849a7098c774dcdf2a, type: 3}
   - itemId: MATE_007
+    starLevel: 2
     count: 1
     resourceId: Coin
     num: 7000
+    icon: {fileID: 21300000, guid: 5bbe4ec4d8fcfda44ad0f840a2b9116a, type: 3}
   - itemId: MATE_008
+    starLevel: 1
     count: 1
     resourceId: Coin
     num: 2800
+    icon: {fileID: 21300000, guid: 80f653012e686dc40ababc8db1544234, type: 3}
   - itemId: MATE_001
+    starLevel: 4
     count: 1
     resourceId: Coin
     num: 15000
+    icon: {fileID: 21300000, guid: 524aca8d6a2fb0c4fb7b4e05e8fc259d, type: 3}
   - itemId: MATE_002
+    starLevel: 3
     count: 1
     resourceId: Coin
     num: 3000
+    icon: {fileID: 21300000, guid: f76129de8ba19434484290d3e8b2950b, type: 3}
   - itemId: MATE_003
+    starLevel: 2
     count: 1
     resourceId: Coin
     num: 600
+    icon: {fileID: 21300000, guid: bf1eb9e40b8de484db6ed53b4b34016f, type: 3}

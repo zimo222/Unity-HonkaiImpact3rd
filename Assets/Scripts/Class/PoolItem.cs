@@ -29,4 +29,5 @@ public class ShopPoolItem
     public int count;
     public string resourceId;
     public int num;
+    public Sprite icon;
 }
