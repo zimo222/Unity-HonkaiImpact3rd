@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using static UnityEditor.Progress;
 
 [System.Serializable]
 public class StoreMenuSection
@@ -44,6 +45,9 @@ public class ShopController : MonoBehaviour
     [Header("Prefab & Parent")]
     [SerializeField] private GameObject itemPrefab;       // 商品预制体（挂载 ItemView 组件）
     [SerializeField] private Transform contentParent;     // 预制体放置的父对象（如 ScrollView Conten
+
+    public GameObject detailPanel;              // 详情面板
+    public Button closeDetailButton;            // 关闭详情按钮
 
     private PlayerData playerData;
 
@@ -92,10 +96,15 @@ public class ShopController : MonoBehaviour
                 var firstPool = menuSections[0].smallButtonPools[0];
             }
         }
+        // 绑定详情面板关闭按钮（仅用于材料）
+        if (closeDetailButton != null)
+            closeDetailButton.onClick.AddListener(HideDetailPanel);
+
+        // 初始化详情面板为隐藏
+        if (detailPanel != null)
+            detailPanel.SetActive(false);
 
         viewShop.UpdatePlayerResources(playerData);
-        if (viewShop.clickArea != null)
-            viewShop.clickArea.onClick.RemoveAllListeners();
     }
 
     private void OnLargeButtonClick(int LargeIndex)
@@ -249,6 +258,62 @@ public class ShopController : MonoBehaviour
 
             // 2.3 绑定点击事件（将数据和预制体传给绑定函数）
             //BindItemEvents(itemGO, itemData);
+            Button[] allButtons = itemGO.GetComponentsInChildren<Button>();
+            ShopPoolItem localItem = itemData; // 重要：创建局部变量副本
+            allButtons[0].onClick.AddListener(() => OnMaterialItemClicked(localItem));
+            allButtons[1].onClick.AddListener(() => OnBuyButtonClicked(localItem));
         }
+    }
+    void OnMaterialItemClicked(ShopPoolItem item)
+    {
+        ShowDetailPanel(item);
+    }    //隐藏详情面板
+
+    void ShowDetailPanel(ShopPoolItem item)
+    {
+        detailPanel.SetActive(true);
+        viewShop.ShowDetail(item);
+    }
+
+    void HideDetailPanel()
+    {
+        if (detailPanel != null)
+            detailPanel.SetActive(false);
+    }
+
+    void OnBuyButtonClicked(ShopPoolItem item)
+    {
+        switch (item.resourceId)
+        {
+            case "Coin":
+                {
+                    if (playerData.Coins < item.num) return;
+                    playerData.Coins -= item.num;
+                    break;
+                }
+            case "Crystal":
+                {
+                    if (playerData.Crystals < item.num) return;
+                    playerData.Crystals -= item.num;
+                    break;
+                }
+        }
+
+        if (GameDataManager.Instance.CharacterDict.TryGetValue(item.itemId, out var character))
+            return;
+
+        // 尝试从武器字典查找
+        if (GameDataManager.Instance.WeaponDict.TryGetValue(item.itemId, out var weapon))
+            return;
+
+        // 尝试从圣痕字典查找
+        if (GameDataManager.Instance.StigmataDict.TryGetValue(item.itemId, out var stigmata))
+            return;
+
+        // 尝试从材料字典查找
+        if (GameDataManager.Instance.MaterialDict.TryGetValue(item.itemId, out var material))
+            PlayerDataManager.Instance.AddMaterial(item.itemId, item.count);
+
+        viewShop.UpdatePlayerResources(playerData);
     }
 }

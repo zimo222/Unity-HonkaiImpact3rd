@@ -70,7 +70,7 @@ public class PlayerData
         InitializeDailyEXPRewards();
     }
 
-    private void SortedBag()
+    public void SortedBag()
     {
 
         WeaponBag.Sort((a, b) =>
@@ -200,7 +200,7 @@ public class PlayerData
         }
     }
 
-    private void AddDefaultMaterial(string defineId, int Count)
+    public void AddDefaultMaterial(string defineId, int Count)
     {
         var def = GameDataManager.Instance.MaterialDict[defineId];
         var material = new MaterialData(

@@ -12,36 +12,20 @@ public class ShopView : MonoBehaviour
     public TMP_Text coinsText;
     public TMP_Text crystalsText;
 
-    [Header("保底信息")]
-    public TMP_Text fourStarPityText;
-    public TMP_Text fiveStarPityText;
-    public TMP_Text currentPoolNameText;
-
-    [Header("动态内容区域")]
-    [SerializeField] private GameObject contentPanel;      // 唯一的 Panel 对象
-    [SerializeField] private VideoPlayer contentVideoPlayer; // Panel 内的 VideoPlayer
-
-    // ========================= 抽卡结果展示UI（单个物品展示） =========================
-    [Header("抽卡展示流程")]
-    public GameObject animationPanel;           // 播放抽卡动画的面板（包含VideoPlayer）
-    public VideoPlayer gachaAnimationVideoPlayer; // 抽卡动画视频播放器
-    public GameObject singleItemPanel;          // 单个道具展示面板
-    public Image itemIconImage;                 // 道具图标
-    public TMP_Text itemNameText;                // 道具名称
-    public TMP_Text itemStarText;                // 道具星级（如 "★5"）
-    public Button clickArea;                     // 用于点击切换的全屏透明按钮
-
-    [Header("动画设置")]
-    public AnimationCurve scaleCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f); // 缩放曲线
-    public float scaleDuration = 0.2f; // 缩放持续时间
+    [Header("详情面板 - 用于显示")]
+    public Image detailRarityImage;             // 详情-背景
+    public Image detailIconImage;             // 详情-图标
+    public Image detailStarImage;             // 详情-星级
+    public TMP_Text detailNameText;             // 详情-名称
+    public TMP_Text detailIntroductionText;      // 详情-介绍
+    public TMP_Text detailDescriptionText;      // 详情-描述
+    public TMP_Text detailCountText;            // 详情-数量
 
     private Coroutine scaleCoroutine;
 
     // ========================= 公共方法 =========================
     private void Start()
     {
-        ShowAnimationPanel(false);
-        ShowSingleItemPanel(false);
     }
 
     public void UpdatePlayerResources(PlayerData playerData)
@@ -50,16 +34,6 @@ public class ShopView : MonoBehaviour
         if (staminaText != null) staminaText.text = playerData.Stamina.ToString();
         if (coinsText != null) coinsText.text = playerData.Coins.ToString();
         if (crystalsText != null) crystalsText.text = playerData.Crystals.ToString();
-    }
-
-    public void ShowAnimationPanel(bool show)
-    {
-        if (animationPanel != null) animationPanel.SetActive(show);
-    }
-
-    public void ShowSingleItemPanel(bool show)
-    {
-        if (singleItemPanel != null) singleItemPanel.SetActive(show);
     }
 
     /// <summary>
@@ -77,6 +51,43 @@ public class ShopView : MonoBehaviour
         {
             // 如果没有组件，也可以直接操作子 UI 元素（不推荐）
             Debug.LogError("预制体缺少 ItemView 组件！");
+        }
+    }
+    public void ShowDetail(ShopPoolItem item)
+    {
+        // 尝试从角色字典查找
+        if (GameDataManager.Instance.CharacterDict.TryGetValue(item.itemId, out var character))
+            return;
+
+        // 尝试从武器字典查找
+        if (GameDataManager.Instance.WeaponDict.TryGetValue(item.itemId, out var weapon))
+            return;
+
+        // 尝试从圣痕字典查找
+        if (GameDataManager.Instance.StigmataDict.TryGetValue(item.itemId, out var stigmata))
+            return;
+
+        // 尝试从材料字典查找
+        if (GameDataManager.Instance.MaterialDict.TryGetValue(item.itemId, out var material))
+        {
+            Debug.Log("找到了");
+            if (detailRarityImage != null)
+                detailRarityImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Frame_{material.baseStars}S");
+
+            if (detailIconImage != null)
+                detailIconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Icon_{material.id}");
+
+            if (detailStarImage != null)
+                detailStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{material.baseStars}S");
+
+            if (detailNameText != null)
+                detailNameText.text = material.materialName;
+
+            if (detailIntroductionText != null)
+                detailIntroductionText.text = $"{material.introduction}";
+
+            if (detailDescriptionText != null)
+                detailDescriptionText.text = $"{material.description}";
         }
     }
 }

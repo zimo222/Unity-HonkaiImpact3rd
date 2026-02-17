@@ -448,6 +448,32 @@ public class PlayerDataManager : MonoBehaviour
 
     // ================== 材料相关方法 ==================
     #region 材料方法
+
+    public void AddMaterial(string materialId, int amount)
+    {
+        MaterialData material = CurrentPlayerData.MaterialBag.Find(m => m.Id == materialId);
+
+        if (material != null)
+        {
+            // 2. 如果找到，增加数量
+            material.Count += amount ;
+            Debug.Log($"材料 {material.Name} 数量增加 {amount}，当前总量：{material.Count}");
+        }
+        else
+        {
+            CurrentPlayerData.AddDefaultMaterial(materialId, amount);
+            // 3. 可选：如果未找到，可以选择不处理，或根据配置添加新材料
+            // 如果需要自动添加，可以参考以下代码：
+            // var def = GameDataManager.Instance.MaterialDict[materialId];
+            // var newMaterial = new MaterialData(def.id, def.materialName, def.baseStars, amount, def.num, def.introduction, def.description);
+            // MaterialBag.Add(newMaterial);
+            // SortedBag(); // 添加后重新排序
+        }
+
+        // 4. 如果希望背包始终保持排序，可调用排序方法
+        CurrentPlayerData.SortedBag();
+        TriggerPlayerDataChanged();
+    }
     #endregion
 
 
