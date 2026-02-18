@@ -1,5 +1,6 @@
 // ½ÇÉ«¶¨ÒåSO
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewCharacter", menuName = "GameData/CharacterDefine")]
@@ -23,11 +24,12 @@ public class CharacterDefineSO : ScriptableObject
     public float baseCritDamage;
     public float baseElementBonus;
 
-    public Sprite icon;
-    public Sprite Illustration;
-
     [TextArea] public string introduction;
     [TextArea] public string description;
+
+    public Sprite icon;
+    public Sprite illustration;
+    public GameObject model;
 
     public string Id => id;
 }

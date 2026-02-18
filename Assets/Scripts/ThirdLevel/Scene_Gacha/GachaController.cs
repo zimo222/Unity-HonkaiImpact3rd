@@ -182,7 +182,7 @@ public class GachaController : MonoBehaviour
             name = character.characterName;
             star = character.baseStars + 4;
             icon = character.icon; // ¼ÙÉè SO ÖÐÓÐ icon ×Ö¶Î
-            illustration = character.Illustration;
+            illustration = character.illustration;
             return;
         }
         if (dataManager.WeaponDict.TryGetValue(id, out WeaponDefineSO weapon))
