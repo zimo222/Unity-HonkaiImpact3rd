@@ -46,10 +46,10 @@ public class WeaponDetailView : MonoBehaviour
         if (weapon == null) return;
         // 基本信息
         if (nameText != null) nameText.text = weapon.Name;
-        if (typeImage != null) typeImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/Type_{weapon.Type}");
+        if (typeImage != null) typeImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/Type_{weapon.Type}");
         if (typeText != null) typeText.text = GetWeaponTypeName(weapon.Type);
-        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{weapon.Stats.Stars}S{weapon.Stats.MaxStars}");
-        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
+        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{weapon.Stats.Stars}S{weapon.Stats.MaxStars}");
+        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
 
         if (descriptionText != null) descriptionText.text = weapon.TextStats.Description;
 

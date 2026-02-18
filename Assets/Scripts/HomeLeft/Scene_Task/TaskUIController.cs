@@ -174,17 +174,15 @@ public class TaskUIController : MonoBehaviour
             if (currentPlayerData.DailyEXPRewards[i].IsClaimed)
             {
                 Transform iconTransform = dailyRewardButtons[i].transform.Find("Image");
-                Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Price_DailyEXP Claimed");
+                Sprite sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Task/Price_DailyEXP Claimed");
                 Image childImage = iconTransform.GetComponent<Image>();
-                Debug.Log($"UI/Icons/Price_DailyEXP Claimed");
                 childImage.sprite = (sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default"));
             }
             else
             {
                 Transform iconTransform = dailyRewardButtons[i].transform.Find("Image");
-                Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Price_DailyEXP UnClaim");
+                Sprite sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Task/Price_DailyEXP UnClaim");
                 Image childImage = iconTransform.GetComponent<Image>();
-                Debug.Log($"UI/Icons/Price_DailyEXP UnClaim");
                 childImage.sprite = (sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default"));
             }
         }

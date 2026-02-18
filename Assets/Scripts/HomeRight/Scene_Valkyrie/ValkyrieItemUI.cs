@@ -100,7 +100,7 @@ public class ValkyrieItemUI : MonoBehaviour
         //Debug.Log($"Picture/Valkyrie/CharacterCard/{valkyrie.Id}");
 
         ElementImage.sprite =  Resources.Load<Sprite>($"Picture/Valkyrie/ElementBack_{valkyrie.BaseStats.Element}");
-        ValkyrieImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/CharacterCard/{valkyrie.Id}");
+        ValkyrieImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Icon/{valkyrie.Id}");
     }
 
     void SetupModularUIButton(CharacterData valkyrie)

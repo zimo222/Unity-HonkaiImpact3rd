@@ -355,7 +355,7 @@ public class MissionItemUI : MonoBehaviour
         }
 
         iconName = task.TaskName;
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/Task_{iconName}");
+        Sprite sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Task/Task_{iconName}");
         return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 
@@ -376,7 +376,7 @@ public class MissionItemUI : MonoBehaviour
             default: spriteName = "Icon_Default"; break;
         }
 
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/{spriteName}");
+        Sprite sprite = Resources.Load<Sprite>($"Picture/Source/Icons/{spriteName}");
         return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 

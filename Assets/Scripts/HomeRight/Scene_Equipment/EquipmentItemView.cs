@@ -50,7 +50,7 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
 
         // 星级
         if (starsImage != null)
-            starsImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{equipmentData.Stats.Stars}S{equipmentData.Stats.MaxStars}");
+            starsImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{equipmentData.Stats.Stars}S{equipmentData.Stats.MaxStars}");
 
         // 加载图标
         LoadIcon();
@@ -62,7 +62,7 @@ public class EquipmentItemView : MonoBehaviour, IPointerClickHandler
         if (iconImage == null) return;
 
         // 构建图标路径
-        string iconPath = equipmentData is WeaponData ? $"Picture/Scene_Equipment/Weapon/Icon_{equipmentData.Id}" : $"Picture/Scene_Equipment/Stigmata/Icon_{equipmentData.Id}";
+        string iconPath = equipmentData is WeaponData ? $"Picture/Weapon/Icon/{equipmentData.Id}" : $"Picture/Stigmata/Icon/{equipmentData.Id}";
         Sprite icon = Resources.Load<Sprite>(iconPath);
 
         if (icon != null)

@@ -39,7 +39,7 @@ public class MaterialItemView : MonoBehaviour, IPointerClickHandler
 
         // 星级
         if (starsImage != null)
-            starsImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Stars_{materialData.Stars}S");
+            starsImage.sprite = Resources.Load<Sprite>($"Picture/Material/Stars_{materialData.Stars}S");
 
         // 数量
         if (countText != null)
@@ -55,7 +55,7 @@ public class MaterialItemView : MonoBehaviour, IPointerClickHandler
         if (iconImage == null) return;
 
         // 构建图标路径
-        string iconPath = $"Picture/Scene_Equipment/Material/Icon_{materialData.Id}";
+        string iconPath = $"Picture/Material/Icon_{materialData.Id}";
         Sprite icon = Resources.Load<Sprite>(iconPath);
 
         if (icon != null)

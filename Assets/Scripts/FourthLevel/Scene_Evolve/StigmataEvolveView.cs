@@ -58,12 +58,12 @@ public class StigmataEvolveView : MonoBehaviour
         EnhanceResultPanel.SetActive(false);
         if (stigmata == null) return;
         // 基本信息
-        if (illustrationImage != null) illustrationImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stigmata/Illustration_{stigmata.Id}");
-        if (iconImage != null) iconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stigmata/SymIcon_{stigmata.Id}");
+        if (illustrationImage != null) illustrationImage.sprite = Resources.Load<Sprite>($"Picture/Stigmata/Illustration/{stigmata.Id}");
+        if (iconImage != null) iconImage.sprite = Resources.Load<Sprite>($"Picture/Stigmata/SymIcon/{stigmata.Id}");
         if (nameText != null) nameText.text = stigmata.Name;
         if (levelText != null) levelText.text = $"{stigmata.Stats.Level}/<color=#FEDF4C>{20 * stigmata.Stats.Stars + 5 * stigmata.Stats.SStars - 10}</color>";
-        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{stigmata.Stats.Stars + (stigmata.Stats.SStars + 1) / 4}S{stigmata.Stats.MaxStars}");
-        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{(stigmata.Stats.SStars + 1) % 4}");
+        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{stigmata.Stats.Stars + (stigmata.Stats.SStars + 1) / 4}S{stigmata.Stats.MaxStars}");
+        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/sStars_{(stigmata.Stats.SStars + 1) % 4}");
 
         foreach (MaterialData mat in costMaterial)
         {

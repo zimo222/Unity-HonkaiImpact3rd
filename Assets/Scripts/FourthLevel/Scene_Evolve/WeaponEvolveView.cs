@@ -64,14 +64,14 @@ public class WeaponEvolveView : MonoBehaviour
         EnhanceResultPanel.SetActive(false);
         if (weapon == null) return;
         // 基本信息
-        if (type1Image != null && type2Image != null) type1Image.sprite = type2Image.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/Type_{weapon.Type}");
+        if (type1Image != null && type2Image != null) type1Image.sprite = type2Image.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/Type_{weapon.Type}");
         if (name1Text != null && name2Text != null) name1Text.text = name2Text.text = weapon.Name;
         if (level1Text != null) level1Text.text = $"{weapon.Stats.Level}/<color=#FEDF4C>{20 * weapon.Stats.Stars + 5 * weapon.Stats.SStars - 10}</color>"; 
-        if (level2Text != null) level2Text.text = $"{1}/<color=#FEDF4C>{(20 * weapon.Stats.Stars + 5 * weapon.Stats.SStars - 10 + 5)}</color>"; 
-        if (star1Image != null) star1Image.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{weapon.Stats.Stars}S{weapon.Stats.MaxStars}");
-        if (star2Image != null) star2Image.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{weapon.Stats.Stars + (weapon.Stats.SStars + 1) / 4}S{weapon.Stats.MaxStars}");
-        if (sstar1Image != null) sstar1Image.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
-        if (sstar2Image != null) sstar2Image.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{(weapon.Stats.SStars + 1) % 4}");
+        if (level2Text != null) level2Text.text = $"{1}/<color=#FEDF4C>{(20 * weapon.Stats.Stars + 5 * weapon.Stats.SStars - 10 + 5)}</color>";
+        if (star1Image != null) star1Image.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{weapon.Stats.Stars}S{weapon.Stats.MaxStars}");
+        if (star2Image != null) star2Image.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{weapon.Stats.Stars + (weapon.Stats.SStars + 1) / 4}S{weapon.Stats.MaxStars}");
+        if (sstar1Image != null) sstar1Image.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
+        if (sstar2Image != null) sstar2Image.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/sStars_{(weapon.Stats.SStars + 1) % 4}");
 
         foreach (MaterialData mat in costMaterial)
         {

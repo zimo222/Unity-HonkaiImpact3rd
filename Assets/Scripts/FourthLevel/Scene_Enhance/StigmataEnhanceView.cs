@@ -60,11 +60,11 @@ public class StigmataEnhanceView : MonoBehaviour
         EnhanceResultPanel.SetActive(false);
         if (stigmata == null) return;
         // 基本信息
-        if (illustrationImage != null) illustrationImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stigmata/Illustration_{stigmata.Id}");
-        if (iconImage != null) iconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stigmata/SymIcon_{stigmata.Id}");
+        if (illustrationImage != null) illustrationImage.sprite = Resources.Load<Sprite>($"Picture/Stigmata/Illustration/{stigmata.Id}");
+        if (iconImage != null) iconImage.sprite = Resources.Load<Sprite>($"Picture/Stigmata/SymIcon/{stigmata.Id}");
         if (nameText != null) nameText.text = stigmata.Name;
-        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{stigmata.Stats.Stars}S{stigmata.Stats.MaxStars}");
-        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{stigmata.Stats.SStars}");
+        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{stigmata.Stats.Stars}S{stigmata.Stats.MaxStars}");
+        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/sStars_{stigmata.Stats.SStars}");
 
         int expGain = 0, expg = 0;
         foreach (MaterialData mat in costMaterial)

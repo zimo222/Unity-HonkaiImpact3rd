@@ -131,7 +131,7 @@ public class RewardDetailPanelUI : MonoBehaviour
         }
 
         Debug.Log($"UI/Icons/Large/{spriteName}");
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/{spriteName}");
+        Sprite sprite = Resources.Load<Sprite>($"Picture/Source/Icons/{spriteName}");
         return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 

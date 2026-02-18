@@ -61,10 +61,10 @@ public class WeaponEnhanceView : MonoBehaviour
         EnhanceResultPanel.SetActive(false);
         if (weapon == null) return;
         // 基本信息
-        if (typeImage != null) typeImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/Type_{weapon.Type}");
+        if (typeImage != null) typeImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/Type_{weapon.Type}");
         if (nameText != null) nameText.text = weapon.Name;
-        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Stars_{weapon.Stats.Stars}S{weapon.Stats.MaxStars}");
-        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
+        if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{weapon.Stats.Stars}S{weapon.Stats.MaxStars}");
+        if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/sStars_{weapon.Stats.SStars}");
 
         int expGain = 0, expg = 0;
         foreach (MaterialData mat in costMaterial)

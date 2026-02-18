@@ -1145,7 +1145,7 @@ public class PlayerDataManager : MonoBehaviour
         equipment.Stats.SStars++;
 
         // 如果小星级满3，进位到大星级
-        if (equipment.Stats.SStars >= 3)
+        if (equipment.Stats.SStars > 3)
         {
             equipment.Stats.Stars++;
             equipment.Stats.SStars = 0;
