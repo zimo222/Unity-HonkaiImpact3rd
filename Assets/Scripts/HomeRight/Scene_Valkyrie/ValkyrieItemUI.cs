@@ -12,6 +12,7 @@ public class ValkyrieItemUI : MonoBehaviour
     [Header("女武神项UI组件")]
     public Image ElementImage;
     public Image ValkyrieImage;
+    public Image StarImage;
     public TMP_Text StatusText;
 
     [Header("点击区域")]
@@ -23,7 +24,7 @@ public class ValkyrieItemUI : MonoBehaviour
     // 私有变量
     private int num;
     private string valkyrieId;
-    private ValkyrieUIController uiController;
+    private ValkyrieController uiController;
     private CharacterData valkyrieData;
     void Start()
     {
@@ -43,7 +44,7 @@ public class ValkyrieItemUI : MonoBehaviour
         }
     }
 
-    public void Initialize(int Num, CharacterData valkyrie, ValkyrieUIController controller)
+    public void Initialize(int Num, CharacterData valkyrie, ValkyrieController controller)
     {
         num = Num;
         valkyrieId = valkyrie.Id;
@@ -101,6 +102,7 @@ public class ValkyrieItemUI : MonoBehaviour
 
         ElementImage.sprite =  Resources.Load<Sprite>($"Picture/Valkyrie/ElementBack_{valkyrie.BaseStats.Element}");
         ValkyrieImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Icon/{valkyrie.Id}");
+        StarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{valkyrie.BaseStats.Stars}S");
     }
 
     void SetupModularUIButton(CharacterData valkyrie)

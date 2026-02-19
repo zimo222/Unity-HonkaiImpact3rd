@@ -48,6 +48,9 @@ EditorBuildSettings:
     path: Assets/Scenes/HomeRight/5SupplyScene.unity
     guid: 3e9b2631b4412734eb58e019d8480886
   - enabled: 1
+    path: Assets/Scenes/ThirdLevel/ValkyrieDetailScene.unity
+    guid: d8c6b4f1cd8bb6f45addb2c0a9a74cd0
+  - enabled: 1
     path: Assets/Scenes/ThirdLevel/EquipmentDetailScene.unity
     guid: 1ef9ec2b39fc084479ee6eda3071add1
   - enabled: 1
@@ -58,7 +61,7 @@ EditorBuildSettings:
     guid: be7ef067388a16b4ca0bed55f687f9ed
   - enabled: 1
     path: Assets/Scenes/ThirdLevel/ShopScene.unity
-    guid: db066d34b7375504e81d9fd3742ad80a
+    guid: ff69be8e6b576a8488ab77e26ca5f7ef
   - enabled: 1
     path: Assets/Scenes/ThirdLevel/GachaScene.unity
     guid: 5482018e802cc8849a0a954aa9760ea3

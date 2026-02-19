@@ -10,6 +10,7 @@ using UnityEngine.UI;
 
 public class ValkyrieUIController : MonoBehaviour
 {
+    /*
     // ========================= 基础玩家信息UI引用 =========================
     [Header("资源信息")]
     public TMP_Text tiliText;
@@ -407,4 +408,5 @@ public class ValkyrieUIController : MonoBehaviour
             Debug.LogError($"无法从路径加载模型: {modelPath}");
         }
     }
+    */
 }

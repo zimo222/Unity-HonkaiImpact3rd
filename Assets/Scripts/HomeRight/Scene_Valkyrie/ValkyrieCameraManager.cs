@@ -41,7 +41,7 @@ public class ValkyrieCameraManager : MonoBehaviour
 
     [Header("预设数量")]
     [Range(1, 20)]
-    public int presetCount = 6;                   // 预设数量
+    public int presetCount = 5;                   // 预设数量
 
     [Header("UI组件数组")]
     public CanvasGroup[] uiModules = new CanvasGroup[0]; // 所有可能用到的UI组件
@@ -57,7 +57,7 @@ public class ValkyrieCameraManager : MonoBehaviour
 
     [Header("过渡效果")]
     public Image fadeOverlay;                     // 淡入淡出遮罩
-    public float uiFadeTime = 0.3f;               // UI淡入淡出时间
+    public float uiFadeTime = 0.1f;               // UI淡入淡出时间
     public float charImageTransitionTime = 0.5f;  // CharImage过渡时间
 
     [Header("控制选项")]
@@ -68,7 +68,7 @@ public class ValkyrieCameraManager : MonoBehaviour
     public bool startWithFirstPreset = true;      // 是否以第一个预设开始
 
     // 私有变量
-    private int currentPresetIndex = 0;
+    private int currentPresetIndex = 4;
     private bool isTransitioning = false;
     private DG.Tweening.Sequence currentTransitionSequence;
     private bool[] currentUIStates;               // 当前UI组件的显示状态
@@ -108,7 +108,8 @@ public class ValkyrieCameraManager : MonoBehaviour
         // 默认设置为第一个预设状态
         if (startWithFirstPreset)
         {
-            SetToFirstPreset();
+            //SetToFirstPreset();
+            SwitchToPreset(0);
         }
     }
 
