@@ -284,8 +284,6 @@ public class PlayerDataManager : MonoBehaviour
     public event Action<int> OnCoinsChanged;
     public event Action<int> OnCrystalsChanged;
     public event Action<int> OnStaminaChanged;
-    public event Action<EquipmentData> OnEquipmentChanged;
-    public event Action<CharacterData> OnCharacterChanged;
 
     // 触发事件的方法
     private void TriggerPlayerDataChanged()
@@ -351,19 +349,33 @@ public class PlayerDataManager : MonoBehaviour
     /// </summary>
     public List<CharacterData> GetSortedCharacters(string Element = null)
     {
-        var filteredCharacters = Element != null
-            ? CurrentPlayerData.Characters.FindAll(t => t.BaseStats.Element == Element)
-            : CurrentPlayerData.Characters;
         // 排序：未解锁的在最后，解锁的按等级排序
-        filteredCharacters.Sort((a, b) =>
+        CurrentPlayerData.Characters.Sort((a, b) =>
         {
             int statusOrderA = (a.IsUnlocked == true ? 1 : 0);
             int statusOrderB = (b.IsUnlocked == true ? 1 : 0);
             if (statusOrderA != statusOrderB)
                 return statusOrderB.CompareTo(statusOrderA); // 降序排列，优先级高的在前，即解锁的在前
-            return b.BaseStats.Level.CompareTo(a.BaseStats.Level);// 同状态按解锁等级排序，即等级高的在前
+            return a.Id.CompareTo(b.Id);// 同状态按解锁等级排序，即等级高的在前
         });
+        var filteredCharacters = Element != null
+            ? CurrentPlayerData.Characters.FindAll(t => t.BaseStats.Element == Element)
+            : CurrentPlayerData.Characters;
         return filteredCharacters;
+    }
+    public CharacterStats GetCharacterTotalStats(int characterIndex)
+    {
+        var c = CurrentPlayerData.Characters[characterIndex];
+        var total = c.BaseStats;
+        if (c.EquippedWeaponIndex >= 0)
+            total += CurrentPlayerData.WeaponBag[c.EquippedWeaponIndex].Stats;
+        if (c.EquippedTopStigmataIndex >= 0)
+            total += CurrentPlayerData.StigmataBag[c.EquippedTopStigmataIndex].Stats;
+        if (c.EquippedMiddleStigmataIndex >= 0)
+            total += CurrentPlayerData.StigmataBag[c.EquippedMiddleStigmataIndex].Stats;
+        if (c.EquippedBottomStigmataIndex >= 0)
+            total += CurrentPlayerData.StigmataBag[c.EquippedBottomStigmataIndex].Stats;
+        return total;
     }
     #endregion
 
@@ -603,6 +615,7 @@ public class PlayerDataManager : MonoBehaviour
         return false;
     }
 
+    /*
     /// <summary>
     /// 获取角色当前的总属性（基础属性+装备属性）
     /// </summary>
@@ -660,6 +673,7 @@ public class PlayerDataManager : MonoBehaviour
         }
         return totalStats;
     }
+    */
 
     /// <summary>
     /// 装备背包排序
@@ -1083,8 +1097,8 @@ public class PlayerDataManager : MonoBehaviour
             if (equipment.Stats.CritRate != 0) equipment.Stats.CritRate += (int)(newLevel / 5 - initialLevel / 5) * 0.01f;
         }
 
-            // === 5. 触发事件和保存 ===
-            OnEquipmentChanged?.Invoke(equipment);
+        // === 5. 触发事件和保存 ===
+        OnPlayerDataChanged?.Invoke(CurrentPlayerData);
         SortEquipment();
         if(equipment is WeaponData now1)
         {
@@ -1174,8 +1188,8 @@ public class PlayerDataManager : MonoBehaviour
         }
 
 
-            // === 3. 触发事件和保存 ===
-            OnEquipmentChanged?.Invoke(equipment);
+        // === 3. 触发事件和保存 ===
+        OnPlayerDataChanged?.Invoke(CurrentPlayerData);
         SortEquipment();
         if (equipment is WeaponData now1)
         {
@@ -1269,4 +1283,7 @@ public class PlayerDataManager : MonoBehaviour
     }
     #endregion
 
+    // ================== 角色升级晋升 ==================
+    #region 升级晋升
+    #endregion
 }

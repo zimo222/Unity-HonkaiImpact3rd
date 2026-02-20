@@ -1,4 +1,6 @@
 using DG.Tweening;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -105,12 +107,20 @@ public class ValkyrieCameraManager : MonoBehaviour
         // 初始化UI状态
         InitializeUI();
 
-        // 默认设置为第一个预设状态
-        if (startWithFirstPreset)
+        int currentPresetIndex = PlayerPrefs.GetInt("ValkyrieDetailIndex", 0);
+
+        StartCoroutine(WaitForModelAndSwitch(currentPresetIndex - 1 > 0 ? currentPresetIndex - 1 : 0));
+    }
+
+    IEnumerator WaitForModelAndSwitch(int targetIndex)
+    {
+        while (playerModelTransform == null)
         {
-            //SetToFirstPreset();
-            SwitchToPreset(0);
+            SetPlayerModelFromSpawned(); // 尝试查找
+            if (playerModelTransform == null)
+                yield return new WaitForSeconds(0.1f);
         }
+        SwitchToPreset(targetIndex);
     }
 
     public void SetPlayerModelFromSpawned()

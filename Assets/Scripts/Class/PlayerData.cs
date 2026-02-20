@@ -525,6 +525,19 @@ public struct CharacterStats
     {
         return $"生命: {Health}, 攻击: {Attack}, 暴击: {CritRate:P0}, 爆伤: {CritDamage:P0}, 元素: {ElementBonus:P0}";
     }
+
+    public static CharacterStats operator +(CharacterStats a, CharacterStats b)
+    {
+        a.Health += b.Health;
+        a.Attack += b.Attack;
+        a.Defence += b.Defence;
+        a.Energy += b.Energy;
+        a.CritRate += b.CritRate;
+        a.CritDamage += b.CritDamage;
+        a.ElementBonus += b.ElementBonus;
+        // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
+        return a;
+    }
 }
 [System.Serializable]
 public struct TextStats
