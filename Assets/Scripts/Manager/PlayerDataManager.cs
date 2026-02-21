@@ -5,6 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
@@ -363,10 +364,12 @@ public class PlayerDataManager : MonoBehaviour
             : CurrentPlayerData.Characters;
         return filteredCharacters;
     }
+
     public CharacterStats GetCharacterTotalStats(int characterIndex)
     {
         var c = CurrentPlayerData.Characters[characterIndex];
-        var total = c.BaseStats;
+        //                        level 1 ~ 2                     Star 1 ~ 3
+        var total = c.BaseStats * ((1 + c.BaseStats.Level / 80) * (c.BaseStats.Stars + 3) / 2.0);
         if (c.EquippedWeaponIndex >= 0)
             total += CurrentPlayerData.WeaponBag[c.EquippedWeaponIndex].Stats;
         if (c.EquippedTopStigmataIndex >= 0)
@@ -1283,7 +1286,51 @@ public class PlayerDataManager : MonoBehaviour
     }
     #endregion
 
+
     // ================== ½ÇÉ«Éý¼¶½úÉý ==================
     #region Éý¼¶½úÉý
+    public void CalLevelTo(int valkyrieIndex, string materialId, int cost, out int expGain, out int toLevel, out int toExp, out int finalCost)
+    {
+        CharacterData nowValkyrie = CurrentPlayerData.Characters[valkyrieIndex];
+        MaterialData nowMaterial = CurrentPlayerData.MaterialBag.Find(m => m.Id == materialId);
+        expGain = 0;
+        toLevel = nowValkyrie.BaseStats.Level;
+        toExp = nowValkyrie.BaseStats.Exp;
+        finalCost = 0;
+        int nowLevel = toLevel;
+        int nowExp = toExp;
+        int needExp = (nowLevel + 79) * (79 - nowLevel + 1) * 100 - nowExp;
+        finalCost = Math.Min(Math.Min((int)Math.Ceiling(needExp * 1.0 / nowMaterial.Num * 1.0), nowMaterial.Count), cost);
+        expGain = finalCost * nowMaterial.Num;
+        toExp += expGain;
+        while (toExp >= toLevel * 200 && toLevel < 80) { toExp -= toLevel * 200; toLevel++; } 
+    }
+
+    public void LevelUpCharacter(int valkyrieIndex, string materialId, int cost)
+    {
+        CharacterData nowValkyrie = CurrentPlayerData.Characters[valkyrieIndex];
+        MaterialData nowMaterial = CurrentPlayerData.MaterialBag.Find(m => m.Id == materialId);
+        int expGain = 0;
+        nowMaterial.Count -= cost;
+        expGain = cost * nowMaterial.Num;
+        nowValkyrie.BaseStats.Exp += expGain;
+        while (nowValkyrie.BaseStats.Exp >= nowValkyrie.BaseStats.Level * 200 && nowValkyrie.BaseStats.Level < 80) 
+        { 
+            nowValkyrie.BaseStats.Exp -= nowValkyrie.BaseStats.Level * 200; 
+            nowValkyrie.BaseStats.Level++;
+        }
+        SaveCurrentPlayerData();
+    }
+
+    public void PromotionCharacter(int valkyrieIndex)
+    {
+        CharacterData nowValkyrie = CurrentPlayerData.Characters[valkyrieIndex];
+        if(nowValkyrie.BaseStats.Stars < 3 && nowValkyrie.BaseStats.Fragments >= 50)
+        {
+            nowValkyrie.BaseStats.Stars++;
+            nowValkyrie.BaseStats.Fragments -= 50;
+        }
+        SaveCurrentPlayerData();
+    }    
     #endregion
 }

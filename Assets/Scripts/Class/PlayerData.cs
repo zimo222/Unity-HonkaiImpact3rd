@@ -538,6 +538,32 @@ public struct CharacterStats
         // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
         return a;
     }
+
+    public static CharacterStats operator -(CharacterStats a, CharacterStats b)
+    {
+        a.Health -= b.Health;
+        a.Attack -= b.Attack;
+        a.Defence -= b.Defence;
+        a.Energy -= b.Energy;
+        a.CritRate -= b.CritRate;
+        a.CritDamage -= b.CritDamage;
+        a.ElementBonus -= b.ElementBonus;
+        // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
+        return a;
+    }
+
+    public static CharacterStats operator *(CharacterStats a, double b)
+    {
+        a.Health = (int)(a.Health * b);
+        a.Attack = (int)(a.Attack * b);
+        a.Defence = (int)(a.Defence * b);
+        a.Energy = (int)(a.Energy * b);
+        a.CritRate = (int)(a.CritRate * b);
+        a.CritDamage = (int)(a.CritDamage * b);
+        a.ElementBonus = (int)(a.ElementBonus * b);
+        // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
+        return a;
+    }
 }
 [System.Serializable]
 public struct TextStats

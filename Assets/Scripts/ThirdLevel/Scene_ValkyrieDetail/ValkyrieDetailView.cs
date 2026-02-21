@@ -58,6 +58,23 @@ public class ValkyrieDetailView : MonoBehaviour
     // 已生成的模型引用
     private GameObject spawnedModel;
 
+    // ========================= 角色升级晋升UI引用 =========================
+    [Header("角色升级晋升")]
+    public TMP_Text expGainText;
+    public TMP_Text levelToText;
+    public TMP_Text aText;
+    public TMP_Text bText;
+    public TMP_Text cText;
+    public TMP_Text dText;
+    public TMP_Text costText;
+    public Image beforeStarImage;
+    public Image afterStarImage;
+    public TMP_Text beforeText;
+    public TMP_Text afterText;
+    public TMP_Text PlusText;
+    public TMP_Text numText;
+
+
     private void Awake()
     {
         SpawnModel("CHAR_001");
@@ -74,6 +91,7 @@ public class ValkyrieDetailView : MonoBehaviour
 
     }
 
+    // ==================== 基础UI ====================
     public void InitializeUI()
     {
         // 设置默认文本
@@ -98,16 +116,7 @@ public class ValkyrieDetailView : MonoBehaviour
         if (LevelText1 != null) LevelText1.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
         //右面板
         CharacterStats stat = PlayerDataManager.Instance.GetCharacterTotalStats(currentValkyrie);
-        if (StarImage1 != null) StarImage1.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
-        if (HealthText != null) HealthText.text = stat.Health.ToString();
-        if (AttackText != null) AttackText.text = stat.Attack.ToString();
-        if (DefenceText != null) DefenceText.text = stat.Defence.ToString();
-        if (ElementBonusText != null) ElementBonusText.text = (stat.ElementBonus * 100).ToString();
-        if (CritRateText != null) CritRateText.text = (stat.CritRate * 100).ToString();
-        if (CritDamageText != null) CritDamageText.text = (stat.CritDamage * 100).ToString();
-        if (ExpText != null) ExpText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Exp).ToString() + '/' + (currentPlayerData.Characters[currentValkyrie].BaseStats.Level * 100).ToString();
-        if (StarImage2 != null) StarImage2.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
-        if (FragmentText != null) FragmentText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Fragments).ToString() + "/50";
+        Update1PanelUI(currentPlayerData, currentValkyrie);
 
         if (WeaponNameText != null) WeaponNameText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "无");
         if (WeaponStarImage != null) WeaponStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Stars}S") : null;
@@ -165,5 +174,56 @@ public class ValkyrieDetailView : MonoBehaviour
         {
             Debug.LogError($"无法从路径加载模型: {modelPath}");
         }
+    }
+
+    // ==================== 角色升级晋升 ====================
+    public void UpdateLevelUpUI(PlayerData currentPlayerData, int currentValkyrie, string nowMaterialName, int cost, int beforeLevel, int toLevel)
+    {
+        if (LevelText1 != null) LevelText1.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
+
+        if (expGainText != null) expGainText.text = (currentPlayerData.MaterialBag.Find(c => c.Id == nowMaterialName).Num * cost).ToString();
+        if (levelToText != null) levelToText.text = beforeLevel.ToString() + " >> " + toLevel.ToString();
+        if (aText != null) aText.text = (currentPlayerData.MaterialBag.Find(m => m.Id == "MATE_004").Count).ToString();
+        if (bText != null) bText.text = (currentPlayerData.MaterialBag.Find(m => m.Id == "MATE_003").Count).ToString();
+        if (cText != null) cText.text = (currentPlayerData.MaterialBag.Find(m => m.Id == "MATE_002").Count).ToString();
+        if (dText != null) dText.text = (currentPlayerData.MaterialBag.Find(m => m.Id == "MATE_001").Count).ToString();
+        if (costText != null) costText.text = (cost).ToString();
+    }
+
+    public void UpdatePromotionUI(PlayerData currentPlayerData, int currentValkyrie)
+    {
+        if (beforeStarImage != null) beforeStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
+        if (afterStarImage != null) afterStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars + 1}S");
+        CharacterStats stat = PlayerDataManager.Instance.GetCharacterTotalStats(currentValkyrie);
+        if (beforeText != null) beforeText.text = stat.Health.ToString() + "\n\n" + stat.Attack.ToString() + "\n\n" + stat.Defence.ToString() + "\n\n" + stat.CritRate.ToString() + "\n\n" + stat.CritDamage.ToString();
+        CharacterStats toStat = stat * (1.0 * (currentPlayerData.Characters[currentValkyrie].BaseStats.Stars + 1 + 3) / (currentPlayerData.Characters[currentValkyrie].BaseStats.Stars + 3));
+        if (afterText != null) afterText.text = toStat.Health.ToString() + "\n\n" + toStat.Attack.ToString() + "\n\n" + toStat.Defence.ToString() + "\n\n" + toStat.CritRate.ToString() + "\n\n" + toStat.CritDamage.ToString();
+        CharacterStats addStat = toStat - stat;
+        if(PlusText != null ) PlusText.text = addStat.Health.ToString() + "\n\n" + addStat.Attack.ToString() + "\n\n" + addStat.Defence.ToString() + "\n\n" + addStat.CritRate.ToString() + "\n\n" + addStat.CritDamage.ToString();
+        if (numText != null) numText.text = "50/" + currentPlayerData.Characters[currentValkyrie].BaseStats.Fragments.ToString();
+    }
+
+    public void Update1PanelUI(PlayerData currentPlayerData, int currentValkyrie)
+    {
+        //右面板
+        CharacterStats stat = PlayerDataManager.Instance.GetCharacterTotalStats(currentValkyrie);
+        if (StarImage1 != null) StarImage1.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
+        if (HealthText != null) HealthText.text = stat.Health.ToString();
+        if (AttackText != null) AttackText.text = stat.Attack.ToString();
+        if (DefenceText != null) DefenceText.text = stat.Defence.ToString();
+        if (ElementBonusText != null) ElementBonusText.text = (stat.ElementBonus * 100).ToString();
+        if (CritRateText != null) CritRateText.text = (stat.CritRate * 100).ToString();
+        if (CritDamageText != null) CritDamageText.text = (stat.CritDamage * 100).ToString();
+        if(stat.Level == 80)
+        {
+            if (ExpText != null) ExpText.text = (16000).ToString() + '/' + (16000).ToString();
+        }
+        else
+        {
+            if (ExpText != null) ExpText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Exp).ToString() + '/' + (currentPlayerData.Characters[currentValkyrie].BaseStats.Level * 200).ToString();
+        }
+        
+        if (StarImage2 != null) StarImage2.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
+        if (FragmentText != null) FragmentText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Fragments).ToString() + "/50";
     }
 }
