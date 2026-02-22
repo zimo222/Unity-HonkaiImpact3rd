@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class DisaplayEquipmentItemPrefabs : MonoBehaviour
+public class DisaplayEquipmentItemPrefabs : MonoBehaviour, IPointerClickHandler
 {
     [Header("UI组件")]
     public Image rarityImage;         // 稀有度背景

@@ -150,9 +150,12 @@ public class PlayerData
             AddDefaultWeapon("WEAP_0" + (i >= 10 ? "" : "0") + i.ToString());
         }
 
-        AddDefaultStigmata("STIG_001_TOP");
-        AddDefaultStigmata("STIG_001_MID");
-        AddDefaultStigmata("STIG_001_BOT");
+        for(int i = 1; i <= 2; i++)
+        {
+            AddDefaultStigmata("STIG_00" + i + "_TOP");
+            AddDefaultStigmata("STIG_00" + i + "_MID");
+            AddDefaultStigmata("STIG_00" + i + "_BOT");
+        }
     }
 
     private void AddDefaultWeapon(string defineId)
@@ -559,9 +562,9 @@ public struct CharacterStats
         a.Attack = (int)(a.Attack * b);
         a.Defence = (int)(a.Defence * b);
         a.Energy = (int)(a.Energy * b);
-        a.CritRate = (int)(a.CritRate * b);
-        a.CritDamage = (int)(a.CritDamage * b);
-        a.ElementBonus = (int)(a.ElementBonus * b);
+        a.CritRate = a.CritRate * ((float)b);
+        a.CritDamage = a.CritDamage * ((float)b);
+        a.ElementBonus = a.ElementBonus * ((float)b);
         // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
         return a;
     }

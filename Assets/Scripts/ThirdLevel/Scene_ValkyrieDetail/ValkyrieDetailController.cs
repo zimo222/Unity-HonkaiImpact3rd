@@ -1,7 +1,10 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -38,9 +41,11 @@ public class ValkyrieDetailController : MonoBehaviour
     public GameObject twoPanel;
     public Button returnButton;
     private int nowType;
-    private int nowIndex = 0;
+    private int nowIndex = -1;
+    private int toIndex = -1;
     public Transform equipmentListContent;  // 装备/材料列表容器
     public GameObject equipmentItemPrefab;  // 装备项预制体
+    public Button updateButton;
     // 新增：活动项列表
     private List<GameObject> activeItems = new List<GameObject>();
 
@@ -86,18 +91,17 @@ public class ValkyrieDetailController : MonoBehaviour
         {
             int now = count;
             count--;
-            btn.onClick.AddListener(() => onMaterialButtonClick(now));
+            btn.onClick.AddListener(() => OnMaterialButtonClick(now));
         }
-
-        //武器替换
         count = 0;
         foreach(Button btn in replaceButton)
         {
             int now = count;
             count++;
-            btn.onClick.AddListener(() => onReplaceButtonClick(now));
+            btn.onClick.AddListener(() => OnReplaceButtonClick(now));
         }
-        returnButton.onClick.AddListener(onReturnButtonClick);
+        returnButton.onClick.AddListener(OnReturnButtonClick);
+        updateButton.onClick.AddListener(OnUpdateButtonClick);
     }
 
     // Update is called once per frame
@@ -178,7 +182,7 @@ public class ValkyrieDetailController : MonoBehaviour
         viewValkyrieDetail.UpdatePromotionUI(currentPlayerData, currentValkyrie);
     }
 
-    // 当 Slider 的值被改变时调用（由用户拖动或代码设置都会触发）
+    // 当 Slider 的值被改变时调用
     private void OnSliderValueChanged(float value)
     {
         Debug.Log(value);
@@ -193,7 +197,7 @@ public class ValkyrieDetailController : MonoBehaviour
         onePanel.SetActive(false);
     }
 
-    void onMaterialButtonClick(int index)
+    void OnMaterialButtonClick(int index)
     {
         nowMaterial = "MATE_00" + index.ToString();
         slider.maxValue = currentPlayerData.MaterialBag.Find(m => m.Id == nowMaterial).Count;
@@ -227,12 +231,11 @@ public class ValkyrieDetailController : MonoBehaviour
     }
 
     // ==================== 武器圣痕替换 ====================
-
-    void onReplaceButtonClick(int index)
+    void OnReplaceButtonClick(int index)
     {
         twoPanel.SetActive(true);
-        LoadCurrentTabContent();
         nowType = index;
+        LoadCurrentTabContent();
         if (index == 0)
         {
             detailPanel[1].SetActive(false);
@@ -244,8 +247,9 @@ public class ValkyrieDetailController : MonoBehaviour
         detailPanel[4].SetActive(false);
     }
 
-    void onReturnButtonClick()
+    void OnReturnButtonClick()
     {
+        ClearItemList();
         twoPanel.SetActive(false);
         if(nowType == 0)
         {
@@ -265,46 +269,70 @@ public class ValkyrieDetailController : MonoBehaviour
         switch (nowType)
         {
             case 0:
-                LoadWeapons(currentPlayerData.WeaponBag, currentPlayerData.Characters[currentValkyrie].WeaponType);
+                LoadWeapons();
+                nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex;
                 break;
             case 1:
-                LoadStigmatas(currentPlayerData.StigmataBag, StigmataPosition.Top);
+                LoadStigmatas(StigmataPosition.Top);
+                nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex;
                 break;
             case 2:
-                LoadStigmatas(currentPlayerData.StigmataBag, StigmataPosition.Middle);
+                LoadStigmatas(StigmataPosition.Middle);
+                nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex;
                 break;
             case 3:
-                LoadStigmatas(currentPlayerData.StigmataBag, StigmataPosition.Bottom);
+                LoadStigmatas(StigmataPosition.Bottom);
+                nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex;
                 break;
         }
+        OnEquipmentItemClicked(toIndex);
     }
+
     //加载武器
-    void LoadWeapons(List<WeaponData> currentWeapons, WeaponType weaponType)
+    void LoadWeapons()
     {
-        if (currentWeapons == null) return;
+        if (currentPlayerData.WeaponBag == null) return;
 
-        for (int i = 0; i < currentWeapons.Count; i++)
+        if (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1) toIndex = nowIndex;
+
+        for (int i = 0; i < currentPlayerData.WeaponBag.Count; i++)
         {
-            var weapon = currentWeapons[i];
-            if (weapon.Type == weaponType)
+            var weapon = currentPlayerData.WeaponBag[i];
+            if (weapon.Type == currentPlayerData.Characters[currentValkyrie].WeaponType)
+            {
+                if (toIndex == -1) toIndex = i;
                 CreateEquipmentItem(weapon, i);
+            }
         }
-
-        Debug.Log($"加载了 {currentWeapons.Count} 件武器");
     }
-    //加载圣痕
-    void LoadStigmatas(List<StigmataData> currentStigmatas, StigmataPosition nowIndex)
-    {
-        if (currentStigmatas == null) return;
 
-        for (int i = 0; i < currentStigmatas.Count; i++)
+    //加载圣痕
+    void LoadStigmatas(StigmataPosition nowPosition)
+    {
+        if (currentPlayerData.StigmataBag == null) return;
+
+        switch (nowPosition)
         {
-            var stigmata = currentStigmatas[i];
-            if (stigmata.Position == nowIndex)
-                CreateEquipmentItem(stigmata, i);
+            case StigmataPosition.Top:
+                if (currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1) toIndex = nowIndex;
+                break;
+            case StigmataPosition.Middle:
+                if (currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1) toIndex = nowIndex;
+                break;
+            case StigmataPosition.Bottom:
+                if (currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1) toIndex = nowIndex;
+                break;
         }
 
-        Debug.Log($"加载了 {currentStigmatas.Count} 件圣痕");
+        for (int i = 0; i < currentPlayerData.StigmataBag.Count; i++)
+        {
+            var stigmata = currentPlayerData.StigmataBag[i];
+            if (stigmata.Position == nowPosition)
+            {
+                if (toIndex == -1) toIndex = i;
+                CreateEquipmentItem(stigmata, i);
+            }
+        }
     }
 
     // 创建装备项 - 添加索引参数
@@ -320,11 +348,23 @@ public class ValkyrieDetailController : MonoBehaviour
         }
         activeItems.Add(itemObj);
     }
-    // 装备项点击 - 修改为跳转场景
-    void OnEquipmentItemClicked(int Index)
+
+    // 装备项点击
+    void OnEquipmentItemClicked(int index)
     {
-        viewValkyrieDetail.UpdateEquipmentUI(nowIndex, Index);
+        Debug.Log(index);
+        toIndex = index;
+        Debug.Log(nowIndex);
+        if(nowType == 0)
+        {
+            viewValkyrieDetail.UpdateEquipmentUI(nowIndex >= 0 ? currentPlayerData.WeaponBag[nowIndex] : new WeaponData(), currentPlayerData.WeaponBag[index]);
+        }
+        else
+        {
+            viewValkyrieDetail.UpdateEquipmentUI(nowIndex >= 0 ? currentPlayerData.StigmataBag[nowIndex] : new StigmataData(), currentPlayerData.StigmataBag[index]);
+        }
     }
+
     //清空容器
     void ClearItemList()
     {
@@ -332,11 +372,36 @@ public class ValkyrieDetailController : MonoBehaviour
         foreach (var item in activeItems)
         {
             if (item != null)
-            {
                 Destroy(item);
-            }
         }
         activeItems.Clear();
     }
 
+    void OnUpdateButtonClick()
+    {
+        switch(nowType)
+        {
+            case 0:
+                PlayerDataManager.Instance.EquipWeaponToCharacter(currentValkyrie, toIndex); 
+                viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.WeaponBag[toIndex], currentPlayerData.WeaponBag[toIndex]);
+                viewValkyrieDetail.Update2PanelUI(currentPlayerData, currentValkyrie);
+                break;
+            case 1:
+                PlayerDataManager.Instance.EquipStigmataToCharacter(currentValkyrie, toIndex, StigmataPosition.Top);
+                viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.StigmataBag[toIndex], currentPlayerData.StigmataBag[toIndex]);
+                viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
+                break;
+            case 2:
+                PlayerDataManager.Instance.EquipStigmataToCharacter(currentValkyrie, toIndex, StigmataPosition.Middle);
+                viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.StigmataBag[toIndex], currentPlayerData.StigmataBag[toIndex]);
+                viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
+                break;
+            case 3:
+                PlayerDataManager.Instance.EquipStigmataToCharacter(currentValkyrie, toIndex, StigmataPosition.Bottom);
+                viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.StigmataBag[toIndex], currentPlayerData.StigmataBag[toIndex]);
+                viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
+                break;
+        }
+        
+    }
 }

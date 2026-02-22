@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c89dca24fdcf640bc5cc415aaafc98, type: 3}
+  m_Name: STIG_002_TOP
+  m_EditorClassIdentifier: 
+  id: STIG_002_TOP
+  stigmataName: "\u767D\u7EC3\xB7\u7206\u88C2\u5F62\u6001(\u4E0A)"
+  Position: 1
+  element: 
+  baseStars: 4
+  maxStars: 5
+  baseHealth: 240
+  baseAttack: 45
+  baseDefence: 8
+  baseEnergy: 0
+  baseCritRate: 0
+  baseCritDamage: 0.1
+  baseElementBonus: 0.08
+  icon: {fileID: 0}
+  introduction: 
+  description: 

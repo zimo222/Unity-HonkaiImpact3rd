@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -74,17 +75,27 @@ public class ValkyrieDetailView : MonoBehaviour
     public TMP_Text PlusText;
     public TMP_Text numText;
 
-
+    // ========================= 武器圣痕替换UI引用 =========================
+    [Header("武器圣痕替换")]
     public Transform equipmentListContent;  // 装备/材料列表容器
     public GameObject equipmentItemPrefab;  // 装备项预制体
-    private void Awake()
-    {
-        SpawnModel("CHAR_001");
-    }
+    public GameObject[] statsPanel;
+    public TMP_Text[,] statsText = new TMP_Text[4, 3];
+    public TMP_Text equipmentNameText;
+    public TMP_Text equipmentLevelText;
+    public TMP_Text updateText;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        //武器替换
+        for (int i = 0; i < 4; i++)
+        {
+            TMP_Text[] texts = statsPanel[i].GetComponentsInChildren<TMP_Text>();
+            statsText[i, 0] = texts[0];
+            statsText[i, 1] = texts[1];
+            statsText[i, 2] = texts[2];
+        }
     }
 
     // Update is called once per frame
@@ -120,25 +131,8 @@ public class ValkyrieDetailView : MonoBehaviour
         CharacterStats stat = PlayerDataManager.Instance.GetCharacterTotalStats(currentValkyrie);
 
         Update1PanelUI(currentPlayerData, currentValkyrie);
-
-        if (WeaponNameText != null) WeaponNameText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "武器");
-        if (WeaponStarImage != null) WeaponStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Stars}S") : null;
-        if (WeaponLevelText != null) WeaponLevelText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? "Lv." + currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Level.ToString() : "");
-
-        if (StigmataTOPImage != null) StigmataTOPImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Portrait/{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Weapon/None");
-        if (StigmataTOPNameText != null) StigmataTOPNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Name : "圣痕上位";
-        if (StigmataTOPStarImage != null) StigmataTOPStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Stats.Stars}S") : Resources.Load<Sprite>($"Picture/Weapon/None");
-        if (StigmataTOPLevelText != null) StigmataTOPLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? "Lv." + currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Stats.Level.ToString() : "";
-
-        if (StigmataMIDImage != null) StigmataMIDImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Portrait/{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Weapon/None");
-        if (StigmataMIDNameText != null) StigmataMIDNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Name : "圣痕中位";
-        if (StigmataMIDStarImage != null) StigmataMIDStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Stats.Stars}S") : Resources.Load<Sprite>($"Picture/Weapon/None");
-        if (StigmataMIDLevelText != null) StigmataMIDLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? "Lv." + currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Stats.Level.ToString() : "";
-
-        if (StigmataBOTImage != null) StigmataBOTImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Portrait/{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Weapon/None");
-        if (StigmataBOTNameText != null) StigmataBOTNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Name : "圣痕下位";
-        if (StigmataBOTStarImage != null) StigmataBOTStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Stats.Stars}S") : Resources.Load<Sprite>($"Picture/Weapon/None");
-        if (StigmataBOTLevelText != null) StigmataBOTLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? "Lv." + currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Stats.Level.ToString() : "";
+        Update2PanelUI(currentPlayerData, currentValkyrie);
+        Update3PanelUI(currentPlayerData, currentValkyrie);
     }
 
     public void SpawnModel(string id)
@@ -198,11 +192,11 @@ public class ValkyrieDetailView : MonoBehaviour
         if (beforeStarImage != null) beforeStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
         if (afterStarImage != null) afterStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars + 1}S");
         CharacterStats stat = PlayerDataManager.Instance.GetCharacterTotalStats(currentValkyrie);
-        if (beforeText != null) beforeText.text = stat.Health.ToString() + "\n\n" + stat.Attack.ToString() + "\n\n" + stat.Defence.ToString() + "\n\n" + stat.CritRate.ToString() + "\n\n" + stat.CritDamage.ToString();
+        if (beforeText != null) beforeText.text = stat.Health.ToString() + "\n\n" + stat.Attack.ToString() + "\n\n" + stat.Defence.ToString() + "\n\n" + ((int)(stat.CritRate * 100)).ToString() + "\n\n" + ((int)(stat.CritDamage * 100)).ToString();
         CharacterStats toStat = stat * (1.0 * (currentPlayerData.Characters[currentValkyrie].BaseStats.Stars + 1 + 3) / (currentPlayerData.Characters[currentValkyrie].BaseStats.Stars + 3));
-        if (afterText != null) afterText.text = toStat.Health.ToString() + "\n\n" + toStat.Attack.ToString() + "\n\n" + toStat.Defence.ToString() + "\n\n" + toStat.CritRate.ToString() + "\n\n" + toStat.CritDamage.ToString();
+        if (afterText != null) afterText.text = toStat.Health.ToString() + "\n\n" + toStat.Attack.ToString() + "\n\n" + toStat.Defence.ToString() + "\n\n" + ((int)(toStat.CritRate * 100)).ToString() + "\n\n" + ((int)(toStat.CritDamage * 100)).ToString();
         CharacterStats addStat = toStat - stat;
-        if(PlusText != null ) PlusText.text = addStat.Health.ToString() + "\n\n" + addStat.Attack.ToString() + "\n\n" + addStat.Defence.ToString() + "\n\n" + addStat.CritRate.ToString() + "\n\n" + addStat.CritDamage.ToString();
+        if(PlusText != null ) PlusText.text = addStat.Health.ToString() + "\n\n" + addStat.Attack.ToString() + "\n\n" + addStat.Defence.ToString() + "\n\n" + ((int)(-(int)(stat.CritRate * 100) + (int)(toStat.CritRate * 100))).ToString() + "\n\n" + ((int)(-(int)(stat.CritDamage * 100)) + (int)(toStat.CritDamage * 100)).ToString();
         if (numText != null) numText.text = "50/" + currentPlayerData.Characters[currentValkyrie].BaseStats.Fragments.ToString();
     }
 
@@ -231,8 +225,80 @@ public class ValkyrieDetailView : MonoBehaviour
     }
 
     // ==================== 武器圣痕替换 ====================
-    public void UpdateEquipmentUI(int weaponType, int index)
+    public void UpdateEquipmentUI(EquipmentData beforeEquipment, EquipmentData afterEquipment)
     {
+        if(beforeEquipment == afterEquipment)
+        {
+            updateText.text = "卸下";
+        }
+        else
+        {
+            updateText.text = "装备";
+        }
+            int count = 0;
+        if (afterEquipment.Stats.Health != 0)
+        {
+            statsText[count, 0].text = "生命";
+            statsText[count, 1].text = beforeEquipment.Stats.Health.ToString();
+            statsText[count, 2].text = afterEquipment.Stats.Health.ToString();
+            count++;
+        }
+        if (afterEquipment.Stats.Attack != 0)
+        {
+            statsText[count, 0].text = "攻击";
+            statsText[count, 1].text = beforeEquipment.Stats.Attack.ToString();
+            statsText[count, 2].text = afterEquipment.Stats.Attack.ToString();
+            count++;
+        }
+        if (afterEquipment.Stats.Defence != 0)
+        {
+            statsText[count, 0].text = "防御";
+            statsText[count, 1].text = beforeEquipment.Stats.Defence.ToString();
+            statsText[count, 2].text = afterEquipment.Stats.Defence.ToString();
+            count++;
+        }
+        if (afterEquipment.Stats.CritRate * 100.0 != 0.0)
+        {
+            statsText[count, 0].text = "会心";
+            statsText[count, 1].text = ((int)(beforeEquipment.Stats.CritRate * 100)).ToString();
+            statsText[count, 2].text = ((int)(afterEquipment.Stats.CritRate * 100)).ToString();
+            count++;
+        }
+        for (int i = 0; i < count; i++)
+        {
+            statsPanel[i].SetActive(true);
+        }
+        for (int i = count; i < 4; i++)
+        {
+            statsPanel[i].SetActive(false);
+        }
 
+        if (equipmentNameText != null) equipmentNameText.text = afterEquipment.Name;
+        if (equipmentLevelText != null) equipmentLevelText.text = "Lv." + afterEquipment.Stats.Level.ToString();
+    }
+
+    public void Update2PanelUI(PlayerData currentPlayerData, int currentValkyrie)
+    {
+        if (WeaponNameText != null) WeaponNameText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "武器");
+        if (WeaponStarImage != null) WeaponStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Stars}S") : null;
+        if (WeaponLevelText != null) WeaponLevelText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? "Lv." + currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Level.ToString() : "");
+    }
+
+    public void Update3PanelUI(PlayerData currentPlayerData, int currentValkyrie)
+    {
+        if (StigmataTOPImage != null) StigmataTOPImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Portrait/{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Weapon/None");
+        if (StigmataTOPNameText != null) StigmataTOPNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Name : "圣痕上位";
+        if (StigmataTOPStarImage != null) StigmataTOPStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Stats.Stars}S") : Resources.Load<Sprite>($"Picture/Weapon/None");
+        if (StigmataTOPLevelText != null) StigmataTOPLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex != -1 ? "Lv." + currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex].Stats.Level.ToString() : "";
+
+        if (StigmataMIDImage != null) StigmataMIDImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Portrait/{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Weapon/None");
+        if (StigmataMIDNameText != null) StigmataMIDNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Name : "圣痕中位";
+        if (StigmataMIDStarImage != null) StigmataMIDStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Stats.Stars}S") : Resources.Load<Sprite>($"Picture/Weapon/None");
+        if (StigmataMIDLevelText != null) StigmataMIDLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex != -1 ? "Lv." + currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex].Stats.Level.ToString() : "";
+
+        if (StigmataBOTImage != null) StigmataBOTImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Portrait/{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Id}") : Resources.Load<Sprite>($"Picture/Weapon/None");
+        if (StigmataBOTNameText != null) StigmataBOTNameText.text = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Name : "圣痕下位";
+        if (StigmataBOTStarImage != null) StigmataBOTStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Stats.Stars}S") : Resources.Load<Sprite>($"Picture/Weapon/None");
+        if (StigmataBOTLevelText != null) StigmataBOTLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? "Lv." + currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Stats.Level.ToString() : "";
     }
 }
