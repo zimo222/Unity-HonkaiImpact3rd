@@ -57,7 +57,7 @@ public class PlayerData
 
         // 初始化默认资源
         Crystals = 50000;
-        Coins = 300000000;
+        Coins = 3000000;
         Stamina = Level + 80;
 
         // 初始化默认角色和装备和材料
@@ -127,7 +127,7 @@ public class PlayerData
         var def = GameDataManager.Instance.CharacterDict[defineId];
         var character = new CharacterData(
             id: def.id, name: def.characterName,
-            isUnlocked: isUnlocked,
+            isUnlocked: isUnlocked, weaponType: def.weaponType,
             element: def.element,
             stars: def.baseStars, maxstars: def.maxStars,
             health: def.baseHealth, attack: def.baseAttack, defence: def.baseDefence,
@@ -371,6 +371,7 @@ public class CharacterData
     public string Id;                                // 角色ID
     public string Name;                              // 角色名称
     public bool IsUnlocked;                          // 是否解锁
+    public WeaponType WeaponType;
     public CharacterStats BaseStats;                 // 基础属性
 
     // 装备索引（指向EquipmentBag的下标）
@@ -381,12 +382,12 @@ public class CharacterData
 
     public CharacterData() { }
 
-    public CharacterData(string id, string name, bool isUnlocked, 
+    public CharacterData(string id, string name, bool isUnlocked, WeaponType weaponType,
                         string element, int stars, int maxstars,
                         int health, int attack, int defence, 
                         int energy, float critRate, float critDamage, float elementBonus)
     {
-        Id = id; Name = name; IsUnlocked = isUnlocked;
+        Id = id; Name = name; IsUnlocked = isUnlocked; WeaponType = weaponType;
         BaseStats = new CharacterStats()
         {
             Element = element, Level = 1, Stars = stars, MaxStars = maxstars,

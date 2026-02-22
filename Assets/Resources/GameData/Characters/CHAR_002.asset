@@ -15,6 +15,7 @@ MonoBehaviour:
   id: CHAR_002
   characterName: "\u742A\u4E9A\u5A1C-\u9886\u57DF\u88C5\xB7\u767D\u7EC3"
   element: JX
+  weaponType: 1
   baseStars: 1
   maxStars: 3
   baseHealth: 1200

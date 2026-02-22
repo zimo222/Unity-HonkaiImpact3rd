@@ -15,6 +15,7 @@ MonoBehaviour:
   id: CHAR_005
   characterName: "\u6D41\u8424-\u795E\u79D8\u673A\u7532\u5973"
   element: YN
+  weaponType: 2
   baseStars: 1
   maxStars: 3
   baseHealth: 1300

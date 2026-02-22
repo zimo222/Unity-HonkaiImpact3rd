@@ -15,6 +15,7 @@ MonoBehaviour:
   id: CHAR_008
   characterName: "\u742A\u4E9A\u5A1C-\u5723\u5973\u7948\u7977"
   element: SW
+  weaponType: 1
   baseStars: -1
   maxStars: 3
   baseHealth: 1300
@@ -24,6 +25,8 @@ MonoBehaviour:
   baseCritRate: 0.09
   baseCritDamage: 1.4
   baseElementBonus: 0.25
-  icon: {fileID: 21300000, guid: 682adaf40a11a764d99ec9d3816565ca, type: 3}
   introduction: 
   description: 
+  icon: {fileID: 21300000, guid: 682adaf40a11a764d99ec9d3816565ca, type: 3}
+  illustration: {fileID: 0}
+  model: {fileID: 0}

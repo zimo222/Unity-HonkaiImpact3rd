@@ -15,6 +15,7 @@ MonoBehaviour:
   id: CHAR_003
   characterName: "\u53F6\u77AC\u5149-\u865A\u72E9\xB7\u9752\u669D\u53F8\u547D"
   element: SW
+  weaponType: 2
   baseStars: 1
   maxStars: 3
   baseHealth: 1400

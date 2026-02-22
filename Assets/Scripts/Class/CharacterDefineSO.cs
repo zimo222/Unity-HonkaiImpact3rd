@@ -8,6 +8,7 @@ public class CharacterDefineSO : ScriptableObject
 {
     public string id;
     public string characterName;
+    public WeaponType weaponType;
 
     public string element;
 

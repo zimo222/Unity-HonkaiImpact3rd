@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -14,6 +15,7 @@ public class ValkyrieDetailController : MonoBehaviour
 
     // =========================  按钮引用   =========================
     public ModularUIButton[] referencedButtons;
+    public GameObject[] detailPanel;
 
 
     // ========================= 角色升级晋升 =========================
@@ -29,6 +31,18 @@ public class ValkyrieDetailController : MonoBehaviour
     public Slider slider;
     public Button[] maButton;
     private string nowMaterial = "MATE_004";
+
+    // ========================= 武器圣痕替换 =========================
+    [Header("武器圣痕替换")]
+    public Button[] replaceButton;
+    public GameObject twoPanel;
+    public Button returnButton;
+    private int nowType;
+    private int nowIndex = 0;
+    public Transform equipmentListContent;  // 装备/材料列表容器
+    public GameObject equipmentItemPrefab;  // 装备项预制体
+    // 新增：活动项列表
+    private List<GameObject> activeItems = new List<GameObject>();
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
@@ -58,6 +72,7 @@ public class ValkyrieDetailController : MonoBehaviour
 
         viewValkyrieDetail.UpdateAllUI(currentPlayerData,currentValkyrie);
 
+        //角色升级晋升
         levelUpButton.onClick.AddListener(ShowLevelUp);
         promotionButton.onClick.RemoveAllListeners();
         promotionButton.onClick.AddListener(ShowPromotion);
@@ -66,8 +81,6 @@ public class ValkyrieDetailController : MonoBehaviour
         sureLevelUpButton.onClick.AddListener(LevelUp);
         surePromotionButton.onClick.RemoveAllListeners();
         surePromotionButton.onClick.AddListener(Promotion);
-
-
         int count = 4;
         foreach(Button btn in maButton)
         {
@@ -75,6 +88,16 @@ public class ValkyrieDetailController : MonoBehaviour
             count--;
             btn.onClick.AddListener(() => onMaterialButtonClick(now));
         }
+
+        //武器替换
+        count = 0;
+        foreach(Button btn in replaceButton)
+        {
+            int now = count;
+            count++;
+            btn.onClick.AddListener(() => onReplaceButtonClick(now));
+        }
+        returnButton.onClick.AddListener(onReturnButtonClick);
     }
 
     // Update is called once per frame
@@ -202,4 +225,118 @@ public class ValkyrieDetailController : MonoBehaviour
             promotionButton.interactable = false;
         }
     }
+
+    // ==================== 武器圣痕替换 ====================
+
+    void onReplaceButtonClick(int index)
+    {
+        twoPanel.SetActive(true);
+        LoadCurrentTabContent();
+        nowType = index;
+        if (index == 0)
+        {
+            detailPanel[1].SetActive(false);
+        }
+        else
+        {
+            detailPanel[2].SetActive(false);
+        }
+        detailPanel[4].SetActive(false);
+    }
+
+    void onReturnButtonClick()
+    {
+        twoPanel.SetActive(false);
+        if(nowType == 0)
+        {
+            detailPanel[1].SetActive(true);
+        }
+        else
+        {
+            detailPanel[2].SetActive(true);
+        }
+        detailPanel[4].SetActive(true);
+    }
+
+    //加载对应类项
+    void LoadCurrentTabContent()
+    {
+        ClearItemList();
+        switch (nowType)
+        {
+            case 0:
+                LoadWeapons(currentPlayerData.WeaponBag, currentPlayerData.Characters[currentValkyrie].WeaponType);
+                break;
+            case 1:
+                LoadStigmatas(currentPlayerData.StigmataBag, StigmataPosition.Top);
+                break;
+            case 2:
+                LoadStigmatas(currentPlayerData.StigmataBag, StigmataPosition.Middle);
+                break;
+            case 3:
+                LoadStigmatas(currentPlayerData.StigmataBag, StigmataPosition.Bottom);
+                break;
+        }
+    }
+    //加载武器
+    void LoadWeapons(List<WeaponData> currentWeapons, WeaponType weaponType)
+    {
+        if (currentWeapons == null) return;
+
+        for (int i = 0; i < currentWeapons.Count; i++)
+        {
+            var weapon = currentWeapons[i];
+            if (weapon.Type == weaponType)
+                CreateEquipmentItem(weapon, i);
+        }
+
+        Debug.Log($"加载了 {currentWeapons.Count} 件武器");
+    }
+    //加载圣痕
+    void LoadStigmatas(List<StigmataData> currentStigmatas, StigmataPosition nowIndex)
+    {
+        if (currentStigmatas == null) return;
+
+        for (int i = 0; i < currentStigmatas.Count; i++)
+        {
+            var stigmata = currentStigmatas[i];
+            if (stigmata.Position == nowIndex)
+                CreateEquipmentItem(stigmata, i);
+        }
+
+        Debug.Log($"加载了 {currentStigmatas.Count} 件圣痕");
+    }
+
+    // 创建装备项 - 添加索引参数
+    void CreateEquipmentItem(EquipmentData equipment, int index)
+    {
+        if (equipmentItemPrefab == null || equipmentListContent == null) return;
+        GameObject itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
+        itemObj.SetActive(true);
+        DisaplayEquipmentItemPrefabs itemView = itemObj.GetComponent<DisaplayEquipmentItemPrefabs>();
+        if (itemView != null)
+        {
+            itemView.Initialize(equipment, OnEquipmentItemClicked, index);
+        }
+        activeItems.Add(itemObj);
+    }
+    // 装备项点击 - 修改为跳转场景
+    void OnEquipmentItemClicked(int Index)
+    {
+        viewValkyrieDetail.UpdateEquipmentUI(nowIndex, Index);
+    }
+    //清空容器
+    void ClearItemList()
+    {
+        if (equipmentListContent == null) return;
+        foreach (var item in activeItems)
+        {
+            if (item != null)
+            {
+                Destroy(item);
+            }
+        }
+        activeItems.Clear();
+    }
+
 }
