@@ -3,9 +3,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class DisaplayEquipmentItemPrefabs : MonoBehaviour, IPointerClickHandler
+public class DisaplayEquipmentItemView : MonoBehaviour, IPointerClickHandler
 {
     [Header("UI组件")]
+    public GameObject isChoiseImage;
+    public GameObject isEquipImage;
     public Image rarityImage;         // 稀有度背景
     public Image iconImage;           // 图标
     public TMP_Text levelText;        // 等级
@@ -14,15 +16,17 @@ public class DisaplayEquipmentItemPrefabs : MonoBehaviour, IPointerClickHandler
 
     // 数据
     private EquipmentData equipmentData;
-    private System.Action<int> onClickCallback;
+    private System.Action<int, GameObject> onClickCallback;
     private int index;
+    private GameObject obj;
 
     // 初始化
-    public void Initialize(EquipmentData data, System.Action<int> onClick, int Index)
+    public void Initialize(EquipmentData data, System.Action<int, GameObject> onClick, int Index, GameObject Obj)
     {
         equipmentData = data;
         onClickCallback = onClick;
         index = Index;
+        obj = Obj;
 
         UpdateUI();
     }
@@ -96,6 +100,16 @@ public class DisaplayEquipmentItemPrefabs : MonoBehaviour, IPointerClickHandler
     // 点击事件
     public void OnPointerClick(PointerEventData eventData)
     {
-        onClickCallback?.Invoke(index);
+        onClickCallback?.Invoke(index, obj);
+    }
+
+    public void UpdateChoiseState()
+    {
+        isChoiseImage.gameObject.SetActive(!isChoiseImage.gameObject.activeSelf);
+    }
+
+    public void UpdateEquipState()
+    {
+        isEquipImage.gameObject.SetActive(!isEquipImage.gameObject.activeSelf);
     }
 }

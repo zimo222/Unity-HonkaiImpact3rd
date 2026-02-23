@@ -301,4 +301,25 @@ public class ValkyrieDetailView : MonoBehaviour
         if (StigmataBOTStarImage != null) StigmataBOTStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Stats.Stars}S") : Resources.Load<Sprite>($"Picture/Weapon/None");
         if (StigmataBOTLevelText != null) StigmataBOTLevelText.text = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex != -1 ? "Lv." + currentPlayerData.StigmataBag[currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex].Stats.Level.ToString() : "";
     }
+
+    public void UpdateChoiseState(GameObject aEquipment, GameObject bEquipment)
+    {
+        if(aEquipment != null)
+        {
+            DisaplayEquipmentItemView aitemView = aEquipment.GetComponent<DisaplayEquipmentItemView>();
+            aitemView.UpdateChoiseState();
+        }
+        DisaplayEquipmentItemView bitemView = bEquipment.GetComponent<DisaplayEquipmentItemView>();
+        bitemView.UpdateChoiseState();
+    }
+    public void UpdateEquipState(GameObject aEquipment, GameObject bEquipment)
+    {
+        if(aEquipment != null)
+        {
+            DisaplayEquipmentItemView aitemView = aEquipment.GetComponent<DisaplayEquipmentItemView>();
+            aitemView.UpdateEquipState();
+        }
+        DisaplayEquipmentItemView bitemView = bEquipment.GetComponent<DisaplayEquipmentItemView>();
+        bitemView.UpdateEquipState();
+    }
 }

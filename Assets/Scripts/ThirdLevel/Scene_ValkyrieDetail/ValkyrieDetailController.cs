@@ -41,8 +41,14 @@ public class ValkyrieDetailController : MonoBehaviour
     public GameObject twoPanel;
     public Button returnButton;
     private int nowType;
+    //现在装备的装备在背包中的下标
     private int nowIndex = -1;
+    //现在选中的装备在背包中的下标
     private int toIndex = -1;
+    //现在装备的装备的预制体
+    private GameObject nowObj = null;
+    //现在选中鹅装备的预制体
+    private GameObject toObj = null;
     public Transform equipmentListContent;  // 装备/材料列表容器
     public GameObject equipmentItemPrefab;  // 装备项预制体
     public Button updateButton;
@@ -285,7 +291,18 @@ public class ValkyrieDetailController : MonoBehaviour
                 LoadStigmatas(StigmataPosition.Bottom);
                 break;
         }
-        OnEquipmentItemClicked(toIndex);
+        //身上没装备且有待选装备，那么toObj就是待选里的第一个
+        if(nowIndex == -1 && activeItems.Count > 0)
+        {
+            toObj = activeItems[0];
+            viewValkyrieDetail.UpdateChoiseState(null, toObj);
+        }
+        else
+        {
+            viewValkyrieDetail.UpdateEquipState(null, nowObj);
+            viewValkyrieDetail.UpdateChoiseState(null, toObj);
+        }
+            OnEquipmentItemClicked(toIndex, toObj);
     }
 
     //加载武器
@@ -341,21 +358,31 @@ public class ValkyrieDetailController : MonoBehaviour
         if (equipmentItemPrefab == null || equipmentListContent == null) return;
         GameObject itemObj = Instantiate(equipmentItemPrefab, equipmentListContent);
         itemObj.SetActive(true);
-        DisaplayEquipmentItemPrefabs itemView = itemObj.GetComponent<DisaplayEquipmentItemPrefabs>();
+        DisaplayEquipmentItemView itemView = itemObj.GetComponent<DisaplayEquipmentItemView>();
         if (itemView != null)
         {
-            itemView.Initialize(equipment, OnEquipmentItemClicked, index);
+            itemView.Initialize(equipment, OnEquipmentItemClicked, index, itemObj);
+        }
+        //初始化装备和选中的预制体
+        if(index == nowIndex)
+        {
+            nowObj = toObj = itemObj;
         }
         activeItems.Add(itemObj);
     }
 
     // 装备项点击
-    void OnEquipmentItemClicked(int index)
+    void OnEquipmentItemClicked(int index, GameObject obj)
     {
         Debug.Log(index);
         toIndex = index;
         Debug.Log(nowIndex);
-        if(nowType == 0)
+        if(toObj != obj)
+        {
+            viewValkyrieDetail.UpdateChoiseState(toObj, obj);
+        }
+        toObj = obj;
+        if (nowType == 0)
         {
             viewValkyrieDetail.UpdateEquipmentUI(nowIndex >= 0 ? currentPlayerData.WeaponBag[nowIndex] : new WeaponData(), currentPlayerData.WeaponBag[index]);
         }
@@ -379,10 +406,20 @@ public class ValkyrieDetailController : MonoBehaviour
 
     void OnUpdateButtonClick()
     {
-        switch(nowType)
+        if (nowObj == toObj)
+        {
+            viewValkyrieDetail.UpdateEquipState(null, toObj);
+            nowObj = null;
+        }
+        else
+        {
+            viewValkyrieDetail.UpdateEquipState(nowObj, toObj);
+            nowObj = toObj;
+        }
+        switch (nowType)
         {
             case 0:
-                if(nowIndex == toIndex)
+                if (nowIndex == toIndex)
                 {
                     PlayerDataManager.Instance.UnequipWeaponFromCharacter(currentValkyrie);
                     nowIndex = -1;
@@ -390,7 +427,7 @@ public class ValkyrieDetailController : MonoBehaviour
                     viewValkyrieDetail.Update2PanelUI(currentPlayerData, currentValkyrie);
                     break;
                 }
-                PlayerDataManager.Instance.EquipWeaponToCharacter(currentValkyrie, toIndex); 
+                PlayerDataManager.Instance.EquipWeaponToCharacter(currentValkyrie, toIndex);
                 viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.WeaponBag[toIndex], currentPlayerData.WeaponBag[toIndex]);
                 viewValkyrieDetail.Update2PanelUI(currentPlayerData, currentValkyrie);
                 break;
@@ -434,6 +471,6 @@ public class ValkyrieDetailController : MonoBehaviour
                 viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
                 break;
         }
-        
     }
+
 }
