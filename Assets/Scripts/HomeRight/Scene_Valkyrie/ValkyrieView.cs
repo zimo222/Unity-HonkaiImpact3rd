@@ -102,7 +102,7 @@ public class ValkyrieView : MonoBehaviour
                 StarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
             }
             if (LevelText != null)
-                LevelText.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
+                LevelText.text = "Lv." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
             //”“√Ê∞Â
             //…œ√Ê∞Â
             if (WeaponText != null)

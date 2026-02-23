@@ -499,24 +499,56 @@ public class PlayerDataManager : MonoBehaviour
     /// </summary>
     public bool EquipWeaponToCharacter(int characterIndex, int weaponIndex)
     {
-        if (characterIndex < 0 || characterIndex >= CurrentPlayerData.Characters.Count || weaponIndex < 0 || weaponIndex >= CurrentPlayerData.WeaponBag.Count)
-            return false;
+        // 参数有效性检查
+        if (characterIndex < 0 || characterIndex >= CurrentPlayerData.Characters.Count ||
+            weaponIndex < 0 || weaponIndex >= CurrentPlayerData.WeaponBag.Count) return false;
+
         var character = CurrentPlayerData.Characters[characterIndex];
         var weapon = CurrentPlayerData.WeaponBag[weaponIndex];
-        // 检查武器是否已被其他角色装备
-        if (weapon.EquippedToCharacterIndex >= 0)
+
+        // 原持有武器的角色索引
+        int originalHolderIndex = weapon.EquippedToCharacterIndex;
+        // 当前角色当前装备的武器索引
+        int currentWeaponIndex = character.EquippedWeaponIndex;
+
+        // 情况1：武器已被其他角色佩戴，且当前角色有武器 → 交换
+        if (originalHolderIndex >= 0 && currentWeaponIndex >= 0)
         {
-            CurrentPlayerData.Characters[weapon.EquippedToCharacterIndex].EquippedWeaponIndex = -1;
+            // 原佩戴角色
+            var originalCharacter = CurrentPlayerData.Characters[originalHolderIndex];
+            // 当前角色佩戴的武器
+            var currentWeapon = CurrentPlayerData.WeaponBag[currentWeaponIndex];
+            // 交换装备索引
+            originalCharacter.EquippedWeaponIndex = currentWeaponIndex;
+            character.EquippedWeaponIndex = weaponIndex;
+            // 更新武器的佩戴角色
+            currentWeapon.EquippedToCharacterIndex = originalHolderIndex;
+            weapon.EquippedToCharacterIndex = characterIndex;
         }
-        // 先卸下当前装备的武器
-        if (character.EquippedWeaponIndex >= 0 && character.EquippedWeaponIndex < CurrentPlayerData.WeaponBag.Count)
+        // 情况2：武器已被佩戴，但当前角色无武器 → 武器从原角色移动到当前角色
+        else if (originalHolderIndex >= 0)
         {
-            var oldWeapon = CurrentPlayerData.WeaponBag[character.EquippedWeaponIndex];
-            oldWeapon.EquippedToCharacterIndex = -1;
+            var originalCharacter = CurrentPlayerData.Characters[originalHolderIndex];
+            originalCharacter.EquippedWeaponIndex = -1;          // 原角色失去武器
+            character.EquippedWeaponIndex = weaponIndex;         // 当前角色获得武器
+            weapon.EquippedToCharacterIndex = characterIndex;    // 武器绑定当前角色
         }
-        // 装备新武器
-        character.EquippedWeaponIndex = weaponIndex;
-        weapon.EquippedToCharacterIndex = characterIndex;
+        // 情况3：武器未被佩戴，但当前角色有武器 → 先卸下当前武器，再装备新武器
+        else if (currentWeaponIndex >= 0)
+        {
+            var oldWeapon = CurrentPlayerData.WeaponBag[currentWeaponIndex];
+            oldWeapon.EquippedToCharacterIndex = -1;             // 旧武器解除绑定
+            character.EquippedWeaponIndex = weaponIndex;         // 当前角色装备新武器
+            weapon.EquippedToCharacterIndex = characterIndex;    // 新武器绑定当前角色
+        }
+        // 情况4：武器未被佩戴，当前角色也无武器 → 直接装备
+        else
+        {
+            character.EquippedWeaponIndex = weaponIndex;
+            weapon.EquippedToCharacterIndex = characterIndex;
+        }
+
+        // 保存数据
         SaveCurrentPlayerData();
         return true;
     }
@@ -526,30 +558,23 @@ public class PlayerDataManager : MonoBehaviour
     /// </summary>
     public bool EquipStigmataToCharacter(int characterIndex, int stigmataIndex, StigmataPosition position)
     {
-        if (characterIndex < 0 || characterIndex >= CurrentPlayerData.Characters.Count || stigmataIndex < 0 || stigmataIndex >= CurrentPlayerData.StigmataBag.Count)
-            return false;
+        // 参数有效性检查
+        if (characterIndex < 0 || characterIndex >= CurrentPlayerData.Characters.Count ||
+            stigmataIndex < 0 || stigmataIndex >= CurrentPlayerData.StigmataBag.Count) return false;
+
         var character = CurrentPlayerData.Characters[characterIndex];
         var stigmata = CurrentPlayerData.StigmataBag[stigmataIndex];
+
         // 检查圣痕位置是否正确
-        if (stigmata.Position != position)
-            return false;
-        // 检查装备是否已被其他角色装备
-        if (stigmata.EquippedToCharacterIndex >= 0)
-        {
-            switch(position)
-            {
-                case StigmataPosition.Top:
-                    CurrentPlayerData.Characters[stigmata.EquippedToCharacterIndex].EquippedTopStigmataIndex = -1;
-                    break;
-                case StigmataPosition.Middle:
-                    CurrentPlayerData.Characters[stigmata.EquippedToCharacterIndex].EquippedMiddleStigmataIndex = -1;
-                    break;
-                case StigmataPosition.Bottom:
-                    CurrentPlayerData.Characters[stigmata.EquippedToCharacterIndex].EquippedBottomStigmataIndex = -1;
-                    break;
-            }
-        }
-        // 根据位置卸下当前装备的圣痕
+        if (stigmata.Position != position) return false;
+
+        // 获取目标圣痕当前装备的角色索引
+        int originalHolderIndex = stigmata.EquippedToCharacterIndex;
+
+        // 如果已经装备给当前角色，无需任何操作
+        if (originalHolderIndex == characterIndex) return true;
+
+        // 获取当前角色指定位置已装备的圣痕索引
         int currentStigmataIndex = -1;
         switch (position)
         {
@@ -563,25 +588,109 @@ public class PlayerDataManager : MonoBehaviour
                 currentStigmataIndex = character.EquippedBottomStigmataIndex;
                 break;
         }
-        if (currentStigmataIndex >= 0 && currentStigmataIndex < CurrentPlayerData.StigmataBag.Count)
+
+        // 情况1：目标圣痕已被其他角色装备，且当前角色在该位置有圣痕 → 交换
+        if (originalHolderIndex >= 0 && currentStigmataIndex >= 0)
+        {
+            var originalCharacter = CurrentPlayerData.Characters[originalHolderIndex];
+            var currentStigmata = CurrentPlayerData.StigmataBag[currentStigmataIndex];
+
+            // 交换两个角色的对应位置圣痕索引
+            switch (position)
+            {
+                case StigmataPosition.Top:
+                    originalCharacter.EquippedTopStigmataIndex = currentStigmataIndex;
+                    character.EquippedTopStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Middle:
+                    originalCharacter.EquippedMiddleStigmataIndex = currentStigmataIndex;
+                    character.EquippedMiddleStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Bottom:
+                    originalCharacter.EquippedBottomStigmataIndex = currentStigmataIndex;
+                    character.EquippedBottomStigmataIndex = stigmataIndex;
+                    break;
+            }
+
+            // 更新圣痕的装备角色索引
+            currentStigmata.EquippedToCharacterIndex = originalHolderIndex;
+            stigmata.EquippedToCharacterIndex = characterIndex;
+        }
+        // 情况2：目标圣痕已被其他角色装备，但当前角色该位置无圣痕 → 移动
+        else if (originalHolderIndex >= 0)
+        {
+            var originalCharacter = CurrentPlayerData.Characters[originalHolderIndex];
+
+            // 卸下原角色的圣痕
+            switch (position)
+            {
+                case StigmataPosition.Top:
+                    originalCharacter.EquippedTopStigmataIndex = -1;
+                    break;
+                case StigmataPosition.Middle:
+                    originalCharacter.EquippedMiddleStigmataIndex = -1;
+                    break;
+                case StigmataPosition.Bottom:
+                    originalCharacter.EquippedBottomStigmataIndex = -1;
+                    break;
+            }
+
+            // 当前角色装备新圣痕
+            switch (position)
+            {
+                case StigmataPosition.Top:
+                    character.EquippedTopStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Middle:
+                    character.EquippedMiddleStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Bottom:
+                    character.EquippedBottomStigmataIndex = stigmataIndex;
+                    break;
+            }
+
+            stigmata.EquippedToCharacterIndex = characterIndex;
+        }
+        // 情况3：目标圣痕未被装备，但当前角色该位置有圣痕 → 卸下当前，装备新
+        else if (currentStigmataIndex >= 0)
         {
             var oldStigmata = CurrentPlayerData.StigmataBag[currentStigmataIndex];
             oldStigmata.EquippedToCharacterIndex = -1;
+
+            switch (position)
+            {
+                case StigmataPosition.Top:
+                    character.EquippedTopStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Middle:
+                    character.EquippedMiddleStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Bottom:
+                    character.EquippedBottomStigmataIndex = stigmataIndex;
+                    break;
+            }
+
+            stigmata.EquippedToCharacterIndex = characterIndex;
         }
-        // 装备新圣痕
-        switch (position)
+        // 情况4：目标圣痕未被装备，当前角色该位置无圣痕 → 直接装备
+        else
         {
-            case StigmataPosition.Top:
-                character.EquippedTopStigmataIndex = stigmataIndex;
-                break;
-            case StigmataPosition.Middle:
-                character.EquippedMiddleStigmataIndex = stigmataIndex;
-                break;
-            case StigmataPosition.Bottom:
-                character.EquippedBottomStigmataIndex = stigmataIndex;
-                break;
+            switch (position)
+            {
+                case StigmataPosition.Top:
+                    character.EquippedTopStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Middle:
+                    character.EquippedMiddleStigmataIndex = stigmataIndex;
+                    break;
+                case StigmataPosition.Bottom:
+                    character.EquippedBottomStigmataIndex = stigmataIndex;
+                    break;
+            }
+
+            stigmata.EquippedToCharacterIndex = characterIndex;
         }
-        stigmata.EquippedToCharacterIndex = characterIndex;
+
         SaveCurrentPlayerData();
         return true;
     }
@@ -599,6 +708,7 @@ public class PlayerDataManager : MonoBehaviour
         var weapon = CurrentPlayerData.WeaponBag[character.EquippedWeaponIndex];
         weapon.EquippedToCharacterIndex = -1;
         character.EquippedWeaponIndex = -1;
+        SaveCurrentPlayerData();
         return true;
     }
 
@@ -632,6 +742,7 @@ public class PlayerDataManager : MonoBehaviour
             stigmata.EquippedToCharacterIndex = -1;
             return true;
         }
+        SaveCurrentPlayerData();
         return false;
     }
 

@@ -269,20 +269,20 @@ public class ValkyrieDetailController : MonoBehaviour
         switch (nowType)
         {
             case 0:
-                LoadWeapons();
                 nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex;
+                LoadWeapons();
                 break;
             case 1:
-                LoadStigmatas(StigmataPosition.Top);
                 nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedTopStigmataIndex;
+                LoadStigmatas(StigmataPosition.Top);
                 break;
             case 2:
-                LoadStigmatas(StigmataPosition.Middle);
                 nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedMiddleStigmataIndex;
+                LoadStigmatas(StigmataPosition.Middle);
                 break;
             case 3:
-                LoadStigmatas(StigmataPosition.Bottom);
                 nowIndex = currentPlayerData.Characters[currentValkyrie].EquippedBottomStigmataIndex;
+                LoadStigmatas(StigmataPosition.Bottom);
                 break;
         }
         OnEquipmentItemClicked(toIndex);
@@ -382,21 +382,53 @@ public class ValkyrieDetailController : MonoBehaviour
         switch(nowType)
         {
             case 0:
+                if(nowIndex == toIndex)
+                {
+                    PlayerDataManager.Instance.UnequipWeaponFromCharacter(currentValkyrie);
+                    nowIndex = -1;
+                    viewValkyrieDetail.UpdateEquipmentUI(nowIndex >= 0 ? currentPlayerData.WeaponBag[nowIndex] : new WeaponData(), currentPlayerData.WeaponBag[toIndex]);
+                    viewValkyrieDetail.Update2PanelUI(currentPlayerData, currentValkyrie);
+                    break;
+                }
                 PlayerDataManager.Instance.EquipWeaponToCharacter(currentValkyrie, toIndex); 
                 viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.WeaponBag[toIndex], currentPlayerData.WeaponBag[toIndex]);
                 viewValkyrieDetail.Update2PanelUI(currentPlayerData, currentValkyrie);
                 break;
             case 1:
+                if (nowIndex == toIndex)
+                {
+                    PlayerDataManager.Instance.UnequipStigmataFromCharacter(currentValkyrie, StigmataPosition.Top);
+                    nowIndex = -1;
+                    viewValkyrieDetail.UpdateEquipmentUI(nowIndex >= 0 ? currentPlayerData.StigmataBag[nowIndex] : new StigmataData(), currentPlayerData.StigmataBag[toIndex]);
+                    viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
+                    break;
+                }
                 PlayerDataManager.Instance.EquipStigmataToCharacter(currentValkyrie, toIndex, StigmataPosition.Top);
                 viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.StigmataBag[toIndex], currentPlayerData.StigmataBag[toIndex]);
                 viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
                 break;
             case 2:
+                if (nowIndex == toIndex)
+                {
+                    PlayerDataManager.Instance.UnequipStigmataFromCharacter(currentValkyrie, StigmataPosition.Middle);
+                    nowIndex = -1;
+                    viewValkyrieDetail.UpdateEquipmentUI(nowIndex >= 0 ? currentPlayerData.StigmataBag[nowIndex] : new StigmataData(), currentPlayerData.StigmataBag[toIndex]);
+                    viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
+                    break;
+                }
                 PlayerDataManager.Instance.EquipStigmataToCharacter(currentValkyrie, toIndex, StigmataPosition.Middle);
                 viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.StigmataBag[toIndex], currentPlayerData.StigmataBag[toIndex]);
                 viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
                 break;
             case 3:
+                if (nowIndex == toIndex)
+                {
+                    PlayerDataManager.Instance.UnequipStigmataFromCharacter(currentValkyrie, StigmataPosition.Bottom);
+                    nowIndex = -1;
+                    viewValkyrieDetail.UpdateEquipmentUI(nowIndex >= 0 ? currentPlayerData.StigmataBag[nowIndex] : new StigmataData(), currentPlayerData.StigmataBag[toIndex]);
+                    viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
+                    break;
+                }
                 PlayerDataManager.Instance.EquipStigmataToCharacter(currentValkyrie, toIndex, StigmataPosition.Bottom);
                 viewValkyrieDetail.UpdateEquipmentUI(currentPlayerData.StigmataBag[toIndex], currentPlayerData.StigmataBag[toIndex]);
                 viewValkyrieDetail.Update3PanelUI(currentPlayerData, currentValkyrie);
