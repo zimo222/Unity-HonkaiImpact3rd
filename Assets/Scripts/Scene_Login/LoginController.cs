@@ -1,56 +1,38 @@
+using System.Collections;
 using System.Collections.Generic;
-// 关键1：引入 TMPro 命名空间
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoginWindowController_TMP : MonoBehaviour
+public class LoginController : MonoBehaviour
 {
-    // UI元素引用 - 所有 InputField 和 Text 都改为 TMP 类型
+    public LoginView viewLogin;
+
     public GameObject loginWindow;
 
-    // 关键2：将类型从 InputField 改为 TMP_InputField
     public TMP_InputField usernameInputField_TMP;
     public TMP_InputField passwordInputField_TMP;
 
-    // 如果你有用于显示提示信息的Text，也需要改为TMP_Text
-    public TMP_Text statusText_TMP; // 可选：用于显示登录状态
+    public TMP_Text statusText_TMP; 
 
-    // 按钮仍然是UnityEngine.UI.Button类型，保持不变
     public UnityEngine.UI.Button loginButton;
     public UnityEngine.UI.Button registerButton;
     public UnityEngine.UI.Button closeButton;
 
-    // 对玩家数据管理器的引用
     public PlayerDataManager dataManager;
 
     void Start()
     {
-        // 确保游戏开始时窗口是关闭的
-        if (loginWindow != null)
-        {
-            loginWindow.SetActive(false);
-        }
+        if (loginWindow != null) loginWindow.SetActive(false);
 
-        // 绑定按钮点击事件
-        if (loginButton != null)
-            loginButton.onClick.AddListener(OnLoginButtonClicked);
-        if (registerButton != null)
-            registerButton.onClick.AddListener(OnRegisterButtonClicked);
-        if (closeButton != null)
-            closeButton.onClick.AddListener(OnCloseButtonClicked);
+        if (loginButton != null) loginButton.onClick.AddListener(AttemptLogin);
+        if (registerButton != null) registerButton.onClick.AddListener(AttemptRegister);
+        if (closeButton != null) closeButton.onClick.AddListener(CloseLoginWindow);
 
         // 可选：为输入框添加结束编辑监听（比如按回车键触发登录）
-        if (usernameInputField_TMP != null)
-        {
-            usernameInputField_TMP.onSubmit.AddListener(delegate { OnInputFieldSubmit(); });
-        }
-        if (passwordInputField_TMP != null)
-        {
-            passwordInputField_TMP.onSubmit.AddListener(delegate { OnInputFieldSubmit(); });
-        }
+        if (usernameInputField_TMP != null) usernameInputField_TMP.onSubmit.AddListener(delegate { AttemptLogin(); });
+        if (passwordInputField_TMP != null) passwordInputField_TMP.onSubmit.AddListener(delegate { AttemptLogin(); });
 
-        // 可选：初始状态信息
         if (statusText_TMP != null)
         {
             statusText_TMP.text = "点击屏幕开始游戏";
@@ -60,13 +42,9 @@ public class LoginWindowController_TMP : MonoBehaviour
 
     void Update()
     {
-        // 检测鼠标点击（非UI元素部分）来打开窗口
         if (Input.GetMouseButtonDown(0) && !IsPointerOverUIElement())
         {
-            if (loginWindow != null && !loginWindow.activeSelf)
-            {
-                OpenLoginWindow();
-            }
+            if (loginWindow != null && !loginWindow.activeSelf) OpenLoginWindow();
         }
     }
 
@@ -76,23 +54,14 @@ public class LoginWindowController_TMP : MonoBehaviour
         if (loginWindow != null)
         {
             loginWindow.SetActive(true);
-            // 清空输入框
             if (usernameInputField_TMP != null)
             {
                 usernameInputField_TMP.text = "";
-                // 自动聚焦到用户名输入框
                 usernameInputField_TMP.Select();
                 usernameInputField_TMP.ActivateInputField();
             }
-            if (passwordInputField_TMP != null)
-            {
-                passwordInputField_TMP.text = "";
-            }
-            // 清除状态信息
-            if (statusText_TMP != null)
-            {
-                statusText_TMP.text = "";
-            }
+            if (passwordInputField_TMP != null) passwordInputField_TMP.text = "";
+            if (statusText_TMP != null) statusText_TMP.text = "";
         }
     }
 
@@ -103,35 +72,8 @@ public class LoginWindowController_TMP : MonoBehaviour
         {
             loginWindow.SetActive(false);
             // 关闭窗口后可以显示一些状态信息
-            if (statusText_TMP != null && dataManager != null && dataManager.CurrentPlayerData != null)
-            {
-                statusText_TMP.text = $"欢迎，{dataManager.CurrentPlayerData.PlayerName}！";
-            }
+            if (statusText_TMP != null && dataManager != null && dataManager.CurrentPlayerData != null) statusText_TMP.text = $"欢迎，{dataManager.CurrentPlayerData.PlayerName}！";
         }
-    }
-
-    // 登录按钮逻辑
-    private void OnLoginButtonClicked()
-    {
-        AttemptLogin();
-    }
-
-    // 注册按钮逻辑
-    private void OnRegisterButtonClicked()
-    {
-        AttemptRegister();
-    }
-
-    // 关闭按钮逻辑
-    private void OnCloseButtonClicked()
-    {
-        CloseLoginWindow();
-    }
-
-    // 输入框提交（按回车键）的逻辑
-    private void OnInputFieldSubmit()
-    {
-        AttemptLogin();
     }
 
     // 尝试登录的公共方法
@@ -161,9 +103,8 @@ public class LoginWindowController_TMP : MonoBehaviour
             ShowStatusMessage("登录成功！", Color.green);
 
             // 调用过渡
-            LoginTransitionSimple transition = FindObjectOfType<LoginTransitionSimple>();
-            if (transition != null)
-                transition.OnLoginSuccess();
+            if (viewLogin != null)
+                viewLogin.OnLoginSuccess();
             else
                 SceneManager.LoadScene("HomeScene");
         }
@@ -176,7 +117,7 @@ public class LoginWindowController_TMP : MonoBehaviour
             passwordInputField_TMP.ActivateInputField();
         }
     }
-        
+
 
     // 尝试注册的公共方法
     private void AttemptRegister()
@@ -236,9 +177,7 @@ public class LoginWindowController_TMP : MonoBehaviour
     // 辅助方法：检测鼠标是否在UI元素上
     private bool IsPointerOverUIElement()
     {
-        if (UnityEngine.EventSystems.EventSystem.current == null)
-            return false;
-
+        if (UnityEngine.EventSystems.EventSystem.current == null) return false;
         return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
     }
 

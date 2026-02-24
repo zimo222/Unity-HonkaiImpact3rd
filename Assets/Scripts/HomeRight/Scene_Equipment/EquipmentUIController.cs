@@ -70,8 +70,8 @@ public class EquipmentUIController : MonoBehaviour
         // 初始化UI
         InitializeUI();
         // 预创建对象池
-        EquipmentObjectPool.Instance.Prewarm(equipmentItemPrefab.name, equipmentItemPrefab, 30);
-        EquipmentObjectPool.Instance.Prewarm(materialItemPrefab.name, materialItemPrefab, 30);
+        EquipmentObjectPool.Instance.Prewarm(equipmentItemPrefab.name, equipmentItemPrefab, 200);
+        EquipmentObjectPool.Instance.Prewarm(materialItemPrefab.name, materialItemPrefab, 200);
 
         // 加载默认标签内容
         SwitchToTab(currentTab);
