@@ -21,13 +21,18 @@ public class ToHomeView : MonoBehaviour
 
     [SerializeField] private float scrollESpeed = 0.03f;
     [SerializeField] private List<Transform> backgroundEImages = new List<Transform>();
-    public float pauseDuration = 0.3f;      // 停顿时间
+    public float pauseDuration = 0.3f;
 
     [SerializeField] private Transform backgroundFImages;
 
+    [SerializeField] private Transform backgroundGImages;
 
-    [SerializeField] private Animator animatorA;             // 用于参数A
-    [SerializeField] private Transform mainCamera;           // 主摄像机
+
+    [SerializeField] private GameObject LightA;         
+    [SerializeField] private GameObject LightB;            
+
+    [SerializeField] private Animator animatorA;          
+    [SerializeField] private Transform mainCamera;        
 
 
 
@@ -126,6 +131,8 @@ public class ToHomeView : MonoBehaviour
 
         // 阶段2：禁用A、B、C、D，E继续移动直到backgroundEImages[1].y <= -0.0002
         Debug.Log("阶段2：禁用其他背景，E继续移动");
+        LightA.SetActive(false);
+        LightB.SetActive(true);
         // 禁用A
         foreach (var t in backgroundAImages)
             if (t != null) t.gameObject.SetActive(false);
@@ -152,27 +159,95 @@ public class ToHomeView : MonoBehaviour
         Debug.Log("阶段3：触发Animator A");
         if (animatorA != null)
             animatorA.SetBool("A", true);   // 请根据实际参数名调整
+
+        backgroundEImages[2].position = new Vector3(0, -0.018f, 0.138f);
+        backgroundGImages.position = new Vector3(-0.2f, -4.43f, 0f);
+
         yield return new WaitForSeconds(pauseDuration);
 
         // 阶段4：将Animator B的参数"BoolB"设为true，同时移动摄像机到z=0
         Debug.Log("阶段4：触发Animator B，移动摄像机");
         if (animatorA != null)
             animatorA.SetBool("B", true);   // 请根据实际参数名调整
-
+        /*
         if (mainCamera != null)
         {
             Vector3 camPos = mainCamera.position;
-            while(camPos.z < 0.01f)
+            Vector3 camRot = mainCamera.eulerAngles;
+            while (camPos.z < 0f)
             {
-                backgroundFImages.Translate(0, 0, -0.01f * Time.deltaTime, Space.World);
+                backgroundFImages.Translate(0, 0, -0.02f * Time.deltaTime, Space.World);
                 camPos.z += 0.03f * Time.deltaTime;
                 mainCamera.position = camPos;
+                camRot.x += 2.1f * Time.deltaTime;
+                mainCamera.eulerAngles = camRot;
+                yield return null;
+            }
+        }
+        mainCamera.position = new Vector3(0, 0, 0); 
+        mainCamera.eulerAngles = new Vector3(2, 0, 0);
+        */
+        if (mainCamera != null)
+        {
+            Vector3 camPos = mainCamera.position;
+            Vector3 camRot = mainCamera.eulerAngles;
+
+            // 目标值
+            float targetZ = 0f;
+            float targetRotX = 2f;   // 你希望的最终旋转角度
+
+            // 速度系数
+            float camSpeedZ = 0.03f;
+            float rotSpeedX = 2.1f;
+            float bgSpeedZ = -0.02f; // background 移动速度（注意方向）
+
+            // 计算需要移动的总距离（用于比例调整）
+            float totalZ = targetZ - camPos.z;          // 应为正数（因为camPos.z < 0）
+            float totalRotX = targetRotX - camRot.x;    // 旋转变化总量（需注意角度环绕，但你的范围不大，直接减即可）
+
+            while (camPos.z < targetZ)   // 条件改为与目标比较
+            {
+                // 当前步长
+                float stepZ = camSpeedZ * Time.deltaTime;
+                float stepRotX = rotSpeedX * Time.deltaTime;
+
+                // 如果这一步会超过目标
+                if (camPos.z + stepZ > targetZ)
+                {
+                    // 剩余距离
+                    float remainingZ = targetZ - camPos.z;
+                    // 剩余比例
+                    float ratio = remainingZ / stepZ;   // 0~1之间
+
+                    // 按比例移动背景和旋转
+                    backgroundFImages.Translate(0, 0, bgSpeedZ * Time.deltaTime * ratio, Space.World);
+
+                    // 精确设置摄像机位置和旋转
+                    camPos.z = targetZ;
+                    camRot.x = targetRotX;   // 直接设为目标值，避免浮点误差
+
+                    mainCamera.position = camPos;
+                    mainCamera.eulerAngles = camRot;
+
+                    break;  // 结束循环
+                }
+                else
+                {
+                    // 正常移动
+                    camPos.z += stepZ;
+                    camRot.x += stepRotX;
+                    mainCamera.position = camPos;
+                    mainCamera.eulerAngles = camRot;
+                    backgroundFImages.Translate(0, 0, bgSpeedZ * Time.deltaTime, Space.World);
+                }
+
                 yield return null;
             }
         }
 
         // 阶段5：切换场景
         Debug.Log("阶段5：加载HomeScene");
+   // X轴旋转2°
         SceneManager.LoadScene("HomeScene");
     }
 }
