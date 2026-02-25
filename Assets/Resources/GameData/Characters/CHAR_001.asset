@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: CHAR_001
   characterName: "\u742A\u4E9A\u5A1C-\u85AA\u708E\u4E4B\u5F8B\u8005"
-  element: YN
   weaponType: 1
+  element: YN
   baseStars: 1
   maxStars: 3
   baseHealth: 2004
@@ -25,8 +25,143 @@ MonoBehaviour:
   baseCritRate: 0.1
   baseCritDamage: 1.5
   baseElementBonus: 0.3
+  skills:
+  - skillName: "\u65E0\u540D\u6E38\u4FA0\u7684\u65C5\u9014"
+    textStats:
+      Introduction: "\u7F6E\u4E8E\u961F\u957F\u4F4D\u65F6\uFF0C\u5168\u961F\u53D7\u5230\u52A0\u6210"
+      Description: "\u961F\u957F\u6280\uFF1A\u5168\u961F\u5168\u5143\u7D20\u4F24\u5BB3\u63D0\u9AD848.0%\uFF0C\u961F\u4F0D\u4E2D\u6BCF\u6709\u4E00\u4E2A\u975E\u742A\u4E9A\u5A1C\u89D2\u8272\uFF0C\u5168\u961F\u521D\u59CB\u80FD\u91CF\u503C\u63D0\u9AD830.0\u70B9\uFF08\u6700\u591A60.0
+        \u70B9\uFF0C\u8BE5\u6548\u679C\u5728\u5F00\u653E\u4E16\u754C\u4E2D\u6BCF10\u5206\u949F\u53EF\u4EE5\u89E6\u53D11\u6B21\uFF09"
+    branches:
+    - branchName: "\u65E0\u540D\u6E38\u4FA0\u7684\u65C5\u9014"
+      level: 0
+      textStats:
+        Introduction: "\u5168\u961F\u5143\u7D20\u4F24\u5BB3\u63D0\u9AD8\uFF1B\u961F\u4F0D\u4E2D\u6BCF\u6709\u4E00\u4E2A\u975E\u742A\u4E9A\u5A1C\u89D2\u8272\uFF0C\u5168\u961F\u521D\u59CB\u80FD\u91CF\u503C\u63D0\u9AD8"
+        Description: 
+  - skillName: "\u70C8\u7130\u5723\u6B4C\u7684\u8A93\u7EA6"
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: "\u4EE5\u6B64\u9882\u8BD7\u5B58\u62A4"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u7EFD\u66AE\u5149\u4E4B\u7948\u795D"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u7E41\u661F\u71A0\u715C"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: "\u9057\u4E16\u706B\u9E1F\u7684\u71C3\u7FBD"
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: "\u4EE5\u6B64\u4F59\u706B\u94ED\u8BB0"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u5C18\u6E21\u5343\u5E74"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u5524\u954C\u7FCE\u4E4B\u65B0\u751F"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: "\u6DEC\u706B\u5251\u58EB\u7684\u5251\u88AD"
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: "\u4EE5\u6B64\u5251\u5149\u6267\u63E1"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u714C\u661F\u7834\u6653"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u5F15\u9E23\u96F7\u4E4B\u70BD\u54CD"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: "\u85AA\u708E\u738B\u5251\u7684\u51EF\u65CB"
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: "\u4EE5\u6B64\u85AA\u708E\u707C\u70C1"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u6211\u8EAB\u4E3A\u70AC"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u8D74\u771F\u7EA2\u4E4B\u6C38\u71C3"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: "\u71CE\u539F\u708E\u8F66\u7684\u72FC\u70DF"
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: "\u4EE5\u6B64\u8F6E\u708E\u5FA1\u9A7E"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u7130\u9A71\u5929\u9053"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: "\u8F6C\u771F\u7406\u4E4B\u56DE\u73AF"
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
   introduction: 
   description: 
   icon: {fileID: 21300000, guid: 6768858c7097c8b41b00c143d08423b7, type: 3}
   illustration: {fileID: 21300000, guid: b4ef7e736ed6be04c8e01c2f635a7002, type: 3}
   model: {fileID: 4301919117083512561, guid: 0d162d4aedebbf740b70dbe8fe02cd87, type: 3}
+  skillIcon:
+  - {fileID: 21300000, guid: 6e0f5ba569444834ca23670c239f326c, type: 3}
+  - {fileID: 21300000, guid: e2f0ea080c6b18143a95879207c6d9ae, type: 3}
+  - {fileID: 21300000, guid: 4aeff9eeaec9a334abefc0070ab2fc0c, type: 3}
+  - {fileID: 21300000, guid: 1f3f39c88ce5355439da2cfe2637e791, type: 3}
+  - {fileID: 21300000, guid: b07883387c246c8478b41eaaac3918e3, type: 3}
+  - {fileID: 21300000, guid: f1d780259326905479fe7ad2c6f8a783, type: 3}
+  - {fileID: 21300000, guid: 07f2c2e3ef7bec14f88297399d7d1311, type: 3}
+  - {fileID: 21300000, guid: c669a35c025ebbb4db553699e3c86b7c, type: 3}
+  - {fileID: 21300000, guid: 2778c50b6836b7c47acbe1b5e5e50ce1, type: 3}
+  - {fileID: 21300000, guid: 008d950725355354dae49afc606bf1e2, type: 3}
+  - {fileID: 21300000, guid: 77ca1c45b954e6b41beccc112f5741de, type: 3}
+  - {fileID: 21300000, guid: 3a8e3405c65a2d8459a3b3357ceabcd7, type: 3}
+  - {fileID: 21300000, guid: c923aede42db5ff4b963b90d64b98560, type: 3}
+  - {fileID: 21300000, guid: 4edb5c9d3db14eb41aeb683f103df9ef, type: 3}
+  - {fileID: 21300000, guid: 6efef75dd4a689443a1371445265d547, type: 3}
+  - {fileID: 21300000, guid: 490dd71cbc38f924cb4541322fb777bd, type: 3}
+  - {fileID: 21300000, guid: 69b648e686707e24d9180cffebb5d93a, type: 3}
+  - {fileID: 21300000, guid: 75da7da242ee0904b851145553f65a6e, type: 3}
+  - {fileID: 21300000, guid: 6ca3ea344e57729458c1c597f40a8f0f, type: 3}
+  - {fileID: 21300000, guid: ab0f8f245382c084db5c8d7018712bbc, type: 3}
+  - {fileID: 21300000, guid: a9679767c8453134abdb2febd6aa925a, type: 3}
+  - {fileID: 21300000, guid: 5a6a0d025256f8040a604542e4ac8e3c, type: 3}

@@ -25,12 +25,15 @@ public class CharacterDefineSO : ScriptableObject
     public float baseCritDamage;
     public float baseElementBonus;
 
+    public SkillData[] skills = new SkillData[6];
+
     [TextArea] public string introduction;
     [TextArea] public string description;
 
     public Sprite icon;
     public Sprite illustration;
     public GameObject model;
+    public Sprite[] skillIcon;
 
     public string Id => id;
 }

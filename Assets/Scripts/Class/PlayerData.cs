@@ -23,10 +23,10 @@ public class PlayerData
 
     // ================== 角色与装备系统 ==================
     [Header("角色系统")]
-    public List<CharacterData> Characters = new List<CharacterData>();          // 角色列表
+    public List<CharacterData> Characters = new List<CharacterData>();      
     public List<WeaponData> WeaponBag = new List<WeaponData>();
     public List<StigmataData> StigmataBag = new List<StigmataData>();
-    public List<MaterialData> MaterialBag = new List<MaterialData>();        // 装备背包
+    public List<MaterialData> MaterialBag = new List<MaterialData>(); 
 
     // ================== 设置与其他 ==================
     public float MusicVolume = 0.8f;
@@ -55,17 +55,15 @@ public class PlayerData
         CreateTime = DateTime.Now;
         LastLoginTime = DateTime.Now;
 
-        // 初始化默认资源
         Crystals = 50000;
         Coins = 3000000;
         Stamina = Level + 80;
 
-        // 初始化默认角色和装备和材料
         InitializeDefaultCharacters();
         InitializeDefaultEquipment();
         InitializeDefaultMaterial();
         SortedBag();
-        // 初始化任务系统
+
         InitializeDefaultTasks();
         InitializeDailyEXPRewards();
     }
@@ -107,9 +105,7 @@ public class PlayerData
 
     // ================== 角色相关方法 ==================
     #region 角色方法
-    /// <summary>
-    /// 初始化默认角色
-    /// </summary>
+    // 初始化默认角色
     private void InitializeDefaultCharacters()
     {
         for (int i = 1; i <= 3; i++)
@@ -131,8 +127,8 @@ public class PlayerData
             element: def.element,
             stars: def.baseStars, maxstars: def.maxStars,
             health: def.baseHealth, attack: def.baseAttack, defence: def.baseDefence,
-            energy: def.baseEnergy, critRate: def.baseCritRate, critDamage: def.baseCritDamage, elementBonus: def.baseElementBonus
-        );
+            energy: def.baseEnergy, critRate: def.baseCritRate, critDamage: def.baseCritDamage, elementBonus: def.baseElementBonus,
+            skills: def.skills);
         Characters.Add(character);
     }
     #endregion
@@ -140,9 +136,7 @@ public class PlayerData
 
     // ================== 装备相关方法 ==================
     #region 装备方法
-    /// <summary>
-    /// 初始化默认装备
-    /// </summary>
+    // 初始化默认装备
     private void InitializeDefaultEquipment()
     {
         for (int i = 1; i <= 30; i++)
@@ -192,9 +186,7 @@ public class PlayerData
 
     // ================== 材料相关方法 ==================
     #region  材料方法
-    /// <summary>
-    /// 初始化默认材料
-    /// </summary>
+    // 初始化默认材料
     private void InitializeDefaultMaterial()
     {
         for (int i = 1; i <= 9; i++)
@@ -218,9 +210,7 @@ public class PlayerData
 
     // ================== 任务相关方法 ==================
     #region 任务方法
-    /// <summary>
-    /// 初始化默认任务
-    /// </summary>
+    // 初始化默认任务
     private void InitializeDefaultTasks()
     {
         // 日常任务
@@ -352,9 +342,7 @@ public class PlayerData
         ));
     }
 
-    /// <summary>
-    /// 初始化每日历练值奖励
-    /// </summary>
+    // 初始化每日历练值奖励
     private void InitializeDailyEXPRewards()
     {
         DailyEXPRewards.Clear();
@@ -374,8 +362,10 @@ public class CharacterData
     public string Id;                                // 角色ID
     public string Name;                              // 角色名称
     public bool IsUnlocked;                          // 是否解锁
+
     public WeaponType WeaponType;
     public CharacterStats BaseStats;                 // 基础属性
+    public SkillData[] Skills;
 
     // 装备索引（指向EquipmentBag的下标）
     public int EquippedWeaponIndex = -1;             // 装备的武器索引
@@ -385,19 +375,40 @@ public class CharacterData
 
     public CharacterData() { }
 
-    public CharacterData(string id, string name, bool isUnlocked, WeaponType weaponType,
+    public CharacterData(string id, string name, bool isUnlocked, 
+                        WeaponType weaponType,
                         string element, int stars, int maxstars,
                         int health, int attack, int defence, 
-                        int energy, float critRate, float critDamage, float elementBonus)
+                        int energy, float critRate, float critDamage, float elementBonus,
+                        SkillData[] skills)
     {
-        Id = id; Name = name; IsUnlocked = isUnlocked; WeaponType = weaponType;
+        Id = id; Name = name; IsUnlocked = isUnlocked; 
+        WeaponType = weaponType;
         BaseStats = new CharacterStats()
         {
             Element = element, Level = 1, Stars = stars, MaxStars = maxstars,
             Health = health, Attack = attack, Defence = defence,
             Energy = energy, CritRate = critRate,CritDamage = critDamage,ElementBonus = elementBonus
         };
-    }
+        for (int i = 0; i < 5; i++) Skills[i] = skills[i];
+     }
+}
+// 技能分支数据（每个分支的动态+静态信息）
+[System.Serializable]
+public class SkillBranchData
+{
+    public string branchName;       // 分支名称
+    public int level;               // 分支当前等级（动态，可升级）
+    public TextStats textStats;      // 分支介绍和描述（静态）
+}
+
+// 技能大类数据
+[System.Serializable]
+public class SkillData
+{
+    public string skillName;        // 技能大类名称
+    public TextStats textStats;      // 技能大类介绍和描述（静态）
+    public SkillBranchData[] branches; // 分支数组，长度可变（1或3）
 }
 
 // ================== 装备数据类 ==================

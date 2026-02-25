@@ -161,7 +161,7 @@ public class ToHomeView : MonoBehaviour
             animatorA.SetBool("A", true);   // 请根据实际参数名调整
 
         backgroundEImages[2].position = new Vector3(0, -0.018f, 0.138f);
-        backgroundGImages.position = new Vector3(-0.2f, -4.43f, 0f);
+        backgroundGImages.position = new Vector3(-0.2f, -4.37f, 0f);
 
         yield return new WaitForSeconds(pauseDuration);
 
