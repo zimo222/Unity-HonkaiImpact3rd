@@ -85,6 +85,22 @@ public class ValkyrieDetailView : MonoBehaviour
     public TMP_Text equipmentLevelText;
     public TMP_Text updateText;
 
+    // ========================= 技能技能技能UI引用 =========================
+    [System.Serializable]
+    public class SkillUI
+    {
+        public Image iconImage;
+        public TMP_Text nameText;
+        public TMP_Text levelText;
+    }
+    [Header("技能技能技能")]
+    public SkillUI[] skillUIs;              //技能主界面6按钮
+    public GameObject skillPanel;           //技能主界面
+    public GameObject skillDetailPanel;     //技能详情界面
+    public SkillUI[] skillDetailUIs;        //技能详情界面4按钮
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -104,7 +120,8 @@ public class ValkyrieDetailView : MonoBehaviour
 
     }
 
-    // ==================== 基础UI ====================
+    // ==================== 基础基础基UI ====================
+    #region 基础UI
     public void InitializeUI()
     {
         // 设置默认文本
@@ -133,6 +150,7 @@ public class ValkyrieDetailView : MonoBehaviour
         Update1PanelUI(currentPlayerData, currentValkyrie);
         Update2PanelUI(currentPlayerData, currentValkyrie);
         Update3PanelUI(currentPlayerData, currentValkyrie);
+        Update4PanelUI(currentPlayerData, currentValkyrie);
     }
 
     public void SpawnModel(string id)
@@ -172,8 +190,11 @@ public class ValkyrieDetailView : MonoBehaviour
             Debug.LogError($"无法从路径加载模型: {modelPath}");
         }
     }
+    #endregion
+
 
     // ==================== 角色升级晋升 ====================
+    #region 角色升级晋升
     public void UpdateLevelUpUI(PlayerData currentPlayerData, int currentValkyrie, string nowMaterialName, int cost, int beforeLevel, int toLevel)
     {
         if (LevelText1 != null) LevelText1.text = "LV." + currentPlayerData.Characters[currentValkyrie].BaseStats.Level.ToString();
@@ -223,8 +244,11 @@ public class ValkyrieDetailView : MonoBehaviour
         if (StarImage2 != null) StarImage2.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{currentPlayerData.Characters[currentValkyrie].BaseStats.Stars}S");
         if (FragmentText != null) FragmentText.text = (currentPlayerData.Characters[currentValkyrie].BaseStats.Fragments).ToString() + "/50";
     }
+    #endregion
+
 
     // ==================== 武器圣痕替换 ====================
+    #region 武器圣痕替换
     public void UpdateEquipmentUI(EquipmentData beforeEquipment, EquipmentData afterEquipment)
     {
         if(beforeEquipment == afterEquipment)
@@ -312,6 +336,7 @@ public class ValkyrieDetailView : MonoBehaviour
         DisaplayEquipmentItemView bitemView = bEquipment.GetComponent<DisaplayEquipmentItemView>();
         bitemView.UpdateChoiseState();
     }
+
     public void UpdateEquipState(GameObject aEquipment, GameObject bEquipment)
     {
         if(aEquipment != null)
@@ -322,4 +347,53 @@ public class ValkyrieDetailView : MonoBehaviour
         DisaplayEquipmentItemView bitemView = bEquipment.GetComponent<DisaplayEquipmentItemView>();
         bitemView.UpdateEquipState();
     }
+    #endregion
+
+
+    // ==================== 角色技能技能 ====================
+    #region 角色技能技能
+    //唤出技能主界面
+    public void Update4PanelUI(PlayerData currentPlayerData, int currentValkyrie)
+    {
+        HideSkillDetailPanel();
+
+        CharacterDefineSO nowValkyrie = null;
+        if (GameDataManager.Instance != null) nowValkyrie = GameDataManager.Instance.CharacterDict[currentPlayerData.Characters[currentValkyrie].Id];
+        int count = 0;
+        foreach(SkillUI skillUI in skillUIs)
+        {
+            int i = count;
+            Debug.Log(i);
+            Debug.Log(nowValkyrie.skillIcon[i == 0 ? 0 : (2 + (i - 1) * 4)]);
+            Debug.Log(nowValkyrie.skills[i].skillName);
+            skillUI.iconImage.sprite = nowValkyrie.skillIcon[i == 0 ? 0 : (2 + (i - 1) * 4)];
+            skillUI.nameText.text = nowValkyrie.skills[i].skillName;
+            skillUI.levelText.text = "+" + currentPlayerData.Characters[currentValkyrie].Skills[i].level.ToString();
+            count++;
+        }
+    }
+
+    //唤出技能详情界面
+    public void ShowSkillDetailUI(PlayerData currentPlayerData, int currentValkyrie, int skillIndex)
+    {
+        skillPanel.gameObject.SetActive(false);
+        skillDetailPanel.gameObject.SetActive(true);
+        spawnedModel.gameObject.SetActive(false);
+        UpdateSkillDetailUI(currentPlayerData, currentValkyrie, skillIndex, 0);
+    }
+
+    //退出技能详情界面
+    public void HideSkillDetailPanel()
+    {
+        skillPanel.gameObject.SetActive(true);
+        skillDetailPanel.gameObject.SetActive(false);
+        spawnedModel.gameObject.SetActive(true);
+    }
+
+    //加载技能详情信息
+    public void UpdateSkillDetailUI(PlayerData currentPlayerData, int currentValkyrie, int skillIndex, int skillBranchIndex)
+    {
+        Debug.Log(skillIndex.ToString() + "." + skillBranchIndex.ToString());
+    }
+    #endregion
 }

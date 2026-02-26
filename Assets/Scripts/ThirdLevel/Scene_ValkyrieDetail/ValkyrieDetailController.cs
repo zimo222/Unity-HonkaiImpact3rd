@@ -41,19 +41,22 @@ public class ValkyrieDetailController : MonoBehaviour
     public GameObject twoPanel;
     public Button returnButton;
     private int nowType;
-    //现在装备的装备在背包中的下标
-    private int nowIndex = -1;
-    //现在选中的装备在背包中的下标
-    private int toIndex = -1;
-    //现在装备的装备的预制体
-    private GameObject nowObj = null;
-    //现在选中鹅装备的预制体
-    private GameObject toObj = null;
+    private int nowIndex = -1;          //现在装备的装备在背包中的下标
+    private int toIndex = -1;           //现在选中的装备在背包中的下标
+    private GameObject nowObj = null;   //现在装备的装备的预制体
+    private GameObject toObj = null;    //现在选中的装备的预制体
     public Transform equipmentListContent;  // 装备/材料列表容器
     public GameObject equipmentItemPrefab;  // 装备项预制体
     public Button updateButton;
     // 新增：活动项列表
     private List<GameObject> activeItems = new List<GameObject>();
+
+    // ========================= 角色技能提升 =========================
+    [Header("角色技能提升")]
+    public Button[] skillButton;
+    public Button returnSkillButton;
+    public Button[] skillDetailButton;
+    private int skillIndex = 0, skillBranchIndex = 0;
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
@@ -99,6 +102,8 @@ public class ValkyrieDetailController : MonoBehaviour
             count--;
             btn.onClick.AddListener(() => OnMaterialButtonClick(now));
         }
+
+        //武器圣痕替换
         count = 0;
         foreach(Button btn in replaceButton)
         {
@@ -108,6 +113,23 @@ public class ValkyrieDetailController : MonoBehaviour
         }
         returnButton.onClick.AddListener(OnReturnButtonClick);
         updateButton.onClick.AddListener(OnUpdateButtonClick);
+
+        //角色技能提升
+        count = 0;
+        foreach (Button btn in skillButton)
+        {
+            int now = count;
+            btn.onClick.AddListener(() => OnSkillButtonClick(now));
+            count++;
+        }
+        returnSkillButton.onClick.AddListener(viewValkyrieDetail.HideSkillDetailPanel);
+        count = 0;
+        foreach (Button btn in skillDetailButton)
+        {
+            int now = count;
+            btn.onClick.AddListener(() => OnSkillDetailButtonClick(now));
+            count++;
+        }
     }
 
     // Update is called once per frame
@@ -235,6 +257,7 @@ public class ValkyrieDetailController : MonoBehaviour
             promotionButton.interactable = false;
         }
     }
+
 
     // ==================== 武器圣痕替换 ====================
     void OnReplaceButtonClick(int index)
@@ -473,4 +496,18 @@ public class ValkyrieDetailController : MonoBehaviour
         }
     }
 
+
+    // ==================== 武器圣痕替换 ====================
+    void OnSkillButtonClick(int index)
+    {
+        skillIndex = index;
+        skillBranchIndex = 0;
+        viewValkyrieDetail.ShowSkillDetailUI(currentPlayerData, currentValkyrie, skillIndex);
+    }
+
+    void OnSkillDetailButtonClick(int index)
+    {
+        skillBranchIndex = index;
+        viewValkyrieDetail.UpdateSkillDetailUI(currentPlayerData, currentValkyrie, skillIndex, skillBranchIndex);
+    }
 }

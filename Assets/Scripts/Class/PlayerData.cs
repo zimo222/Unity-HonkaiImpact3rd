@@ -390,7 +390,7 @@ public class CharacterData
             Health = health, Attack = attack, Defence = defence,
             Energy = energy, CritRate = critRate,CritDamage = critDamage,ElementBonus = elementBonus
         };
-        for (int i = 0; i < 5; i++) Skills[i] = skills[i];
+        Skills = skills;
      }
 }
 // 技能分支数据（每个分支的动态+静态信息）
@@ -407,6 +407,7 @@ public class SkillBranchData
 public class SkillData
 {
     public string skillName;        // 技能大类名称
+    public int level;               // 分支当前等级（动态，可升级）
     public TextStats textStats;      // 技能大类介绍和描述（静态）
     public SkillBranchData[] branches; // 分支数组，长度可变（1或3）
 }
