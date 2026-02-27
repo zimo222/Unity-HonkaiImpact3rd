@@ -53,10 +53,10 @@ public class ValkyrieDetailController : MonoBehaviour
 
     // ========================= 角色技能提升 =========================
     [Header("角色技能提升")]
-    public Button[] skillButton;
-    public Button returnSkillButton;
-    public Button[] skillDetailButton;
-    private int skillIndex = 0, skillBranchIndex = 0;
+    public Button[] skillButton;                            //技能主界面6按钮
+    public Button returnSkillButton;                        //退出技能详情界面按钮
+    public Button[] skillDetailButton;                      //技能详情界面4按钮
+    private int skillIndex = 0, skillBranchIndex = 0;       //技能与分支下标
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
@@ -498,6 +498,7 @@ public class ValkyrieDetailController : MonoBehaviour
 
 
     // ==================== 武器圣痕替换 ====================
+    //
     void OnSkillButtonClick(int index)
     {
         skillIndex = index;
