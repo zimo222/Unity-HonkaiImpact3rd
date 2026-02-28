@@ -413,6 +413,14 @@ public class ValkyrieDetailView : MonoBehaviour
             skillDetailUI.iconImage.transform.parent.gameObject.SetActive(true);
             int i = count;
             skillDetailUI.iconImage.sprite = (skillIndex == 0 ? (i == 0 ? nowValkyrie.skillIcon[0] : nowValkyrie.skillIcon[1]) : nowValkyrie.skillIcon[2 + (skillIndex - 1) * 4 + i]);
+            if(count == 0)
+            {
+                count++;
+                skillDetailUI.nameText.gameObject.SetActive(false);
+                skillDetailUI.levelText.gameObject.SetActive(false);
+                continue;
+            }
+
             skillDetailUI.nameText.text = (skillIndex == 0 ? (i == 0 ? nowValkyrie.skills[skillIndex].skillName : nowValkyrie.skills[skillIndex].branches[0].branchName) : (i == 0 ? nowValkyrie.skills[skillIndex].skillName : nowValkyrie.skills[skillIndex].branches[i - 1].branchName));
             skillDetailUI.levelText.text = (skillIndex == 0 ? (i == 0 ? "" : "+" + currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[0].level.ToString()) : (i == 0 ? "" : "+" + currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[i - 1].level.ToString()));
             count++;

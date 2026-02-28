@@ -154,6 +154,9 @@ public class ToHomeView : MonoBehaviour
             yield return null;
         }
         Debug.Log("阶段2完成");
+        //backgroundEImages[3].position = new Vector3(-1280.01f, -800f, 0.07f);
+        backgroundEImages[3].position = new Vector3(-0.007f, 0f, 0.07f);
+        backgroundGImages.position = new Vector3(-0.2f, -4.37f, 0f);
 
         // 阶段3：将Animator A的参数"BoolA"设为true，然后停顿pauseDuration秒
         Debug.Log("阶段3：触发Animator A");
@@ -161,7 +164,6 @@ public class ToHomeView : MonoBehaviour
             animatorA.SetBool("A", true);   // 请根据实际参数名调整
 
         backgroundEImages[2].position = new Vector3(0, -0.018f, 0.138f);
-        backgroundGImages.position = new Vector3(-0.2f, -4.37f, 0f);
 
         yield return new WaitForSeconds(pauseDuration);
 
