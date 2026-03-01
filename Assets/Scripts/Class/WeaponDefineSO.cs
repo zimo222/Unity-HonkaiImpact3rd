@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -29,6 +30,14 @@ public class WeaponDefineSO : ScriptableObject
 
     [TextArea] public string introduction;
     [TextArea] public string description;
+
+    [System.Serializable]
+    public class weaponSkill
+    {
+        public string name;
+        [TextArea] public string description;
+    }
+    public weaponSkill[] skill;
     /*
     public GameObject weaponPrefab;
     public Sprite icon;

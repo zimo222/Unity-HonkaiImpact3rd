@@ -1,8 +1,9 @@
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GachaResultView : MonoBehaviour
 {
@@ -48,10 +49,28 @@ public class GachaResultView : MonoBehaviour
                     img.color = GetColor(item.star);
                 }
             }
+            Transform starTransform = iconObj.transform.Find("StarImage");
+            if (starTransform != null)
+            {
+                Image img = starTransform.GetComponent<Image>();
+                if (img != null && item.icon != null)
+                {
+                    img.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{item.star}S{item.star}");
+                }
+            }
+            Transform bottomTransform = iconObj.transform.Find("BottomIconPanel");
+            if (bottomTransform != null)
+            {
+                Image img = bottomTransform.GetComponent<Image>();
+                if (img != null && item.icon != null)
+                {
+                    img.sprite = Resources.Load<Sprite>($"Picture/Weapon/None");
+                }
+            }
             // 可选：显示星级文本，可在预制体中包含 TMP_Text 并赋值
             TMP_Text starText = iconObj.GetComponentInChildren<TMP_Text>();
             if (starText != null)
-                starText.text = item.star + "星";
+                starText.text = "";
         }
 
         if (confirmButton != null)

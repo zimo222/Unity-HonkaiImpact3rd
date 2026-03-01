@@ -27,12 +27,12 @@ MonoBehaviour:
   - itemId: CHAR_003
     itemType: 0
     starLevel: 5
-    weight: 1
+    weight: 3
     isUp: 0
   - itemId: CHAR_004
     itemType: 0
     starLevel: 5
-    weight: 1
+    weight: 3
     isUp: 0
   - itemId: CHAR_005
     itemType: 0

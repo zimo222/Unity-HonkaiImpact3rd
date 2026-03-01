@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,6 +32,15 @@ public class WeaponDetailView : MonoBehaviour
     [Header("右上")]
     public TMP_Text stat1Text;
     public TMP_Text stat2Text;
+    [System.Serializable]
+    public class EquipmentSkillUI
+    {
+        public TMP_Text nameText;
+        public TMP_Text descriptionText;
+    }
+    [Header("右中")]
+    public GameObject[] skillPanel;
+    public EquipmentSkillUI[] weaponSkillUI;
 
     // 生成的位置和旋转
     [SerializeField] private string modelPath = "Prefabs/Weapon/";
@@ -42,7 +53,11 @@ public class WeaponDetailView : MonoBehaviour
     // 更新装备信息
     public void UpdateWeaponInfo(WeaponData weapon)
     {
+        WeaponDefineSO nowWeapon = null;
+        if (GameDataManager.Instance != null) nowWeapon = GameDataManager.Instance.WeaponDict[weapon.Id];
+
         SpawnModel(weapon);
+
         if (weapon == null) return;
         // 基本信息
         if (nameText != null) nameText.text = weapon.Name;
@@ -68,6 +83,18 @@ public class WeaponDetailView : MonoBehaviour
         }
         if (stat1Text != null) stat1Text.text = weapon.Attack.ToString();
         if (stat2Text != null) stat2Text.text = ((int)(weapon.CritRate * 100)).ToString();
+        
+        //右中
+        for(int i = 0; i < nowWeapon.skill.Count(); i++)
+        {
+            skillPanel[i].SetActive(true);
+            weaponSkillUI[i].nameText.text = nowWeapon.skill[i].name;
+            weaponSkillUI[i].descriptionText.text = nowWeapon.skill[i].description;
+        }
+        for(int i= nowWeapon.skill.Count(); i < 2; i++)
+        {
+            skillPanel[i].SetActive(false);
+        }
     }
 
     // 更新玩家资源
@@ -86,9 +113,22 @@ public class WeaponDetailView : MonoBehaviour
         {
             WeaponType.DualPistols => "双枪",
             WeaponType.SingleHandedSword => "单手剑",
+            WeaponType.HeavyArtillery => "重炮",
+            WeaponType.Claymore => "大剑",
+            WeaponType.Cross => "十字架",
             WeaponType.Spear => "长枪",
             _ => ""
         };
+        /*
+         
+    None,                                            // 无（圣痕使用）
+    DualPistols,                                     // 双枪
+    SingleHandedSword,                               // 单手剑
+    HeavyArtillery,                                  // 重炮
+    Claymore,                                        // 大剑
+    Cross,                                           // 十字架
+    Spear                                            // 长枪
+         */
     }
 
     public void SpawnModel(WeaponData Weapon)
@@ -100,7 +140,7 @@ public class WeaponDetailView : MonoBehaviour
         }
 
         // 从Resources文件夹加载模型预设
-        GameObject modelPrefab = Resources.Load<GameObject>(modelPath + Weapon.Id + Weapon.Stats.SStars.ToString());
+        GameObject modelPrefab = Resources.Load<GameObject>(modelPath + Weapon.Id + "_" + Weapon.Stats.Stars.ToString());
 
         if (modelPrefab != null)
         {

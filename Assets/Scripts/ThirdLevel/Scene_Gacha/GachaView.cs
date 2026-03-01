@@ -29,6 +29,8 @@ public class GachaView : MonoBehaviour
     public Image itemIconImage;                 // 道具图标
     public TMP_Text itemNameText;                // 道具名称
     public TMP_Text itemStarText;                // 道具星级（如 "★5"）
+    public Image itemStarImage;                // 道具星级（如 "★5"）
+    public Image itemStarBackImage;                // 道具星级（如 "★5"）
     public Button clickArea;                     // 用于点击切换的全屏透明按钮
 
     [Header("动画设置")]
@@ -55,11 +57,10 @@ public class GachaView : MonoBehaviour
     public void UpdatePityDisplay(int fourStarPity, int fiveStarPity, bool fourStarGuaranteed, bool fiveStarGuaranteed)
     {
         Debug.Log($"四星保底：{fourStarPity}/10 {(fourStarGuaranteed ? "【保底中】" : "")}");
-        if (fourStarPityText != null)
-            fourStarPityText.text = $"四星保底：{fourStarPity}/10 {(fourStarGuaranteed ? "【保底中】" : "")}";
+        if (fourStarPityText != null) fourStarPityText.text = $"四星保底：{fourStarPity}/10 {(fourStarGuaranteed ? "【保底中】" : "")}";
         Debug.Log($"五星保底：{fiveStarPity}/100 {(fiveStarGuaranteed ? "【保底中】" : "")}");
-        if (fiveStarPityText != null)
-            fiveStarPityText.text = $"五星保底：{fiveStarPity}/100 {(fiveStarGuaranteed ? "【保底中】" : "")}";
+        if (fiveStarPityText != null) fiveStarPityText.text = $"{90 - fiveStarPity}";
+        //fiveStarPityText.text = $"五星保底：{fiveStarPity}/100 {(fiveStarGuaranteed ? "【保底中】" : "")}";
     }
 
     public void UpdateCurrentPoolName(string poolName)
@@ -80,9 +81,12 @@ public class GachaView : MonoBehaviour
 
     public void UpdateSingleItemDisplay(Sprite icon, string name, int star)
     {
-        if (itemIconImage != null) itemIconImage.sprite = icon; itemIconImage.rectTransform.sizeDelta = new Vector2(500, 500);
+        if (itemIconImage != null) itemIconImage.sprite = icon; itemIconImage.rectTransform.sizeDelta = new Vector2(600, 500);
         if (itemNameText != null) itemNameText.text = name;
         if (itemStarText != null) itemStarText.text = "★" + star;
+        if (itemStarImage != null) itemStarImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{star}S{star}"); 
+        if (itemStarBackImage != null) itemStarBackImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/{(star >= 3 ? star : 3)}"); 
+        Debug.Log(name + star.ToString());
     }
 
     public void UpdateSuperItemDisplay(Sprite icon, string name, int star)
@@ -90,6 +94,9 @@ public class GachaView : MonoBehaviour
         if (itemIconImage != null) itemIconImage.sprite = icon; itemIconImage.rectTransform.sizeDelta = new Vector2(1800, 1800);
         if (itemNameText != null) itemNameText.text = name;
         if (itemStarText != null) itemStarText.text = "★" + star;
+        if (itemStarImage != null) itemStarImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{star}S{star}");
+        if (itemStarBackImage != null) itemStarBackImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/{(star >= 3 ? star : 3)}");
+        Debug.Log(name + star.ToString());
     }
 
     public void PlayVideoFromResources(int largeIdx, int smallIdx)

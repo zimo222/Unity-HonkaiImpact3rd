@@ -4168,9 +4168,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1729625501}
   - {fileID: 26315732}
   - {fileID: 1586442804}
-  - {fileID: 1729625501}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &808955339
@@ -11838,7 +11838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6a531bc9283b74aae49af1217bf020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0.5
+  rotationSpeed: 0.2
   rotateOnStart: 1
   rotationSpace: 0
 --- !u!224 &1732032477 stripped

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a561bfdc0a9804483e5e6804a6799e, type: 3}
   m_Name: CharacterB
   m_EditorClassIdentifier: 
-  poolName: CharacterA
+  poolName: CharacterB
   items:
   - itemId: CHAR_001
     itemType: 0

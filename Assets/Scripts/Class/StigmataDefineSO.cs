@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using static WeaponDefineSO;
 
 //  •∫€∂®“ÂSO
 [CreateAssetMenu(fileName = "NewStigmata", menuName = "GameData/StigmataDefine")]
@@ -29,6 +30,14 @@ public class StigmataDefineSO : ScriptableObject
 
     [TextArea] public string introduction;
     [TextArea] public string description;
+
+    [System.Serializable]
+    public class stigmataSkill
+    {
+        public string name;
+        [TextArea] public string description;
+    }
+    public stigmataSkill[] skill;
     /*
     public GameObject weaponPrefab;
     public Sprite icon;

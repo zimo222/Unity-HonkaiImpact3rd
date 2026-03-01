@@ -109,10 +109,10 @@ public class TaskDetailPanelUI : MonoBehaviour
             switch (task.Frequency)
             {
                 case TaskFrequency.Daily:
-                    typeText = "Daily";
+                    typeText = "日常";
                     break;
                 case TaskFrequency.Weekly:
-                    typeText = "Weekly";
+                    typeText = "周常";
                     break;
                 case TaskFrequency.Achievement:
                     typeText = "成就任务";
@@ -261,7 +261,7 @@ public class TaskDetailPanelUI : MonoBehaviour
         }
 
         Debug.Log($"UI/Icons/{iconName}");
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/{iconName}");
+        Sprite sprite = Resources.Load<Sprite>($"Picture/Source/Icons/{iconName}");
         return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 
@@ -283,7 +283,7 @@ public class TaskDetailPanelUI : MonoBehaviour
         }
 
         Debug.Log($"UI/Icons/Large/{spriteName}");
-        Sprite sprite = Resources.Load<Sprite>($"UI/Icons/{spriteName}");
+        Sprite sprite = Resources.Load<Sprite>($"Picture/Source/Icons/{spriteName}");
         return sprite != null ? sprite : Resources.Load<Sprite>("UI/Icons/Icon_Default");
     }
 

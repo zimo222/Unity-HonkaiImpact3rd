@@ -2396,6 +2396,7 @@ GameObject:
   - component: {fileID: 375868647}
   - component: {fileID: 375868646}
   - component: {fileID: 375868649}
+  - component: {fileID: 375868650}
   m_Layer: 5
   m_Name: WelfareButton
   m_TagString: Untagged
@@ -2530,6 +2531,18 @@ MonoBehaviour:
       m_Calls: []
   requireConfirmation: 0
   confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
+--- !u!225 &375868650
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375868644}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &414472291
 GameObject:
   m_ObjectHideFlags: 0
@@ -2933,6 +2946,7 @@ GameObject:
   - component: {fileID: 593073481}
   - component: {fileID: 593073480}
   - component: {fileID: 593073483}
+  - component: {fileID: 593073484}
   m_Layer: 5
   m_Name: MallButton
   m_TagString: Untagged
@@ -3067,6 +3081,18 @@ MonoBehaviour:
       m_Calls: []
   requireConfirmation: 0
   confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
+--- !u!225 &593073484
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593073478}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &600408464
 GameObject:
   m_ObjectHideFlags: 0
@@ -3286,6 +3312,7 @@ GameObject:
   - component: {fileID: 643541655}
   - component: {fileID: 643541654}
   - component: {fileID: 643541657}
+  - component: {fileID: 643541658}
   m_Layer: 5
   m_Name: MailButton
   m_TagString: Untagged
@@ -3420,6 +3447,18 @@ MonoBehaviour:
       m_Calls: []
   requireConfirmation: 0
   confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
+--- !u!225 &643541658
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 643541652}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &644249191
 GameObject:
   m_ObjectHideFlags: 0
@@ -3767,6 +3806,7 @@ GameObject:
   - component: {fileID: 710076941}
   - component: {fileID: 710076940}
   - component: {fileID: 710076943}
+  - component: {fileID: 710076944}
   m_Layer: 5
   m_Name: ActivityButton
   m_TagString: Untagged
@@ -3901,6 +3941,18 @@ MonoBehaviour:
       m_Calls: []
   requireConfirmation: 0
   confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
+--- !u!225 &710076944
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710076938}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &734657799
 GameObject:
   m_ObjectHideFlags: 0
@@ -5045,10 +5097,17 @@ MonoBehaviour:
   - {fileID: 171271647}
   - {fileID: 234355439}
   - {fileID: 281621965}
-  duration: 0.5
-  delayBetween: 0.15
-  startDelay: 0
+  duration: 0.8
+  delayBetween: 0.1
+  startDelay: 0.1
+  initialScale: 0.5
+  maxScale: 1
+  expandRatio: 0.1
+  initialAlpha: 0
   useElasticScale: 1
+  useChildImageAsVisual: 1
+  playMode: 2
+  uniqueID: Home_Right
 --- !u!1 &1200996799
 GameObject:
   m_ObjectHideFlags: 0
@@ -5062,6 +5121,7 @@ GameObject:
   - component: {fileID: 1200996802}
   - component: {fileID: 1200996801}
   - component: {fileID: 1200996804}
+  - component: {fileID: 1200996805}
   m_Layer: 5
   m_Name: TaskButton
   m_TagString: Untagged
@@ -5196,6 +5256,18 @@ MonoBehaviour:
       m_Calls: []
   requireConfirmation: 0
   confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
+--- !u!225 &1200996805
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1200996799}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1204613320
 GameObject:
   m_ObjectHideFlags: 0
@@ -5549,6 +5621,7 @@ GameObject:
   - component: {fileID: 1277850786}
   - component: {fileID: 1277850785}
   - component: {fileID: 1277850788}
+  - component: {fileID: 1277850789}
   m_Layer: 5
   m_Name: AnnouncementButton
   m_TagString: Untagged
@@ -5683,6 +5756,18 @@ MonoBehaviour:
       m_Calls: []
   requireConfirmation: 0
   confirmationMessage: "\u786E\u5B9A\u8981\u6267\u884C\u6B64\u64CD\u4F5C\u5417\uFF1F"
+--- !u!225 &1277850789
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1277850783}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1283924850
 GameObject:
   m_ObjectHideFlags: 0
@@ -5772,7 +5857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa6a531bc9283b74aae49af1217bf020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 0.5
+  rotationSpeed: 0.2
   rotateOnStart: 1
   rotationSpace: 0
 --- !u!1 &1334192459
@@ -7095,10 +7180,17 @@ MonoBehaviour:
   - {fileID: 643541654}
   - {fileID: 1277850785}
   - {fileID: 593073480}
-  duration: 0.5
-  delayBetween: 0.15
-  startDelay: 0
+  duration: 0.8
+  delayBetween: 0.1
+  startDelay: 0.1
+  initialScale: 0.5
+  maxScale: 1
+  expandRatio: 0.1
+  initialAlpha: 0
   useElasticScale: 1
+  useChildImageAsVisual: 1
+  playMode: 2
+  uniqueID: Home_Left
 --- !u!1 &1546982326
 GameObject:
   m_ObjectHideFlags: 0

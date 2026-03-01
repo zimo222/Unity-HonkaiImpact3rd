@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: CHAR_015
   characterName: "\u5E03\u6D1B\u59AE\u5A05-\u94F6\u72FC\u7684\u9ECE\u660E"
-  element: SW
   weaponType: 3
-  baseStars: 0
+  element: SW
+  baseStars: -1
   maxStars: 3
   baseHealth: 1300
   baseAttack: 270
@@ -25,8 +25,46 @@ MonoBehaviour:
   baseCritRate: 0.09
   baseCritDamage: 1.4
   baseElementBonus: 0.25
+  skills:
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches: []
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches: []
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches: []
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches: []
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches: []
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches: []
   introduction: 
   description: 
   icon: {fileID: 21300000, guid: 22abf6c7be172b347855cef913c8038d, type: 3}
   illustration: {fileID: 0}
   model: {fileID: 0}
+  skillIcon: []

@@ -14,7 +14,6 @@ public class PlayerDataManager : MonoBehaviour
     // 单例模式，便于全局访问
     public static PlayerDataManager Instance { get; private set; }
 
-    // 在 PlayerDataManager 类中添加（约在第20行，其他字段附近）
     public static float LastTopQuadAYPosition { get; set; } = 0.268f; // 默认值
     public static float LastTopQuadBYPosition { get; set; } = 0.3095f; // 默认值
     public static float LastTopQuadCYPosition { get; set; } = 0.1941f; // 默认值

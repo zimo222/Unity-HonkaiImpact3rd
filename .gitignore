@@ -7,6 +7,7 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 /.vs/
+/.Assets/Resources/Fonts/msyhbd-Bold SDF 适配.asset
 
 # 这些是代码编辑器临时文件
 *.csproj

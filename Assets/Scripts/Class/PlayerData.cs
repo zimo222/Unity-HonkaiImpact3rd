@@ -223,7 +223,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 50),
             reward2: new TaskReward(RewardType.Stamina, 60),
             maxTime: 1,
-            description: "Check-in Task",
+            description: "美味",
             sceneName: "NoneScene",
             battleType: "Normal"
         ));
@@ -237,7 +237,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 50),
             reward2: new TaskReward(RewardType.EXP, 50),
             maxTime: 1,
-            description: "Go to the home base to collect coins",
+            description: "",
             sceneName: "HomeLandScene",
             battleType: "Normal"
         ));
@@ -251,7 +251,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 200),
             reward2: new TaskReward(RewardType.EXP, 200),
             maxTime: 3,
-            description: "Go to battle to obtain materials",
+            description: "",
             sceneName: "MaterialScene",
             battleType: "Material"
         ));
@@ -279,7 +279,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 150),
             reward2: new TaskReward(RewardType.EXP, 300),
             maxTime: 5,
-            description: "fight!fight!fight!",
+            description: "蘸豆，爽！",
             sceneName: "BattleScene",
             battleType: "All"
         ));
@@ -293,7 +293,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 100),
             reward2: new TaskReward(RewardType.EXP, 100),
             maxTime: 5,
-            description: "Only fight!!!",
+            description: "xdm我学会瞬大了",
             sceneName: "BattleScene",
             battleType: "All"
         ));
@@ -308,7 +308,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 300),
             reward2: new TaskReward(RewardType.EXP, 200),
             maxTime: 1,
-            description: "I don't like exam.",
+            description: "我不喜欢考试",
             sceneName: "BattleScene",
             battleType: "Normal"
         ));
@@ -322,7 +322,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 300),
             reward2: new TaskReward(RewardType.EXP, 200),
             maxTime: 5,
-            description: "Just fight.",
+            description: "我还能凹",
             sceneName: "BossScene",
             battleType: "Boss"
         ));
@@ -336,7 +336,7 @@ public class PlayerData
             reward1: new TaskReward(RewardType.DailyEXP, 1000),
             reward2: new TaskReward(RewardType.EXP, 1000),
             maxTime: 10,
-            description: "You don't ao le.",
+            description: "求求你们别凹了",
             sceneName: "EquipmentScene",
             battleType: "None"
         ));
@@ -551,7 +551,6 @@ public struct CharacterStats
         a.CritRate += b.CritRate;
         a.CritDamage += b.CritDamage;
         a.ElementBonus += b.ElementBonus;
-        // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
         return a;
     }
 
@@ -564,7 +563,6 @@ public struct CharacterStats
         a.CritRate -= b.CritRate;
         a.CritDamage -= b.CritDamage;
         a.ElementBonus -= b.ElementBonus;
-        // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
         return a;
     }
 
@@ -577,7 +575,6 @@ public struct CharacterStats
         a.CritRate = a.CritRate * ((float)b);
         a.CritDamage = a.CritDamage * ((float)b);
         a.ElementBonus = a.ElementBonus * ((float)b);
-        // 注意：Level、Stars 等字段通常不叠加，这里只叠加战斗属性
         return a;
     }
 }

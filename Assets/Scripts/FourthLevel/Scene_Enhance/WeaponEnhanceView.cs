@@ -42,6 +42,13 @@ public class WeaponEnhanceView : MonoBehaviour
     [Header("面板")]
     [SerializeField] public GameObject EnhanceResultPanel;
 
+    // 生成的位置和旋转
+    [SerializeField] private string modelPath = "Prefabs/Weapon/";
+    [SerializeField] private Vector3 spawnPosition = new Vector3(0, 0, 500);
+    [SerializeField] private Quaternion spawnRotation = Quaternion.identity;
+    // 已生成的模型引用
+    private GameObject spawnedModel;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -58,6 +65,8 @@ public class WeaponEnhanceView : MonoBehaviour
     // 更新装备信息
     public void UpdateWeaponInfo(WeaponData weapon, List<MaterialData> costMaterial)
     {
+        SpawnModel(weapon);
+
         EnhanceResultPanel.SetActive(false);
         if (weapon == null) return;
         // 基本信息
@@ -155,6 +164,34 @@ public class WeaponEnhanceView : MonoBehaviour
         {
             EnhanceResultPanel.SetActive(false);
             SceneManager.LoadScene(SceneDataManager.Instance.PopPreviousScene());
+        }
+    }
+
+    public void SpawnModel(WeaponData Weapon)
+    {
+        // 如果已有模型存在，先销毁
+        if (spawnedModel != null)
+        {
+            Destroy(spawnedModel);
+        }
+
+        // 从Resources文件夹加载模型预设
+        GameObject modelPrefab = Resources.Load<GameObject>(modelPath + Weapon.Id + "_" + Weapon.Stats.Stars.ToString());
+
+        if (modelPrefab != null)
+        {
+            // 实例化模型
+            spawnedModel = Instantiate(modelPrefab, spawnPosition, spawnRotation);
+            spawnedModel.name = "Spawned_Model";
+
+            // 可选：将模型设置为当前游戏对象的子物体
+            // spawnedModel.transform.parent = transform;
+
+            Debug.Log($"成功生成模型: {modelPath}");
+        }
+        else
+        {
+            Debug.Log($"无法从路径加载模型: {modelPath}");
         }
     }
 }

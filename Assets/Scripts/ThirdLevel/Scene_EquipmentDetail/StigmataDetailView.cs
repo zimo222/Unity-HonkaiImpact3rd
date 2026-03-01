@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static WeaponDetailView;
 
 public class StigmataDetailView : MonoBehaviour
 {
@@ -29,12 +30,18 @@ public class StigmataDetailView : MonoBehaviour
     public TMP_Text expText;
     [Header("右上")]
     public GameObject[] statsPanel;
-    public TMP_Text[, ] statsText = new TMP_Text[4, 2]; 
+    public TMP_Text[, ] statsText = new TMP_Text[4, 2];
+    [Header("右中")]
+    public GameObject[] skillPanel;
+    public EquipmentSkillUI[] stigmataSkillUI;
 
     // ================== View的公共方法 ==================
     // 更新装备信息
     public void UpdateStigmataInfo(StigmataData stigmata)
     {
+        StigmataDefineSO nowStigmata = null;
+        if (GameDataManager.Instance != null) nowStigmata = GameDataManager.Instance.StigmataDict[stigmata.Id];
+
         if (stigmata == null) return;
         // 基本信息
         if (illustrationImage != null) illustrationImage.sprite = Resources.Load<Sprite>($"Picture/Stigmata/Illustration/{stigmata.Id}");
@@ -43,7 +50,7 @@ public class StigmataDetailView : MonoBehaviour
         if (starImage != null) starImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_Equipment/Stars_{stigmata.Stats.Stars}S{stigmata.Stats.MaxStars}");
         if (sstarImage != null) sstarImage.sprite = Resources.Load<Sprite>($"Picture/Scene/Scene_EquipmentDetail/sStars_{stigmata.Stats.SStars}");
 
-        if (descriptionText != null) descriptionText.text = stigmata.TextStats.Description;
+        if (descriptionText != null) descriptionText.text = stigmata.TextStats.Introduction;
 
         if (levelText != null) levelText.text = $"{stigmata.Stats.Level}/<color=#FEDF4C>{20 * stigmata.Stats.Stars + 5 * stigmata.Stats.SStars - 10}</color>";
         if (expText != null) expText.text = $"{stigmata.Stats.Exp}/<color=#FEDF4C>{100 * stigmata.Stats.Level}</color>";
@@ -103,6 +110,18 @@ public class StigmataDetailView : MonoBehaviour
             statsPanel[2].transform.localPosition = new Vector2(220 - 577.5f, -158 + 108);
             statsPanel[3].SetActive(true);
             statsPanel[3].transform.localPosition = new Vector2(815 - 577.5f, -158 + 108);
+        }
+
+        //右中
+        for (int i = 0; i < nowStigmata.skill.Length; i++)
+        {
+            skillPanel[i].SetActive(true);
+            stigmataSkillUI[i].nameText.text = nowStigmata.skill[i].name;
+            stigmataSkillUI[i].descriptionText.text = nowStigmata.skill[i].description;
+        }
+        for (int i = nowStigmata.skill.Length; i < 2; i++)
+        {
+            skillPanel[i].SetActive(false);
         }
     }
 

@@ -25,5 +25,9 @@ MonoBehaviour:
   baseCritRate: 0
   baseCritDamage: 0.1
   baseElementBonus: 0.08
-  introduction: 
+  icon: {fileID: 0}
+  introduction: "\u7A76\u6781\u7684\u653B\u51FB\u578B\u5723\u75D5\uFF0C\u80FD\u591F\u7EC4\u6210\u706B\u7130\u4F20\u627F\u5957\u88C5"
   description: 
+  skill:
+  - name: "\u6781\u5730\u7684\u70FD\u706B"
+    description: "\u5168\u4F24\u5BB3\u63D0\u9AD810.0%\uFF0C\u5F8B\u8005\u5F62\u6001\u4E0B\u706B\u7130\u5143\u7D20\u4F24\u5BB3\u63D0\u9AD825.0%"

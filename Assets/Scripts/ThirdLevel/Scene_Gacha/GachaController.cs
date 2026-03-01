@@ -54,6 +54,7 @@ public class GachaController : MonoBehaviour
     {
         LoadData();
         InitializeUI();
+        UpdatePityDisplay();
     }
 
     void LoadData()
@@ -299,8 +300,8 @@ public class GachaController : MonoBehaviour
                 viewGacha.UpdateSingleItemDisplay(item.icon, item.itemName, item.star);
             }
 
-                // 播放缩放动画
-                viewGacha.PlayItemScaleAnimation();
+            // 播放缩放动画
+            viewGacha.PlayItemScaleAnimation();
             viewGacha.ShowSingleItemPanel(true);
         }
         else
