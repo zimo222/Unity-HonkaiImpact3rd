@@ -57,6 +57,9 @@ public class ValkyrieDetailController : MonoBehaviour
     public Button returnSkillButton;                        //退出技能详情界面按钮
     public Button[] skillDetailButton;                      //技能详情界面4按钮
     private int skillIndex = 0, skillBranchIndex = 0;       //技能与分支下标
+    public Button lastButton;
+    public Button nextButton;
+    public Button skillLevelUpButton;
 
     // ================== 私有变量 ==================
     private PlayerData currentPlayerData;
@@ -130,6 +133,9 @@ public class ValkyrieDetailController : MonoBehaviour
             btn.onClick.AddListener(() => OnSkillDetailButtonClick(now));
             count++;
         }
+        lastButton.onClick.AddListener(LastSkill);
+        nextButton.onClick.AddListener(NextSkill);
+        skillLevelUpButton.onClick.AddListener(SkillLevelUp);
     }
 
     // Update is called once per frame
@@ -497,7 +503,7 @@ public class ValkyrieDetailController : MonoBehaviour
     }
 
 
-    // ==================== 武器圣痕替换 ====================
+    // ==================== 角色技能提升 ===================
     //
     void OnSkillButtonClick(int index)
     {
@@ -509,6 +515,27 @@ public class ValkyrieDetailController : MonoBehaviour
     void OnSkillDetailButtonClick(int index)
     {
         skillBranchIndex = index;
+        viewValkyrieDetail.UpdateSkillDetailUI(currentPlayerData, currentValkyrie, skillIndex, skillBranchIndex);
+    }
+
+    void LastSkill()
+    {
+        skillIndex--;
+        if (skillIndex < 0) skillIndex = 5;
+        OnSkillButtonClick(skillIndex);
+    }
+
+    void NextSkill()
+    {
+        skillIndex++;
+        if (skillIndex > 5) skillIndex = 0;
+        OnSkillButtonClick(skillIndex);
+    }
+
+    void SkillLevelUp()
+    {
+        PlayerDataManager.Instance.SkillLevelUp(currentValkyrie, skillIndex, skillBranchIndex);
+        viewValkyrieDetail.Update4PanelUI(currentPlayerData, currentValkyrie);
         viewValkyrieDetail.UpdateSkillDetailUI(currentPlayerData, currentValkyrie, skillIndex, skillBranchIndex);
     }
 }

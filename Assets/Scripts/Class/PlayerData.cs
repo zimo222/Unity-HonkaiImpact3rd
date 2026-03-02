@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.WSA;
 
 [System.Serializable]
 public class PlayerData
@@ -16,10 +17,18 @@ public class PlayerData
     // ================== 游戏进度与资源 ==================
     public int Level = 88;
     public int Experience;
-    public int Crystals;                           // 水晶
-    public int Coins;                              // 金币
-    public int Stamina;                            // 体力
-    public int HomogeneousPureCrystal;             // 恒质纯晶
+    public int Crystals;                            // 水晶
+    public int Coins;                               // 金币
+    public int Stamina;                             // 体力
+    public int HomogeneousPureCrystal;              // 恒质纯晶
+    public int StarStone;                           // 星石
+    public int StigmataResonance;                   // 圣痕共鸣
+    public int WeaponResonance;                     // 武器共鸣
+    public int GoldenFlowerMedal;                   // 金花奖章
+    public int WitchOrb;                            // 魔女宝珠
+    public int PureWitchPearl;                      // 纯粹魔女宝珠
+    public int PureDollPearl;                       // 纯粹人偶宝珠
+
 
     // ================== 角色与装备系统 ==================
     [Header("角色系统")]
@@ -365,6 +374,7 @@ public class CharacterData
 
     public WeaponType WeaponType;
     public CharacterStats BaseStats;                 // 基础属性
+    public int skillNum;
     public SkillData[] Skills;
 
     // 装备索引（指向EquipmentBag的下标）

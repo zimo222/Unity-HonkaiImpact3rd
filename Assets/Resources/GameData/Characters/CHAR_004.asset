@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: CHAR_004
   characterName: "\u80E1\u6843-\u5F80\u751F\u5802\u5802\u4E3B"
-  element: SW
   weaponType: 2
+  element: SW
   baseStars: 1
   maxStars: 3
   baseHealth: 1100
@@ -25,8 +25,133 @@ MonoBehaviour:
   baseCritRate: 0.15
   baseCritDamage: 1.8
   baseElementBonus: 0.4
+  skills:
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches:
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+    - branchName: 
+      level: 0
+      textStats:
+        Introduction: 
+        Description: 
+  - skillName: 
+    level: 0
+    textStats:
+      Introduction: 
+      Description: 
+    branches: []
   introduction: 
   description: 
   icon: {fileID: 21300000, guid: 0999d4bef503ae742bf716a2b776007d, type: 3}
   illustration: {fileID: 21300000, guid: 5e19795a2e138d54cbbd38fbf911e29f, type: 3}
   model: {fileID: 1742533217069726245, guid: 999bccab774a852458fd50f5be1593bf, type: 3}
+  skillIcon:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

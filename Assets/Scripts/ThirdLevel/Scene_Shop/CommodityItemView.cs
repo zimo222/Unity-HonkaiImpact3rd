@@ -50,12 +50,27 @@ public class CommodityItemView : MonoBehaviour
         {
             case "Coin":
                 {
-                    ResourceIconImage.sprite = Resources.Load<Sprite>("Source/Icons/Icon_Coin");
+                    ResourceIconImage.sprite = Resources.Load<Sprite>("Picture/Source/Icons/Icon_Coin");
                     break;
                 }
             case "Crystal":
                 {
-                    ResourceIconImage.sprite = Resources.Load<Sprite>("Source/Icons/Icon_Crystal");
+                    ResourceIconImage.sprite = Resources.Load<Sprite>("Picture/Source/Icons/Icon_Crystal");
+                    break;
+                }
+            case "StarStone":
+                {
+                    ResourceIconImage.sprite = Resources.Load<Sprite>("Picture/Source/Icons/Icon_StarStone");
+                    break;
+                }
+            case "WitchOrb":
+                {
+                    ResourceIconImage.sprite = Resources.Load<Sprite>("Picture/Source/Icons/Icon_WitchOrb");
+                    break;
+                }
+            case "PureWitchPearl":
+                {
+                    ResourceIconImage.sprite = Resources.Load<Sprite>("Picture/Source/Icons/Icon_PureWitchPearl");
                     break;
                 }
         }

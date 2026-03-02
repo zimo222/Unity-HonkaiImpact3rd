@@ -72,13 +72,13 @@ public class ShopView : MonoBehaviour
         {
             Debug.Log("ур╣╫ак");
             if (detailRarityImage != null)
-                detailRarityImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Frame_{material.baseStars}S");
+                detailRarityImage.sprite = Resources.Load<Sprite>($"Picture/Material/Frame_{material.baseStars}S");
 
             if (detailIconImage != null)
-                detailIconImage.sprite = Resources.Load<Sprite>($"Picture/Scene_Equipment/Material/Icon_{material.id}");
+                detailIconImage.sprite = Resources.Load<Sprite>($"Picture/Material/Icon_{material.id}");
 
             if (detailStarImage != null)
-                detailStarImage.sprite = Resources.Load<Sprite>($"Picture/Valkyrie/Stars_{material.baseStars}S");
+                detailStarImage.sprite = Resources.Load<Sprite>($"Picture/Stigmata/Stars_{material.baseStars}S");
 
             if (detailNameText != null)
                 detailNameText.text = material.materialName;

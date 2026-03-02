@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1839172e3e83d4e8918c7b5e796259, type: 3}
+  m_Name: MATE_202
+  m_EditorClassIdentifier: 
+  id: MATE_202
+  materialName: "\u89D2\u8272\u8865\u7ED9\u5361 \xD710 "
+  baseStars: 5
+  num: 100000
+  icon: {fileID: 21300000, guid: bf791693e1f3dd3429e6056388c68158, type: 3}
+  introduction: "\u80FD\u591F\u83B7\u5F97\u5341\u6B21\u53C2\u4E0E\u8865\u7ED9\u7684\u673A\u4F1A"
+  description: "\u5370\u6709\u543C\u91CC\u5F62\u8C61\u7684\u8865\u7ED9\u5361"

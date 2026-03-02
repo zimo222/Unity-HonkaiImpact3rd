@@ -126,6 +126,8 @@ public class ShopController : MonoBehaviour
 
     private void OnSmallButtonClick(int largeIdx, int smallIdx)
     {
+        ClearContent();
+
         if (smallIndex == smallIdx) return;
         smallIndex = smallIdx;
         SetSmallButtonHighlight(largeIdx, smallIdx);
@@ -141,6 +143,7 @@ public class ShopController : MonoBehaviour
             Debug.LogError($"smallButtonPools 数组长度不足：长度={menuSections[largeIdx].smallButtonPools.Length}，索引={smallIdx}");
             return;
         }
+
 
         var pool = menuSections[largeIdx].smallButtonPools[smallIdx];
         Debug.Log($"准备加载卡池：pool={(pool != null ? pool.poolName : "null")}, gachaManager={shopManager}");
@@ -315,5 +318,13 @@ public class ShopController : MonoBehaviour
             PlayerDataManager.Instance.AddMaterial(item.itemId, item.count);
 
         viewShop.UpdatePlayerResources(playerData);
+    }
+
+    public void ClearContent()
+    {
+        for (int i = contentParent.childCount - 1; i >= 0; i--)
+        {
+            GameObject.DestroyImmediate(contentParent.GetChild(i).gameObject);
+        }
     }
 }

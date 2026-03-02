@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4197404f18226b94e9feec2cad2d2248, type: 3}
+  m_Name: SupplyCardStore
+  m_EditorClassIdentifier: 
+  poolName: 
+  items:
+  - itemId: MATE_201
+    starLevel: 4
+    count: 1
+    resourceId: Crystal
+    num: 280
+    icon: {fileID: 21300000, guid: 72d612fa82525a24aa41b124f619cfc5, type: 3}
+  - itemId: MATE_202
+    starLevel: 4
+    count: 10
+    resourceId: Crystal
+    num: 2800
+    icon: {fileID: 21300000, guid: bf791693e1f3dd3429e6056388c68158, type: 3}
+  - itemId: MATE_203
+    starLevel: 4
+    count: 1
+    resourceId: Crystal
+    num: 280
+    icon: {fileID: 21300000, guid: 1d7db35e0ec538f40b651d7c9c225bcc, type: 3}
+  - itemId: MATE_204
+    starLevel: 4
+    count: 10
+    resourceId: Crystal
+    num: 2800
+    icon: {fileID: 21300000, guid: 474d361c206d0014faa9765233fde666, type: 3}

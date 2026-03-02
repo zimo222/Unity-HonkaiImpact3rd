@@ -66,7 +66,7 @@ public class DisaplayEquipmentItemView : MonoBehaviour, IPointerClickHandler
         if (iconImage == null) return;
 
         // 构建图标路径
-        string iconPath = equipmentData is WeaponData ? $"Picture/Weapon/Icon/{equipmentData.Id}" : $"Picture/Stigmata/Icon/{equipmentData.Id}";
+        string iconPath = equipmentData is WeaponData ? $"Picture/Weapon/Icon/{equipmentData.Id}_{equipmentData.Stats.Stars}" : $"Picture/Stigmata/Icon/{equipmentData.Id}";
         Sprite icon = Resources.Load<Sprite>(iconPath);
 
         if (icon != null)

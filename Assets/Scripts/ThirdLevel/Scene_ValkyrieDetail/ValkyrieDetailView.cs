@@ -92,16 +92,29 @@ public class ValkyrieDetailView : MonoBehaviour
         public Image iconImage;
         public TMP_Text nameText;
         public TMP_Text levelText;
+        public TMP_Text IntruductionText;
+    }
+    [System.Serializable]
+    public class SkillDetailUI
+    {
+        public Image iconImage;
+        public TMP_Text nameText;
+        public TMP_Text IntruductionText;
     }
     [Header("技能技能技能")]
     public SkillUI[] skillUIs;              //技能主界面6按钮
     public GameObject skillPanel;           //技能主界面
     public GameObject skillDetailPanel;     //技能详情界面
-    public SkillUI[] skillDetailUIs;        //技能详情界面4按钮
+    public SkillDetailUI[] skillDetailUIs;        //技能详情界面4按钮
     public TMP_Text skillNameText;
     public TMP_Text skillLevelText;
     public TMP_Text skillIntroductionText;
     public TMP_Text skillDescriptionText;
+    public TMP_Text skillName2Text;
+    public Button levelUpButton;
+    public TMP_Text coinCostText;
+    public GameObject coinCostImage;
+    public TMP_Text levelUpText;
 
 
 
@@ -308,7 +321,7 @@ public class ValkyrieDetailView : MonoBehaviour
     public void Update2PanelUI(PlayerData currentPlayerData, int currentValkyrie)
     {
         if (WeaponNameText != null) WeaponNameText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Name : "武器");
-        if (WeaponStarImage != null) WeaponStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Stars}S") : null;
+        if (WeaponStarImage != null) WeaponStarImage.sprite = currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? Resources.Load<Sprite>($"Picture/Stigmata/Stars_{currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Stars}S") : Resources.Load<Sprite>("Picture/Weapon/None");
         if (WeaponLevelText != null) WeaponLevelText.text = (currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex != -1 ? "Lv." + currentPlayerData.WeaponBag[currentPlayerData.Characters[currentValkyrie].EquippedWeaponIndex].Stats.Level.ToString() : "");
     }
 
@@ -359,7 +372,7 @@ public class ValkyrieDetailView : MonoBehaviour
     //唤出技能主界面
     public void Update4PanelUI(PlayerData currentPlayerData, int currentValkyrie)
     {
-        HideSkillDetailPanel();
+        //HideSkillDetailPanel();
 
         CharacterDefineSO nowValkyrie = null;
         if (GameDataManager.Instance != null) nowValkyrie = GameDataManager.Instance.CharacterDict[currentPlayerData.Characters[currentValkyrie].Id];
@@ -367,9 +380,9 @@ public class ValkyrieDetailView : MonoBehaviour
         foreach(SkillUI skillUI in skillUIs)
         {
             int i = count;
-            Debug.Log(i);
-            Debug.Log(nowValkyrie.skillIcon[i == 0 ? 0 : (2 + (i - 1) * 4)]);
-            Debug.Log(nowValkyrie.skills[i].skillName);
+            //Debug.Log(i);
+            //Debug.Log(nowValkyrie.skillIcon[i == 0 ? 0 : (2 + (i - 1) * 4)]);
+            //Debug.Log(nowValkyrie.skills[i].skillName);
             skillUI.iconImage.sprite = nowValkyrie.skillIcon[i == 0 ? 0 : (2 + (i - 1) * 4)];
             skillUI.nameText.text = nowValkyrie.skills[i].skillName;
             skillUI.levelText.text = "+" + currentPlayerData.Characters[currentValkyrie].Skills[i].level.ToString();
@@ -397,15 +410,19 @@ public class ValkyrieDetailView : MonoBehaviour
     //加载技能详情信息
     public void UpdateSkillDetailUI(PlayerData currentPlayerData, int currentValkyrie, int skillIndex, int skillBranchIndex)
     {
+        levelUpButton.gameObject.SetActive(skillBranchIndex != 0);
+        coinCostImage.gameObject.SetActive(skillBranchIndex != 0);
+
         CharacterDefineSO nowValkyrie = null;
+        CharacterData nowCharacter = currentPlayerData.Characters[currentValkyrie];
         if (GameDataManager.Instance != null) nowValkyrie = GameDataManager.Instance.CharacterDict[currentPlayerData.Characters[currentValkyrie].Id];
         int count = 0;
-        foreach (SkillUI skillDetailUI in skillDetailUIs)
+        foreach (SkillDetailUI skillDetailUI in skillDetailUIs)
         {
-            Debug.Log($"循环开始：count = {count}, skillIndex = {skillIndex}");
+            //Debug.Log($"循环开始：count = {count}, skillIndex = {skillIndex}");
             if (skillIndex == 0 && (count == 1 || count == 3))
             {
-                Debug.Log($"判定：count = {count}, skillIndex = {skillIndex}");
+                //Debug.Log($"判定：count = {count}, skillIndex = {skillIndex}");
                 skillDetailUI.iconImage.transform.parent.gameObject.SetActive(false);
                 count++;
                 continue;
@@ -417,28 +434,36 @@ public class ValkyrieDetailView : MonoBehaviour
             {
                 count++;
                 skillDetailUI.nameText.gameObject.SetActive(false);
-                skillDetailUI.levelText.gameObject.SetActive(false);
+                //skillDetailUI.levelText.gameObject.SetActive(false);
                 continue;
             }
 
             skillDetailUI.nameText.text = (skillIndex == 0 ? (i == 0 ? nowValkyrie.skills[skillIndex].skillName : nowValkyrie.skills[skillIndex].branches[0].branchName) : (i == 0 ? nowValkyrie.skills[skillIndex].skillName : nowValkyrie.skills[skillIndex].branches[i - 1].branchName));
-            skillDetailUI.levelText.text = (skillIndex == 0 ? (i == 0 ? "" : "+" + currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[0].level.ToString()) : (i == 0 ? "" : "+" + currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[i - 1].level.ToString()));
+            //skillDetailUI.levelText.text = (skillIndex == 0 ? (i == 0 ? "" : "+" + currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[0].level.ToString()) : (i == 0 ? "" : "+" + currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[i - 1].level.ToString()));
+            skillDetailUI.IntruductionText.text = (skillIndex == 0 ? (i == 0 ? "" : currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[0].textStats.Introduction) : (i == 0 ? "" : currentPlayerData.Characters[currentValkyrie].Skills[skillIndex].branches[i - 1].textStats.Introduction));
             count++;
         }
 
-        if(skillIndex == 0)
+        skillName2Text.text = nowValkyrie.skills[skillIndex].skillName;
+        if (skillIndex == 0)
         {
+            //Debug.Log(skillIndex.ToString() + "." + skillBranchIndex.ToString());
             skillNameText.text = skillBranchIndex == 0 ? nowValkyrie.skills[skillIndex].skillName : nowValkyrie.skills[skillIndex].branches[0].branchName;
-            skillLevelText.text = skillBranchIndex == 0 ? "" : "+" + nowValkyrie.skills[skillIndex].branches[0].level.ToString();
+            skillLevelText.text = skillBranchIndex == 0 ? "" : "+" + nowCharacter.Skills[skillIndex].branches[0].level.ToString();
             skillIntroductionText.text = skillBranchIndex == 0 ? nowValkyrie.skills[skillIndex].textStats.Introduction : nowValkyrie.skills[skillIndex].branches[0].textStats.Introduction;
             skillDescriptionText.text = skillBranchIndex == 0 ? nowValkyrie.skills[skillIndex].textStats.Description : nowValkyrie.skills[skillIndex].branches[0].textStats.Description;
+            levelUpText.text = skillBranchIndex == 0 ? "" : (nowCharacter.Skills[skillIndex].branches[0].level > 0 ? "升级" : "解锁");
+            coinCostText.text = skillBranchIndex == 0 ? "" : ((nowCharacter.Skills[skillIndex].branches[0].level * (skillIndex + 1) * skillBranchIndex * 50).ToString());
         }
         else
         {
+            //Debug.Log(skillIndex.ToString() + "." + skillBranchIndex.ToString());
             skillNameText.text = skillBranchIndex == 0 ? nowValkyrie.skills[skillIndex].skillName : nowValkyrie.skills[skillIndex].branches[skillBranchIndex - 1].branchName;
-            skillLevelText.text = skillBranchIndex == 0 ? "" : "+" + nowValkyrie.skills[skillIndex].branches[skillBranchIndex - 1].level.ToString();
+            skillLevelText.text = skillBranchIndex == 0 ? "" : "+" + nowCharacter.Skills[skillIndex].branches[skillBranchIndex - 1].level.ToString();
             skillIntroductionText.text = skillBranchIndex == 0 ? nowValkyrie.skills[skillIndex].textStats.Introduction : nowValkyrie.skills[skillIndex].branches[skillBranchIndex - 1].textStats.Introduction;
             skillDescriptionText.text = skillBranchIndex == 0 ? nowValkyrie.skills[skillIndex].textStats.Description : nowValkyrie.skills[skillIndex].branches[skillBranchIndex - 1].textStats.Description;
+            levelUpText.text = skillBranchIndex == 0 ? "" : (nowCharacter.Skills[skillIndex].branches[skillBranchIndex - 1].level > 0 ? "升级" : "解锁");
+            coinCostText.text = skillBranchIndex == 0 ? "" : ((nowCharacter.Skills[skillIndex].branches[skillBranchIndex - 1].level * (skillIndex + 1) * skillBranchIndex * 50).ToString());
         }
     }
     #endregion

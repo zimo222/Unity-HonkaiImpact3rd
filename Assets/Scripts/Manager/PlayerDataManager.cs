@@ -1433,7 +1433,7 @@ public class PlayerDataManager : MonoBehaviour
         finalCost = Math.Min(Math.Min((int)Math.Ceiling(needExp * 1.0 / nowMaterial.Num * 1.0), nowMaterial.Count), cost);
         expGain = finalCost * nowMaterial.Num;
         toExp += expGain;
-        while (toExp >= toLevel * 200 && toLevel < 80) { toExp -= toLevel * 200; toLevel++; } 
+        while (toExp >= toLevel * 200 && toLevel < 80) { toExp -= toLevel * 200; toLevel++; }
     }
 
     public void LevelUpCharacter(int valkyrieIndex, string materialId, int cost)
@@ -1444,9 +1444,9 @@ public class PlayerDataManager : MonoBehaviour
         nowMaterial.Count -= cost;
         expGain = cost * nowMaterial.Num;
         nowValkyrie.BaseStats.Exp += expGain;
-        while (nowValkyrie.BaseStats.Exp >= nowValkyrie.BaseStats.Level * 200 && nowValkyrie.BaseStats.Level < 80) 
-        { 
-            nowValkyrie.BaseStats.Exp -= nowValkyrie.BaseStats.Level * 200; 
+        while (nowValkyrie.BaseStats.Exp >= nowValkyrie.BaseStats.Level * 200 && nowValkyrie.BaseStats.Level < 80)
+        {
+            nowValkyrie.BaseStats.Exp -= nowValkyrie.BaseStats.Level * 200;
             nowValkyrie.BaseStats.Level++;
         }
         SaveCurrentPlayerData();
@@ -1455,12 +1455,30 @@ public class PlayerDataManager : MonoBehaviour
     public void PromotionCharacter(int valkyrieIndex)
     {
         CharacterData nowValkyrie = CurrentPlayerData.Characters[valkyrieIndex];
-        if(nowValkyrie.BaseStats.Stars < 3 && nowValkyrie.BaseStats.Fragments >= 50)
+        if (nowValkyrie.BaseStats.Stars < 3 && nowValkyrie.BaseStats.Fragments >= 50)
         {
             nowValkyrie.BaseStats.Stars++;
             nowValkyrie.BaseStats.Fragments -= 50;
         }
         SaveCurrentPlayerData();
-    }    
+    }
+    #endregion
+
+
+    // ================== 角色技能提升 ==================
+    #region 技能提升
+    public void SkillLevelUp(int valkyrieIndex, int skillIndex, int skillBranchIndex)
+    {
+        CharacterData nowValkyrie = CurrentPlayerData.Characters[valkyrieIndex];
+        if (nowValkyrie.Skills[skillIndex].branches[skillIndex == 0 ? 0 : skillBranchIndex - 1].level < nowValkyrie.BaseStats.Level / 5)
+        {
+            CurrentPlayerData.Coins -= (nowValkyrie.Skills[skillIndex].branches[skillIndex == 0 ? 0 : skillBranchIndex - 1].level + 1) * (skillIndex + 1) * skillBranchIndex * 50;
+            nowValkyrie.Skills[skillIndex].branches[skillIndex == 0 ? 0 : skillBranchIndex - 1].level++;
+            nowValkyrie.Skills[skillIndex].level++;
+            nowValkyrie.skillNum++;
+        }
+        Debug.Log(skillIndex.ToString() +"." + skillBranchIndex.ToString() + "升级完成");
+        SaveCurrentPlayerData();
+    }
     #endregion
 }
